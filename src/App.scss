@@ -1,0 +1,44 @@
+:root {
+  --main-color: #FF1D63;
+  --main-text-color: #E4DCED;
+}
+
+@mixin link {
+  color: var(--main-text-color);
+  font-size: 1rem;
+  &:hover {
+    color: var(--main-color);
+  }  
+}
+
+body {
+  background-image: url("./images/background.png");
+  background-color: #eaeaea;
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0;
+  position: relative;
+}
+
+header {
+  display: flex;
+  background-color: #230056;
+  justify-content: space-between;
+  .logo {
+    img {
+      max-width: 10rem;
+      @media screen and (max-width: 768px) {
+        max-width: 5rem;
+      }
+    }
+  }
+  .menu-item {
+    @include link;
+  }
+}
+
+span.span-link {
+  text-decoration: underline;
+  @include link;
+  cursor: pointer;
+}
