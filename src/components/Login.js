@@ -1,6 +1,8 @@
 import React, { useEffect, memo } from 'react'
 import firebaseApp, { loginOptions } from '../lib/firebaseApp'
-import * as firebaseui from 'firebaseui'
+import * as firebaseui from 'firebaseui/dist/esm__es_419'
+import 'firebase/auth'
+
 import 'firebaseui/dist/firebaseui.css'
 import '../styles/Login.scss'
 

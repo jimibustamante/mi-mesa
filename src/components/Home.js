@@ -19,6 +19,8 @@ export default function CmsContent() {
       dbType: 'cf',
     })
     const content = await flamelinkApp.content.get('home')
+    const mesas = await flamelinkApp.content.get('mesa')
+    console.log({mesas})
     setContent(Object.values(content)[0])
   }
 
