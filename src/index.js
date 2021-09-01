@@ -12,8 +12,6 @@ import { UserContextProvider, useUserContext } from './contexts/UserContext'
 import { NavigationContextProvider, useNavigationContext } from './contexts/NavigationContext'
 
 import './App.scss'
-import './index.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 import firebaseApp from './lib/firebaseApp'
 
@@ -27,6 +25,7 @@ import Home from './components/Home'
 import Header from './components/Header'
 import Login from './components/Login'
 import CmsContent from './components/CmsContent'
+import Landing from './components/Landing'
 
 const AuthListener = () => {
   const [userState, dispatchUser] = useUserContext()
@@ -44,8 +43,6 @@ const AuthListener = () => {
 
 
   useEffect(() => {
-    // console.log({firebaseApp: firebaseApp})
-    console.log({firebaseApp})
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
         // Signed in
@@ -55,7 +52,7 @@ const AuthListener = () => {
       } else {
         // Signed out
         dispatchUser({type: 'AUTH_SIGNED_OUT'})
-        history.replace('/login')
+        history.replace('/welcome')
       }
     })
   }, [history, firebaseApp])
@@ -71,7 +68,8 @@ ReactDOM.render(
           <AuthListener />
           <Switch>
             <Route path="/" component={Home} exact />
-            <Route path="/login" component={Login} exact />
+            <Route path="/welcome" component={Landing} exact />
+            <Route path="/sign-in" component={Login} exact />
             <Route path="/:page" flamelink={flamelink} component={CmsContent} />
           </Switch>
         </Router>
