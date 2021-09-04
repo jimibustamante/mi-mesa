@@ -18,9 +18,8 @@ export default function CmsContent() {
       firebaseApp,
       dbType: 'cf',
     })
-    const content = await flamelinkApp.content.get('home')
-    const mesas = await flamelinkApp.content.get('mesa')
-    console.log({mesas})
+    const content = await flamelinkApp.content.get({schemaKey: 'home'})
+    // const mesas = await flamelinkApp.content.get({schemaKey: 'mesa'})
     setContent(Object.values(content)[0])
   }
 
@@ -28,7 +27,6 @@ export default function CmsContent() {
     getContent()
   }, [])
 
-  console.log({content})
   return (
     <div className='container'>
       {content && (

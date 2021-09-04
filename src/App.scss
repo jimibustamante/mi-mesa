@@ -93,6 +93,11 @@ header {
   }
 }
 
+.page-wrapper {
+  min-height: calc(100vh - var(--header-height));
+  margin-top: var(--header-height);
+}
+
 span.span-link {
   text-decoration: underline;
   @include link;

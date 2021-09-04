@@ -9,7 +9,7 @@ import 'firebase/auth'
 
 const SignOutButton = () => {
   const [userState, dispatch] = useUserContext()
-  const currentUser = userState.user
+  const { currentUser } = userState
   const signOut = () => {
     firebase.auth().signOut()
     dispatch({ type: 'AUTH_SIGNED_OUT' })
@@ -27,10 +27,9 @@ const SignOutButton = () => {
 export default function Header() {
   const history = useHistory()  
   const [userState] = useUserContext()
-  const currentUser = userState.user
+  const { currentUser } = userState
   const [navigationState, dispatchNavigation] = useNavigationContext()
   const { items } = navigationState
-  console.log({currentUser})
   const goHome = useCallback(() => {
     history.push('/')
   }, [history])

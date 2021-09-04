@@ -4,18 +4,19 @@ const UserContext = createContext()
 
 export const UserContextProvider = ({children}) => {
   const initialState = {
-    user: null,
+    currentUser: null,
   }
   const reducer = (state, action) => {
     switch (action.type) {
       case 'AUTH_SIGNED_IN':
-        return { ...state, user: action.payload }
+        return { ...state, currentUser: action.payload }
       case 'AUTH_SIGNED_OUT':
-        return { ...state, user: null }
+        return { ...state, currentUser: null }
       default: throw new Error('Unexpected action: ' + action.type)
     }
   }
   const contextValue = useReducer(reducer, initialState);
+
   return (
     <UserContext.Provider value={contextValue}>
       {children}

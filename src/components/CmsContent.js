@@ -18,7 +18,7 @@ export default function CmsContent() {
       firebaseApp,
       dbType: 'cf',
     })
-    const content = await flamelinkApp.content.get('home')
+    const content = await flamelinkApp.content.get({schemaKey: 'home'})
     setContent(Object.values(content)[0])
   }
 

@@ -26,6 +26,7 @@ import Header from './components/Header'
 import Login from './components/Login'
 import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
+import Mesas from './components/Mesas'
 
 const AuthListener = () => {
   const [userState, dispatchUser] = useUserContext()
@@ -48,7 +49,7 @@ const AuthListener = () => {
         // Signed in
         initFlamelink()
         dispatchUser({type: 'AUTH_SIGNED_IN', payload: user})
-        history.replace('/')
+        history.replace('/mesas')
       } else {
         // Signed out
         dispatchUser({type: 'AUTH_SIGNED_OUT'})
@@ -70,6 +71,7 @@ ReactDOM.render(
             <Route path="/" component={Home} exact />
             <Route path="/welcome" component={Landing} exact />
             <Route path="/sign-in" component={Login} exact />
+            <Route path="/mesas" component={Mesas} exact />
             <Route path="/:page" flamelink={flamelink} component={CmsContent} />
           </Switch>
         </Router>
