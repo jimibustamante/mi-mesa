@@ -32,6 +32,7 @@ export default function Mesas() {
           // TODO: handle error
           setFetched(true)
           if (err) console.log({err})
+          if (!content) return
           content = Object.values(content)
           const mesas = content.filter((mesa) => mesa.user_id === currentUser.id)
           setMisMesas(mesas)
