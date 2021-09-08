@@ -16,6 +16,32 @@ const useFlameLinkApp = () => {
     return content
   }
 
+  const getSchema = async (schemaKey) => {
+    if (!app.current) return
+    const schema = await app.current.schemas.get(schemaKey)
+    return schema
+  }
+
+  const createRecord = async (schemaKey, data) => {
+    if (!app.current) return
+    // console.log({schemaKey, data})
+    const record = await app.current.content.add({schemaKey, data})
+    return record
+  }
+
+  const getMesas = async () => {
+    if (!app.current) return
+    const mesas = await getContent('mesa')
+    return mesas
+  }
+
+  const getTypes = async () => {
+    if (!app.current) return
+    let types = await getContent('tipoMesa')
+    types = Object.values(types)
+    return types
+  }
+
   useEffect(() => {
     if (app.current) return
     app.current = flamelink({
@@ -27,6 +53,10 @@ const useFlameLinkApp = () => {
   return {
     flamelinkApp: app.current,
     getContent,
+    createRecord,
+    getSchema,
+    getTypes,
+    getMesas,
   }
 }
 

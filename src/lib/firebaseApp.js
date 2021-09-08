@@ -22,4 +22,6 @@ export const loginOptions = {
   ]
 }
 
+export const db = firebase.firestore;
+
 export default !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app()

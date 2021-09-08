@@ -2,6 +2,7 @@
 @import "~bootstrap/scss/bootstrap";
 
 :root {
+  --bs-primary: #5200FF !important; 
   --main-color: #FF1D63;
   --header-height: 95px;
   --main-text-color: #E4DCED;
@@ -26,6 +27,11 @@
   border-radius: 32px;
   background-color: $bg-color;
   color: #FFFFFF;
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
 }
 
 @mixin link {

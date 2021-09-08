@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom'
 
 import { UserContextProvider, useUserContext } from './contexts/UserContext'
+import { MesaContextProvider } from './contexts/MesaContext'
 import { NavigationContextProvider, useNavigationContext } from './contexts/NavigationContext'
 
 import './App.scss'
@@ -26,7 +27,7 @@ import Header from './components/Header'
 import Login from './components/Login'
 import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
-import Mesas from './components/Mesas'
+import Mesas from './components/mesas'
 
 const AuthListener = () => {
   const [userState, dispatchUser] = useUserContext()
@@ -48,6 +49,7 @@ const AuthListener = () => {
       if (user) {
         // Signed in
         initFlamelink()
+        console.log({user})
         dispatchUser({type: 'AUTH_SIGNED_IN', payload: user})
         history.replace('/mesas')
       } else {
@@ -63,19 +65,21 @@ const AuthListener = () => {
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
-      <NavigationContextProvider>
-        <Router>
-          <Header />
-          <AuthListener />
-          <Switch>
-            <Route path="/" component={Home} exact />
-            <Route path="/welcome" component={Landing} exact />
-            <Route path="/sign-in" component={Login} exact />
-            <Route path="/mesas" component={Mesas} exact />
-            <Route path="/:page" flamelink={flamelink} component={CmsContent} />
-          </Switch>
-        </Router>
-      </NavigationContextProvider>
+      <MesaContextProvider>
+        <NavigationContextProvider>
+          <Router>
+            <Header />
+            <AuthListener />
+            <Switch>
+              <Route path="/" component={Home} exact />
+              <Route path="/welcome" component={Landing} exact />
+              <Route path="/sign-in" component={Login} exact />
+              <Route path="/mesas" component={Mesas} exact />
+              <Route path="/:page" flamelink={flamelink} component={CmsContent} />
+            </Switch>
+          </Router>
+        </NavigationContextProvider>
+      </MesaContextProvider>
     </UserContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
