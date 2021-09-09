@@ -5,7 +5,6 @@ const MesaList = ({ mesas, emptyMessage }) => {
   const [mesaState] = useMesaContext()
   const { mesaTypes } = mesaState
 
-  console.log({mesas})
   function mesaTypeName(mesaId) {
     let mesa = mesaTypes.find(mesa => mesa.id === mesaId)
     return mesa ? mesa.name : ''
@@ -29,7 +28,6 @@ const MesaList = ({ mesas, emptyMessage }) => {
             </thead>
             <tbody>
               { mesas.map((mesa) => {
-                  console.log({mesa})
                   return (
                     <tr key={mesa.id} className='mesa-item'>
                       <td>{mesa.name}</td>

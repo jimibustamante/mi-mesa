@@ -20,7 +20,7 @@ export default function Mesas() {
     setFetched(true)
     if (!content) return
     content = Object.values(content)
-    const mesas = content.filter((mesa) => mesa.user_id === currentUser.id)
+    const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
     setMisMesas(mesas)
   }
 
@@ -31,10 +31,10 @@ export default function Mesas() {
         callback: (err, content) => {
           // TODO: handle error
           setFetched(true)
-          if (err) console.log({err})
+          if (err) console.error({err})
           if (!content) return
           content = Object.values(content)
-          const mesas = content.filter((mesa) => mesa.user_id === currentUser.id)
+          const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
           setMisMesas(mesas)
         }
       }
@@ -43,14 +43,13 @@ export default function Mesas() {
 
   useEffect(() => {
     if (flamelinkApp && misMesas.length === 0) {
+      fetchMisMesas()
       subscribeToMesas()
-      // fetchMisMesas()
-      console.log({add: flamelinkApp.content.add})
     }
   }, [flamelinkApp])
 
   const onMesaCreated = (newMesa) => {
-    console.log({newMesa})
+    console.debug({newMesa})
     setShowNewMesa(false)
   }
 

@@ -13,6 +13,7 @@ const SignOutButton = () => {
   const signOut = () => {
     firebase.auth().signOut()
     dispatch({ type: 'AUTH_SIGNED_OUT' })
+    document.location.replace('/')
   }
 
   return (
