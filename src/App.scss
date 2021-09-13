@@ -2,7 +2,10 @@
 @import "~bootstrap/scss/bootstrap";
 
 :root {
+  --mesas-blue: #1A81C1;
+  --mesas-green: #1BDAB0;
   --bs-primary: #5200FF !important; 
+  --bs-secondary: #DADCE5 !important;
   --main-color: #FF1D63;
   --header-height: 95px;
   --main-text-color: #E4DCED;
@@ -11,6 +14,7 @@
   --bs-purple: #3B007D !important;
   --bs-red: #FF595A !important;
   --bs-blue: #5200FF !important;
+  --bs-green: #00FFA3 !important;
   --bs-body-bg: #F2F2F2 !important;
 }
 

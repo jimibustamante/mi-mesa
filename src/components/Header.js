@@ -1,33 +1,17 @@
 import React, { useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useUserContext } from '../contexts/UserContext'
 import { useNavigationContext } from '../contexts/NavigationContext'
 import { Navbar, Container } from 'react-bootstrap'
 import Logo from '../images/logo.svg'
-import firebase from 'firebase/app'
-import 'firebase/auth'
 
-const SignOutButton = () => {
-  const [userState, dispatch] = useUserContext()
-  const { currentUser } = userState
-  const signOut = () => {
-    firebase.auth().signOut()
-    dispatch({ type: 'AUTH_SIGNED_OUT' })
-    document.location.replace('/')
-  }
-
-  return (
-    currentUser ? (
-      <span className='span-link' onClick={signOut}>
-        Sign Out
-      </span>
-    ) : ( '' )
-  )
-}
+import SignOutButton from './SignOut'
 
 export default function Header() {
   const history = useHistory()  
   const [userState] = useUserContext()
+  const location = useLocation()
+  console.log({location})
   const { currentUser } = userState
   const [navigationState, dispatchNavigation] = useNavigationContext()
   const { items } = navigationState
@@ -35,7 +19,6 @@ export default function Header() {
     history.push('/')
   }, [history])
 
-  console.log({items})
   return (
     <header>
       <Container fluid>

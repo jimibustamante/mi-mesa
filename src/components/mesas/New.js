@@ -1,5 +1,5 @@
 import { memo, useState, useEffect } from 'react'
-import firebaseApp, { db } from '../../lib/firebaseApp'
+import { db } from '../../lib/firebaseApp'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 
 import { useUserContext } from '../../contexts/UserContext'
@@ -12,7 +12,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   const [userState] = useUserContext()
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
-  const { createRecord, getTypes, getSchema } = useFlameLinkApp()
+  const { createRecord, getTypes } = useFlameLinkApp()
   const { currentUser } = userState
 
   useEffect(() => {
@@ -25,11 +25,10 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   }, [mesaTypes, dispatch])
 
   const handleSubmit = async (e) => {
+    // TODO: Validate
     e.preventDefault()
     const selectedType = mesaTypes.find(mt => mt.name === type)
     if (!selectedType) return
-    console.log({name, selectedType})
-    const schema = await getSchema('tipoMesa')
     const newMesa = await createRecord('mesa', {
       name,
       userId: currentUser.uid,

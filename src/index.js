@@ -28,6 +28,7 @@ import Login from './components/Login'
 import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
 import Mesas from './components/mesas'
+import ShowMesa from  './components/mesas/Show'
 
 const AuthListener = () => {
   const [userState, dispatchUser] = useUserContext()
@@ -42,7 +43,6 @@ const AuthListener = () => {
     const navigation = await flamelinkApp.nav.get('menu', {structure: 'nested'})
     dispatchNavigation({ type: 'SET_NAVIGATION', payload: navigation })
   }
-
 
   useEffect(() => {
     firebaseApp.auth().onAuthStateChanged(user => {
@@ -74,6 +74,7 @@ ReactDOM.render(
               <Route path="/" component={Home} exact />
               <Route path="/welcome" component={Landing} exact />
               <Route path="/sign-in" component={Login} exact />
+              <Route path="/mesas/:mesaId" component={ShowMesa} exact />
               <Route path="/mesas" component={Mesas} exact />
               <Route path="/:page" flamelink={flamelink} component={CmsContent} />
             </Switch>

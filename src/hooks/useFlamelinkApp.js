@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react'
 import firebaseApp from '../lib/firebaseApp'
 
 import flamelink from 'flamelink/app'
@@ -22,10 +22,23 @@ const useFlameLinkApp = () => {
     return schema
   }
 
+  const getContentBy = async (schemaKey, field, value) => {
+    if (!app.current) return
+    const content = await app.current.content.getByField({schemaKey, field, value})
+    console.log({content})
+    if (!content) return []
+    return content[value]
+  }
+
   const createRecord = async (schemaKey, data) => {
     if (!app.current) return
-    // console.log({schemaKey, data})
     const record = await app.current.content.add({schemaKey, data})
+    return record
+  }
+
+  const updateRecord = async (schemaKey, entryId, data) => {
+    if (!app.current) return
+    const record = await app.current.content.update({schemaKey, entryId, data})
     return record
   }
 
@@ -43,6 +56,7 @@ const useFlameLinkApp = () => {
   }
 
   useEffect(() => {
+    console.log({'app.current': app.current, flamelink, firebaseApp})
     if (app.current) return
     app.current = flamelink({
       firebaseApp,
@@ -53,7 +67,9 @@ const useFlameLinkApp = () => {
   return {
     flamelinkApp: app.current,
     getContent,
+    getContentBy,
     createRecord,
+    updateRecord,
     getSchema,
     getTypes,
     getMesas,
