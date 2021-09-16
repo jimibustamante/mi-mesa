@@ -5,14 +5,15 @@ const MesaContext = createContext()
 export const MesaContextProvider = ({children}) => {
   const initialState = {
     mesaTypes: [],
-    mesas: [],
+    myMesas: [],
   }
+
   const reducer = (state, action) => {
     switch (action.type) {
       case 'SET_MESA_TYPES':
         return { ...state, mesaTypes: action.payload }
-      case 'SET_MESAS':
-        return { ...state, mesas: action.payload }
+      case 'SET_MY_MESAS':
+        return { ...state, myMesas: action.payload }
       default: throw new Error('Unexpected action: ' + action.type)
     }
   }

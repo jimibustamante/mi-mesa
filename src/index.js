@@ -51,11 +51,9 @@ const AuthListener = () => {
         initFlamelink()
         console.log({user})
         dispatchUser({type: 'AUTH_SIGNED_IN', payload: user})
-        history.replace('/mesas')
       } else {
         // Signed out
         dispatchUser({type: 'AUTH_SIGNED_OUT'})
-        history.replace('/welcome')
       }
     })
   }, [history, firebaseApp])

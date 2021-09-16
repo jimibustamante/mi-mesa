@@ -55,6 +55,23 @@ const useFlameLinkApp = () => {
     return types
   }
 
+  const getFolderFiles = async (folderName) => {
+    if (!app.current) return
+    const files = await app.current.storage.getFiles({folderName})
+    return files
+  } 
+
+  const getFolders = async () => {
+    if (!app.current) return
+    const folders = await app.current.storage.getFolders({})
+    return folders
+  }
+
+  const getFileUrl = async (fileId) => {
+    if (!app.current) return
+    const url = await app.current.storage.getURL({fileId})
+    return url
+  }
   useEffect(() => {
     console.log({'app.current': app.current, flamelink, firebaseApp})
     if (app.current) return
@@ -73,6 +90,9 @@ const useFlameLinkApp = () => {
     getSchema,
     getTypes,
     getMesas,
+    getFolderFiles,
+    getFolders,
+    getFileUrl,
   }
 }
 

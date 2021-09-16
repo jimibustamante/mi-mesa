@@ -44,34 +44,6 @@ const MesaList = ({ mesas, emptyMessage, createMesa }) => {
             })}
           </div>
         )}
-        {/* { mesas.length > 0 && (
-          <Table striped bordered hover className='mesa-list'>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Tipo</th>
-                <th>Participantes</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              { mesas.map((mesa) => {
-                  return (
-                    <tr key={mesa.id} className='mesa-item'>
-                      <td>
-                        <Link to={`/mesas/${mesa.id}`}>{mesa.name}</Link>
-                      </td>
-                      <td>{mesaTypeName(mesa.mesaType.id)}</td>
-                      <td>10</td>
-                      <td>
-                        <span className='span-link' onClick={() => startEditing(mesa.id)}>Editar</span>
-                      </td>
-                    </tr>
-                  )
-              })}
-            </tbody>
-          </Table>
-        )} */}
       </Container>
     </section>
   )

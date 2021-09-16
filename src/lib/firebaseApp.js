@@ -12,6 +12,7 @@ const firebaseConfig = {
 }
 
 export const loginOptions = {
+  signInSuccessUrl: '/mesas',
   signInOptions: [
     {
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,

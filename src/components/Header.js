@@ -11,12 +11,12 @@ export default function Header() {
   const history = useHistory()  
   const [userState] = useUserContext()
   const location = useLocation()
-  console.log({location})
+
   const { currentUser } = userState
   const [navigationState, dispatchNavigation] = useNavigationContext()
   const { items } = navigationState
   const goHome = useCallback(() => {
-    history.push('/')
+    history.push('/welcome')
   }, [history])
 
   return (
@@ -36,6 +36,11 @@ export default function Header() {
                   </Navbar.Brand>
                 )
               })}
+              { currentUser && (
+                <Navbar.Brand>
+                  <Link className="menu-item" to='/mesas'>Mesas</Link>
+                </Navbar.Brand>                
+              )}
               { !currentUser && (
                 <>
                   <Navbar.Brand>

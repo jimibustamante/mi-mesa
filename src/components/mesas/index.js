@@ -7,6 +7,7 @@ import { ReactComponent as MesasIcon } from '../../images/mesas.svg'
 import { Container, Button, Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useUserContext } from '../../contexts/UserContext'
+import { useMesaContext } from '../../contexts/MesaContext'
 import NewMesa from './New'
 import MesaList from './List'
 
@@ -14,20 +15,21 @@ import '../../styles/Mesas.scss'
 
 export default function Mesas() {
   const [fetched, setFetched] = useState(false)
-  const [misMesas, setMisMesas] = useState([])
   const [showNewMesa, setShowNewMesa] = useState(false)
   const { flamelinkApp, getContent } = useFlameLinkApp()
   const [userState] = useUserContext()
+  const [mesaState, dispatch] = useMesaContext()
   const { currentUser } = userState
-
-  const fetchMisMesas = async () => {
+  const { myMesas } = mesaState
+  
+  const fetchMyMesas = async () => {
     let content = await getContent('mesa')
     console.log('Fetched', {content})
     setFetched(true)
     if (!content) return
     content = Object.values(content)
     const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
-    setMisMesas(mesas)
+    dispatch({type: 'SET_MY_MESAS', payload: mesas})
   }
 
   const subscribeToMesas = async () => {
@@ -42,16 +44,15 @@ export default function Mesas() {
           if (!content) return
           content = Object.values(content)
           const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
-          setMisMesas(mesas)
+          dispatch({type: 'SET_MY_MESAS', payload: mesas})
         }
       }
     )
   }
 
   useEffect(() => {
-    console.log({flamelinkApp, misMesas})
-    if (flamelinkApp && misMesas.length === 0) {
-      fetchMisMesas()
+    if (flamelinkApp && myMesas.length === 0) {
+      fetchMyMesas()
       subscribeToMesas()
     }
   }, [flamelinkApp])
@@ -85,7 +86,7 @@ export default function Mesas() {
             </div>
           </Col>
         </Row>
-          <MesaList createMesa={() => setShowNewMesa(true)} mesas={misMesas} emptyMessage='No tienes mesas creadas aun' />
+          <MesaList createMesa={() => setShowNewMesa(true)} mesas={myMesas} emptyMessage='No tienes mesas creadas aun' />
         </Container>
       </>
     )
