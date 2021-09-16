@@ -69,7 +69,7 @@ ReactDOM.render(
             <Header />
             <AuthListener />
             <Switch>
-              <Route path="/" component={Home} exact />
+              <Route path="/" component={Landing} exact />
               <Route path="/welcome" component={Landing} exact />
               <Route path="/sign-in" component={Login} exact />
               <Route path="/mesas/:mesaId" component={ShowMesa} exact />
