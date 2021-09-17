@@ -72,6 +72,13 @@ const useFlameLinkApp = () => {
     const url = await app.current.storage.getURL({fileId})
     return url
   }
+
+  const deleteMesa = async (mesaId) => {
+    if (!app.current) return
+    const mesa = await app.current.content.remove({schemaKey: 'mesa', entryId: mesaId})
+    return mesa
+  }
+
   useEffect(() => {
     console.log({'app.current': app.current, flamelink, firebaseApp})
     if (app.current) return
@@ -93,6 +100,7 @@ const useFlameLinkApp = () => {
     getFolderFiles,
     getFolders,
     getFileUrl,
+    deleteMesa,
   }
 }
 

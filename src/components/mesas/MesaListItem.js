@@ -19,7 +19,7 @@ const ActionButton = ({ onClick, icon, title }) => {
   )
 }
 
-export default function MesaItem({mesa, onEdit, onDelete}) {
+export default function MesaItem({mesa, onEdit, deleteMesa}) {
   const [mesaState] = useMesaContext()
   const { mesaTypes } = mesaState
   function mesaTypeName(mesaId) {
@@ -34,14 +34,14 @@ export default function MesaItem({mesa, onEdit, onDelete}) {
     <div className='mesa-item'>
       <div className='body'>
         <TableIcon />
-        <Link className='title' to={`/mesas/${mesa.id}`}>{mesa.name}</Link>
+        <Link className='title' title={mesa.name} to={`/mesas/${mesa.id}`}>{mesa.name}</Link>
         <span className='text'>{mesaType}</span>
       </div>
       <div className='footer actions'>
         <ActionButton icon={<AddParticipantIcon className='add' />} title='Agregar' />
         <ActionButton icon={<DocsIcon className='docs' />} title='Ver material' />
         <ActionButton onClick={onEdit} icon={<EditIcon className='edit' />} title='Editar' />
-        <ActionButton icon={<DeleteIcon className='delete' />} title='Eliminar' />
+        <ActionButton onClick={deleteMesa} icon={<DeleteIcon className='delete' />} title='Eliminar' />
       </div>
     </div>
   )

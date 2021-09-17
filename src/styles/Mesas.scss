@@ -218,7 +218,14 @@ span.option-button {
           color: var(--mesas-blue);
           font-weight: 600;
           font-size: 22px;
-          line-height: 26px;
+
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          line-height: 26px;     /* fallback */
+          max-height: 52px;      /* fallback */
+          -webkit-line-clamp: 2; /* number of lines to show */
+          -webkit-box-orient: vertical;
         }
         span.text {
           align-self: flex-start;

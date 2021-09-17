@@ -114,6 +114,37 @@ span.span-link {
   cursor: pointer;
 }
 
+.delete-prompt {
+  .modal-content {
+    .modal-body {
+      padding: 70px 30px !important;
+    }
+    background-color: var(--mesas-green);
+    h3 {
+      color: black;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 45px;
+      line-height: 53px;
+      text-align: center;
+    }
+    .mesa-buttons {
+      gap: 30px;
+      justify-content: center;
+      span {
+        text-decoration: underline;
+        cursor: pointer;
+        @include link;
+      }
+      button {
+        color: var(--mesas-green);
+        background-color: white;
+        border-color: var(--mesas-green);
+      }
+    }
+  }
+}
+
 #landing {
   margin-bottom: 10rem;
   section.landing-text {

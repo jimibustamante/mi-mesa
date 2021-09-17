@@ -40,7 +40,7 @@ const ComunaPicker = ({ onSelect }) => {
   return (
     <Container >
       <h2 style={{fontSize: '20px'}}  className='text-center'>Indícanos la comuna donde se desarrollará tu Mesa</h2>
-      <Form>
+      <Form autocomplete="off">
         <Form.Group controlId="type">
           <Form.Label>Región</Form.Label>
           <Form.Control as="select" name='región' value={selectedRegion} onChange={handleRegionChange}>
@@ -72,7 +72,7 @@ const CausePicker = ({ onSelect, cause }) => {
   return(
     <Container style={{marginBottom: '50px'}}>
       <h2 style={{fontSize: '20px'}} className='text-center'>En una frase, ¿cuál es la ‘causa social’ que convoca a las y los participantes de esta mesa?</h2>
-      <Form>
+      <Form autocomplete="off">
         <Form.Group controlId="type">
           <Form.Control type="text" value={cause} onChange={onChange} />
         </Form.Group>
@@ -88,7 +88,8 @@ const ThemePicker = ({ onSelect, theme }) => {
   }
   return (
     <Container style={{marginBottom: '50px'}}>
-      <Form>
+      <h2 style={{fontSize: '20px'}} className='text-center'>¿Cual de las siguientes temáticas será el asunto principal a tratar en esta mesa?</h2>
+      <Form autocomplete="off">
         <Form.Group controlId="type">
           <Form.Control type="text" value={theme} onChange={onChange} />
         </Form.Group>
@@ -221,16 +222,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
     // TODO: Validate
     const selectedType = mesaTypes.find(mt => mt.name === type)
     if (!selectedType) return
-    debugger
-    console.log({
-      name: mesaName(),
-      type,
-      isOpen,
-      comuna,
-      cause,
-      theme,
-      
-    })
+
     const newMesa = await createRecord('mesa', {
       name: mesaName(),
       userId: currentUser.uid,
@@ -240,14 +232,18 @@ const NewMesa = ({ onCreate , show, onClose }) => {
       theme,
       mesaType: db().doc(`/fl_content/${selectedType.id}`),
     })
+    setIsOpen(null)
+    setCause('')
+    setTheme('')
+    setComuna('')
+    setType('')
+    setLastStep('')
     onCreate(newMesa)
   }
 
   const onTypeChange = (typeName) => {
     setType(typeName)
     setCarouselCurrentIndex(index => index + 1)
-    // createMesa()
-    // onHide()
   }
 
   const onIsOpenChange = (isOpen) => {
