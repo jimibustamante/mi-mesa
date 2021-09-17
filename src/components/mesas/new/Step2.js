@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Row, Container, Col, Button } from "react-bootstrap"
 
-const Step2 = memo(({onSelect, isMesaOpen}) => { 
+const Step2 = ({onSelect, isMesaOpen}) => { 
   return (
     <Container>
       <Row className='justify-content-md-center'>
@@ -24,6 +24,6 @@ const Step2 = memo(({onSelect, isMesaOpen}) => {
       </Row>
     </Container>
   )
-})
+}
 
-export default Step2
+export default memo(Step2)

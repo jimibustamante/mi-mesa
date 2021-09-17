@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { Row, Container, Col, Button } from "react-bootstrap"
+import { Row, Container, Col } from "react-bootstrap"
 
-const Step3 = memo(({onSelect, type, onLastStepChange}) => { 
+const Step3 = ({onSelect, type, onLastStepChange}) => { 
 
   const handleChange = (e) => {
     onLastStepChange(e.target.name || e.target.getAttribute('name'))
@@ -35,6 +35,6 @@ const Step3 = memo(({onSelect, type, onLastStepChange}) => {
       </Row>
     </Container>
   )
-})
+}
 
-export default Step3
+export default memo(Step3)

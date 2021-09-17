@@ -2,7 +2,7 @@ import { memo } from "react"
 import { Row, Container, Col } from "react-bootstrap"
 import { ReactComponent as TablesIcon } from '../../../images/mesas.svg'
 
-const Step1 = memo(() => { 
+const Step1 = () => { 
   return (
     <Container fluid>
       <Row>
@@ -22,6 +22,6 @@ const Step1 = memo(() => {
       </Row>
     </Container>
   )
-})
+}
 
-export default Step1
+export default memo(Step1)

@@ -18,6 +18,28 @@ span.option-button {
   //   background-color: lightblue;
   // }
 }
+
+.dropdown-container {
+  position: relative;
+  overflow-y: visible;
+  .theme-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-left: solid 1px #d6d2d2;
+    border-right: solid 1px #d6d2d2;
+    .theme-item {
+      padding: 10px 20px;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 27px;
+      color: black;
+      border-bottom: solid 1px #d6d2d2;
+    }
+  }
+}
 .mesa-buttons {
   display: flex;
   justify-content: center;
