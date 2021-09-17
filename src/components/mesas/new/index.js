@@ -74,6 +74,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
     setComuna('')
     setType('')
     setLastStep('')
+    setCarouselCurrentIndex(0)
     onCreate(newMesa)
   }
 
