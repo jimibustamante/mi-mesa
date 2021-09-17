@@ -1,0 +1,29 @@
+import { memo } from 'react'
+import { Row, Container, Col, Button } from "react-bootstrap"
+
+const Step2 = memo(({onSelect, isMesaOpen}) => { 
+  return (
+    <Container>
+      <Row className='justify-content-md-center'>
+        <Col>
+          <h2 className='text-center'>¿Esta mesa será<br/> abierta o cerrada?</h2>
+        </Col>
+      </Row>
+      <Row className='justify-content-md-center'>
+        <Col md={6}>
+          <span style={{display: 'block'}} className='text-center small-text display-block'>
+          * Si marcas ‘abierta’ permitirás que personas puedan inscribirse para sumarse a la mesa.
+          </span>
+        </Col>
+      </Row>
+      <Row className='justify-content-md-center'>
+        <Col className='mesa-buttons' md={6}>
+          <Button className={`button ${isMesaOpen === true ? 'selected' : ''}`} onClick={() => onSelect(true)}>Abierta</Button>
+          <Button className={`button ${isMesaOpen === false ? 'selected' : ''}`} onClick={() => onSelect(false)}>Cerrada</Button>
+        </Col>
+      </Row>
+    </Container>
+  )
+})
+
+export default Step2
