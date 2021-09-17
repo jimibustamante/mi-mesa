@@ -1,44 +1,23 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
-import { Table } from 'react-bootstrap'
-import MesaFile from '../../classes/mesa_file'
 import { useMesaContext } from '../../contexts/MesaContext'
-import { Container } from 'react-bootstrap'
-import Participants from './Participants'
+import { Container, Row, Col } from 'react-bootstrap'
+import Participants from '../participants/Participants'
+import DocsList from './DocsList'
+import { ReactComponent as TableIcon } from '../../images/table.svg'
 
 export default function Show() {
   const { mesaId } = useParams()
-  const [mesaFiles, setMesaFiles] = useState([])
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
   const [mesa, setMesa] = useState(null)
   const { getContentBy, flamelinkApp, getFolderFiles, getFileUrl, getTypes } = useFlameLinkApp()
 
-  function mesaTypeName(typeId) {
-    if (!mesaTypes) return ''
-    return mesaTypes.find(mt => mt.id === typeId)?.name
-  }
-
-  const getMesaFiles =  async (mesa) => {
-    const mesaType = mesaTypeName(mesa.mesaType.id)
-    console.log(mesaType)
-    const files = await getFolderFiles(mesaType)
-    let _mesaFiles = []
-    Object.values(files).forEach((file) => {
-      getFileUrl(file.id).then((url) => {
-        let mesaFile = new MesaFile(file)
-        mesaFile.url = url
-        _mesaFiles.push(mesaFile)
-        setMesaFiles(_mesaFiles)
-      })
-    })
-  }
 
   const getMesa = useCallback(async () => {
     try {
       const mesa = await getContentBy('mesa', 'id', mesaId)
-      getMesaFiles(mesa)
       console.log({mesa})
       setMesa(mesa)
     } catch (error) {
@@ -61,36 +40,19 @@ export default function Show() {
       getMesa()
   }, [mesaId, mesaTypes])
 
-  console.log({mesaFiles})
   return (
     mesa ? (
       <Container id='show-mesa'>
-        <h1>{mesa.name}</h1>
-        <Participants mesa={mesa} />
-
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Tipo</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mesaFiles.map(mesaFile => (
-              <tr key={mesaFile.id}>
-                <td>{mesaFile.name}</td>
-                <td>{mesaFile.type}</td>
-                <td>
-                  <a href={mesaFile.url} target='_blank' title='Abrir archivo'>
-                    Abrir
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-
+        <Row md={12} className='show-mesa-header'>
+          <Col md={2}>
+            <TableIcon className='show-mesa-header-icon' />
+          </Col>
+          <Col md={6}>
+            <h2 className='name'>{mesa.name}</h2>
+          </Col>
+        </Row>
+        {/* <Participants mesa={mesa} /> */}
+        <DocsList mesa={mesa} mesaTypes={mesaTypes} />
       </Container>
     ) : (
       // TODO: Here should be a loading component

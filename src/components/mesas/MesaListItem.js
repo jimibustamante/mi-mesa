@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ReactComponent as TableIcon } from '../../images/table.svg'
-import { ReactComponent as AddIcon } from '../../images/add.svg'
+import { ReactComponent as AddParticipantIcon } from '../../images/add-participant.svg'
+import { ReactComponent as DocsIcon } from '../../images/docs-icon.svg'
 import { ReactComponent as DeleteIcon } from '../../images/delete.svg'
 import { ReactComponent as EditIcon } from '../../images/edit.svg'
 import { useMesaContext } from '../../contexts/MesaContext'
@@ -37,9 +38,10 @@ export default function MesaItem({mesa, onEdit, onDelete}) {
         <span className='text'>{mesaType}</span>
       </div>
       <div className='footer actions'>
+        <ActionButton icon={<AddParticipantIcon className='add' />} title='Agregar' />
+        <ActionButton icon={<DocsIcon className='docs' />} title='Ver material' />
         <ActionButton onClick={onEdit} icon={<EditIcon className='edit' />} title='Editar' />
         <ActionButton icon={<DeleteIcon className='delete' />} title='Eliminar' />
-        <ActionButton icon={<AddIcon className='add' />} title='Agregar' />
       </div>
     </div>
   )

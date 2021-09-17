@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Button, Container, Table, Row, Col } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import EditMesa from './Edit'
-import MesaItem from './MesaItem'
+import MesaItem from './MesaListItem'
 import { ReactComponent as AddIcon } from '../../images/add.svg'
 
 const MesaList = ({ mesas, emptyMessage, createMesa }) => {

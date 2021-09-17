@@ -32,4 +32,8 @@ export default class MesaFile {
   get url() {
     return this._url
   }
+
+  get contentType() {
+    return this.file.contentType
+  }
 }

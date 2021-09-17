@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react'
-
-import { ReactComponent as EditIcon } from '../../images/edit.svg'
-import { ReactComponent as AddIcon } from '../../images/add.svg'
 import { ReactComponent as MesasIcon } from '../../images/mesas.svg'
 
-import { Container, Button, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useUserContext } from '../../contexts/UserContext'
 import { useMesaContext } from '../../contexts/MesaContext'
-import NewMesa from './New'
+import NewMesa from './new/index'
 import MesaList from './List'
 
 import '../../styles/Mesas.scss'
@@ -75,7 +72,7 @@ export default function Mesas() {
               <h3>Mis mesas</h3>
             </div>
           </Col>
-          <Col md={6}>
+          {/* <Col md={6}>
             <div className='buttons'>
               <Button size='md' className='button secondary' variant='secondary'>
                 <EditIcon className='icon' size='15' />Editar mis Mesas
@@ -84,7 +81,7 @@ export default function Mesas() {
                 <AddIcon className='icon' size={15} />Crear nueva mesa
               </Button>
             </div>
-          </Col>
+          </Col> */}
         </Row>
           <MesaList createMesa={() => setShowNewMesa(true)} mesas={myMesas} emptyMessage='No tienes mesas creadas aun' />
         </Container>
