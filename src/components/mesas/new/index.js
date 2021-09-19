@@ -2,8 +2,6 @@ import { memo, useState, useEffect } from 'react'
 import { db } from '../../../lib/firebaseApp'
 import useFlameLinkApp from '../../../hooks/useFlamelinkApp'
 import { ReactComponent as CloseModalIcon } from '../../../images/close-modal.svg'
-import { ReactComponent as NextIcon } from '../../../images/next.svg'
-import { ReactComponent as PrevIcon } from '../../../images/prev.svg'
 
 import { useUserContext } from '../../../contexts/UserContext'
 import { useMesaContext } from '../../../contexts/MesaContext'
@@ -13,6 +11,7 @@ import Carousel from 'react-bootstrap/Carousel'
 import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
+import Back from './Back'
 import ComunaPicker from './ComunaPicker'
 import CausePicker from './CausePicker'
 import ThemePicker from './ThemePicker'
@@ -100,33 +99,56 @@ const NewMesa = ({ onCreate , show, onClose }) => {
     setLastStep(lastStep)
   }
 
+  const next = () => {
+    setCarouselCurrentIndex(index => index + 1)
+  }
+
+  const back = () => {
+    setCarouselCurrentIndex(index => index - 1)
+  }
+
+  const createButtonDisabled = () => {
+    switch (lastStep) {
+      case 'territorial':
+        return comuna === ''
+      case 'interés común':
+        return cause.length < 5
+      case 'temática':
+        return theme.length < 5
+      case 'interés común territorial':
+        return cause.length < 5 || comuna === ''
+      default:
+        return true
+    }
+  }
+
+
+  console.log({createButtonDisabled: createButtonDisabled()})
+  const disabled = createButtonDisabled()
   return (
     <Modal show={show} onHide={onHide} size="lg">
       <CloseModalIcon className='close-modal' onClick={onHide} />
       <Modal.Body>
         <Carousel
           slide={false}
+          controls={false}
           activeIndex={carouselCurrentIndex}
           onSelect={handleCarouselSelect}
-          nextIcon={<NextIcon />}
-          // nextIcon={null}
-          nextLabel={null}
-          prevIcon={<PrevIcon />}
-          prevLabel={null}
           indicators={false}
           interval={null}
           >
           <Carousel.Item>
-            <Step1 />
+            <Step1 next={next} />
           </Carousel.Item>
           <Carousel.Item>
-            <Step2 onSelect={onIsOpenChange} isMesaOpen={isOpen} />
+            <Step2 next={next} back={back} onSelect={onIsOpenChange} isMesaOpen={isOpen} />
           </Carousel.Item>
           <Carousel.Item>
-            <Step3 onSelect={onTypeChange} onLastStepChange={onLastStepChange} type={type} />
+            <Step3 next={next} back={back} onSelect={onTypeChange} onLastStepChange={onLastStepChange} type={type} />
           </Carousel.Item>
           <Carousel.Item>
             <Container>
+              <Back onBack={back} />
               {lastStep.includes('interés común') && (
                 <CausePicker onSelect={(cause) => setCause(cause)} cause={cause} />
               )}
@@ -138,7 +160,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
               )}
               <Row className='justify-content-md-center'>
                 <Col className='mesa-buttons' md={6}>
-                  <Button className='button' onClick={createMesa}>Crear Mesa</Button>
+                  <Button disabled={disabled} className='button' onClick={createMesa}>Crear Mesa</Button>
                 </Col>
               </Row>
             </Container>

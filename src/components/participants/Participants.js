@@ -15,8 +15,7 @@ export default function Participants({mesa}) {
 
   const fetchParticipants = async () => {
     console.log(mesa.id)
-    const participants = await getContentBy('participante', 'mesaId', mesa.id)
-    // debugger
+    const participants = await getContentBy('participante', 'mesaId', mesa.id)debugger
     setParticipants(participants)
     setFetched(true)
     console.log({participants})

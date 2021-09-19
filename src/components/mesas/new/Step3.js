@@ -1,7 +1,9 @@
 import { memo } from 'react'
 import { Row, Container, Col } from "react-bootstrap"
+import Next from './Next'
+import Back from './Back'
 
-const Step3 = ({onSelect, type, onLastStepChange}) => { 
+const Step3 = ({onSelect, type, onLastStepChange, back, next}) => { 
 
   const handleChange = (e) => {
     onLastStepChange(e.target.name || e.target.getAttribute('name'))
@@ -10,6 +12,7 @@ const Step3 = ({onSelect, type, onLastStepChange}) => {
 
   return (
     <Container>
+      <Back onBack={back} />
       <Row className='justify-content-md-center'>
         <Col>
           <h2 className='text-center' style={{marginButton: 21}} >

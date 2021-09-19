@@ -1,10 +1,12 @@
 import { memo } from "react"
 import { Row, Container, Col } from "react-bootstrap"
 import { ReactComponent as TablesIcon } from '../../../images/mesas.svg'
+import Next from './Next'
 
-const Step1 = () => { 
+const Step1 = ({next}) => { 
   return (
     <Container fluid>
+      <Next onNext={next} />
       <Row>
         <Col md={3}>
           <TablesIcon />

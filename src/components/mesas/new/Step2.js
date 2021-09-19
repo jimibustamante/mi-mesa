@@ -1,9 +1,15 @@
 import { memo } from 'react'
 import { Row, Container, Col, Button } from "react-bootstrap"
+import Next from './Next'
+import Back from './Back'
 
-const Step2 = ({onSelect, isMesaOpen}) => { 
+const Step2 = ({onSelect, isMesaOpen, back, next}) => { 
   return (
     <Container>
+      <Back onBack={back} />
+      {isMesaOpen !== null && (
+        <Next onNext={next} />
+      )}
       <Row className='justify-content-md-center'>
         <Col>
           <h2 className='text-center'>¿Esta mesa será<br/> abierta o cerrada?</h2>
