@@ -144,7 +144,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
             <Step2 next={next} back={back} onSelect={onIsOpenChange} isMesaOpen={isOpen} />
           </Carousel.Item>
           <Carousel.Item>
-            <Step3 next={next} back={back} onSelect={onTypeChange} onLastStepChange={onLastStepChange} type={type} />
+            <Step3 back={back} onSelect={onTypeChange} onLastStepChange={onLastStepChange} type={type} />
           </Carousel.Item>
           <Carousel.Item>
             <Container>

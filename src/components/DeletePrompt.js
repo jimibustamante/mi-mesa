@@ -27,7 +27,6 @@ export default function DeletePrompt({show, onHide, onConfirm, text}) {
         <Row className='justify-content-sm-center'>
           <Col xs={12} className='mesa-buttons'>
             <span className='mesa-button' onClick={onHide}>Cancelar</span>
-            {/* <button onClick={onHide}>cancelar</button> */}
             <button onClick={onConfirm}>eliminar</button>
           </Col>
         </Row>

@@ -12,18 +12,18 @@ export default function Show() {
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
   const [mesa, setMesa] = useState(null)
-  const { getContentBy, flamelinkApp, getFolderFiles, getFileUrl, getTypes } = useFlameLinkApp()
+  const { getMesaById, getTypes } = useFlameLinkApp()
 
 
   const getMesa = useCallback(async () => {
     try {
-      const mesa = await getContentBy('mesa', 'id', mesaId)
+      const mesa = await getMesaById(mesaId)
       console.log({mesa})
       setMesa(mesa)
     } catch (error) {
       console.error(error)
     }
-  }, [getContentBy, mesaId])
+  }, [getMesaById, mesaId])
 
   useEffect(() => {
     if (mesaTypes.length === 0) {
@@ -43,7 +43,7 @@ export default function Show() {
   return (
     mesa ? (
       <Container id='show-mesa'>
-        <Row md={12} className='show-mesa-header'>
+        <Row style={{marginBottom: '25px'}} md={12} className='show-mesa-header'>
           <Col md={2}>
             <TableIcon className='show-mesa-header-icon' />
           </Col>
@@ -51,7 +51,17 @@ export default function Show() {
             <h2 className='name'>{mesa.name}</h2>
           </Col>
         </Row>
-        {/* <Participants mesa={mesa} /> */}
+        <Row>
+          <Col>
+            <p>Hola! Aquí está todo lo que necesitas para armar tu Mesa Ciudadana. 
+              Por favor lee con cuidado los documentos metodológicos, revisa los videos tutoriales, 
+              y revisa también las herramientas de tabulación de los resultados de tu Mesa Ciudadana. 
+              Queremos que conozcas bien toda la información antes de iniciar el trabajo de tu mesa. 
+              Si necesitas apoyo no dudes en escribirnos en mesasciudadanas@boricpresidente.cl
+            </p>
+          </Col>
+        </Row>
+        <Participants mesa={mesa} />
         <DocsList mesa={mesa} mesaTypes={mesaTypes} />
       </Container>
     ) : (

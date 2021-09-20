@@ -12,16 +12,16 @@ function EditMesa({mesaId, onUpdate, onCancel}) {
 
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
-  const { getContentBy, updateRecord } = useFlameLinkApp()
+  const { getMesaById, updateRecord } = useFlameLinkApp()
 
   const getMesa = useCallback(async () => {
     try {
-      const mesa = await getContentBy('mesa', 'id', mesaId)
+      const mesa = await getMesaById(mesaId)
       setMesa(mesa)
     } catch (error) {
       console.error(error)
     }
-  }, [getContentBy, mesaId])
+  }, [getMesaById, mesaId])
 
   const onChange = (e) => {
     let { name, value } = e.target

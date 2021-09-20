@@ -25,9 +25,14 @@ const useFlameLinkApp = () => {
   const getContentBy = async (schemaKey, field, value) => {
     if (!app.current) return
     const content = await app.current.content.getByField({schemaKey, field, value})
-    console.log({content})
     if (!content) return []
-    return content[value]
+    return Object.values(content)
+  }
+  
+  const getMesaById = async (mesaId) => {
+    const mesa = await app.current.content.getByField({schemaKey: 'mesa', field: 'id', value: mesaId})
+    console.log({mesa})
+    return mesa[mesaId]
   }
 
   const createRecord = async (schemaKey, data) => {
@@ -79,6 +84,12 @@ const useFlameLinkApp = () => {
     return mesa
   }
 
+  const deleteParticipant = async (participanteId) => {
+    if (!app.current) return
+    const participante = await app.current.content.remove({schemaKey: 'participante', entryId: participanteId})
+    return participante
+  }
+
   useEffect(() => {
     console.log({'app.current': app.current, flamelink, firebaseApp})
     if (app.current) return
@@ -92,6 +103,7 @@ const useFlameLinkApp = () => {
     flamelinkApp: app.current,
     getContent,
     getContentBy,
+    getMesaById,
     createRecord,
     updateRecord,
     getSchema,
@@ -101,6 +113,7 @@ const useFlameLinkApp = () => {
     getFolders,
     getFileUrl,
     deleteMesa,
+    deleteParticipant,
   }
 }
 

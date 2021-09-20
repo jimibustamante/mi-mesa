@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Row, Col } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import MesaFile from '../../classes/mesa_file'
 
@@ -42,7 +42,7 @@ export default function DocsList({mesa, mesaTypes}) {
   }
 
   const getMesaFiles =  async (mesa) => {
-    const mesaType = mesaTypeName(mesa.mesaType.id)
+    const mesaType = mesaTypeName(mesa?.mesaType?.id)
     const files = await getFolderFiles(mesaType)
     let _mesaFiles = []
     Object.values(files).forEach((file) => {
@@ -56,7 +56,7 @@ export default function DocsList({mesa, mesaTypes}) {
   }
 
   useEffect(() => {
-    if (mesaTypes) {
+    if (mesaTypes && mesa) {
       getMesaFiles(mesa)
     }
   }, [mesa, mesaTypes])

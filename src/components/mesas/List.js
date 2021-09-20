@@ -17,7 +17,7 @@ const MesaList = ({ mesas, emptyMessage, createMesa }) => {
     setEditId(id)
   }
 
-  const deteteMesa = (id) => {
+  const deleteAttempt = (id) => {
     setDeleteId(id)
     setShowDelete(true)
   }
@@ -56,7 +56,7 @@ const MesaList = ({ mesas, emptyMessage, createMesa }) => {
                 key={mesa.id}
                 mesa={mesa}
                 onEdit={() => startEditing(mesa.id)}
-                deleteMesa={() => deteteMesa(mesa.id)}
+                deleteMesa={() => deleteAttempt(mesa.id)}
               />
             )
           })}
