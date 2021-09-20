@@ -221,7 +221,6 @@ span.span-link {
     background-size: cover;
     width: 100%;
     height: calc(100vh - var(--header-height));
-    // height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -384,6 +383,12 @@ span.span-link {
     font-weight: 300;
     font-size: 25px;
     line-height: 142.3%;
+  }
+  .col-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
   }
   button, a.btn {
     @include button(var(--bs-blue));
