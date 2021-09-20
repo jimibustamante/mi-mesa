@@ -5,6 +5,7 @@ import { useUserContext } from '../../contexts/UserContext'
 // import Participant from '../../classes/participant'
 import DeletePrompt from '../../components/DeletePrompt'
 import NewParticipant from './NewParticipant'
+import EditParticipant from './EditParticipant'
 import { ReactComponent as ParticipantIcon } from '../../images/participant.svg'
 import { ReactComponent as EmailIcon } from '../../images/action-mail.svg'
 import { ReactComponent as EditIcon } from '../../images/action-edit.svg'
@@ -12,7 +13,9 @@ import { ReactComponent as DeleteIcon } from '../../images/action-delete.svg'
 
 export default function Participants({mesa}) {
   const [participants, setParticipants] = useState([])
+  const [editingParticipant, setEditingParticipant] = useState(null)
   const [showDelete, setShowDelete] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
   const [deleteId, setDeleteId] = useState(null)
   const [fetched, setFetched] = useState(false)
   const [showNewParticipant, setShowNewParticipant] = useState(false)
@@ -56,6 +59,11 @@ export default function Participants({mesa}) {
     fetchParticipants()
   }
 
+  const editParticipant = (participant) => {
+    setEditingParticipant(participant)
+    setShowEdit(true)
+  }
+
   const deleteAttempt = (id) => {
     setDeleteId(id)
     setShowDelete(true)
@@ -74,6 +82,9 @@ export default function Participants({mesa}) {
         onHide={() => setShowDelete(false)}
         onConfirm={onConfirmDelete} 
       />
+      {editingParticipant && (
+        <EditParticipant onUpdate={onCreateParticipant} show={showEdit} participant={editingParticipant} participants={participants} onClose={e => setShowEdit(false)} />
+      )}
       <NewParticipant mesa={mesa} participants={participants} show={showNewParticipant} onCreate={onCreateParticipant} onClose={e => setShowNewParticipant(false)}/>
       <Row md={12} className='participants-header'>
         <Col>
@@ -98,7 +109,7 @@ export default function Participants({mesa}) {
                       <div className='action'>
                         <EmailIcon />
                       </div>
-                      <div className='action'>
+                      <div className='action' onClick={() => editParticipant(participant)}>
                         <EditIcon />
                       </div>
                       <div className='action' onClick={() => deleteAttempt(participant.id)}>

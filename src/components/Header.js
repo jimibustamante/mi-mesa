@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useUserContext } from '../contexts/UserContext'
-import { useNavigationContext } from '../contexts/NavigationContext'
+// import { useNavigationContext } from '../contexts/NavigationContext'
 import { Navbar, Container } from 'react-bootstrap'
 import Logo from '../images/logo.svg'
 
@@ -10,11 +10,11 @@ import SignOutButton from './SignOut'
 export default function Header() {
   const history = useHistory()  
   const [userState] = useUserContext()
-  const location = useLocation()
+
 
   const { currentUser } = userState
-  const [navigationState, dispatchNavigation] = useNavigationContext()
-  const { items } = navigationState
+  // const [navigationState, dispatchNavigation] = useNavigationContext()
+  // const { items } = navigationState
   const goHome = useCallback(() => {
     history.push('/welcome')
   }, [history])
@@ -29,13 +29,6 @@ export default function Header() {
             </Navbar.Brand>
             <Navbar.Toggle className="navbar-dark"  />
             <Navbar.Collapse>
-              {items.map(item => {
-                return (
-                  <Navbar.Brand key={item.id} >
-                    <Link className="menu-item" to={item.url}>{item.title}</Link>
-                  </Navbar.Brand>
-                )
-              })}
               { currentUser && (
                 <Navbar.Brand>
                   <Link className="menu-item" to='/mesas'>Mesas</Link>

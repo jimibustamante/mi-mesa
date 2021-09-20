@@ -87,6 +87,7 @@ header {
     }
   }
   .logo {
+    cursor: pointer;
     img {
       max-width: 10rem;
       @media screen and (max-width: 575px) {

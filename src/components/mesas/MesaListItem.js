@@ -37,7 +37,6 @@ export default function MesaItem({mesa, onEdit, deleteMesa}) {
         <TableIcon />
         <Link className='title' title={mesa.name} to={`/mesas/${mesa.id}`}>{mesa.name}</Link>
         <div className='mesa-info'>
-          <span className='text participants'>7 Partidcipantes</span>
           <span className='text mesa-type'>{mesaType}</span>
           {mesa.comuna && <span className='text comuna'>Comuna: {mesa.comuna}</span>}
           {mesa.theme && <span className='text theme'>Tema: {mesa.theme}</span>}
