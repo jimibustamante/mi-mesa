@@ -1,75 +1,84 @@
-import React from 'react'
-import { Container } from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import {Button, Col, Container, Row } from 'react-bootstrap'
 import LandingImage1 from '../images/landing-img-1.png'
 import LandingImage2 from '../images/landing-img-2.png'
-import LandingImage3 from '../images/landing-img-3.png'
+import { ReactComponent as Arrow } from '../images/arrow.svg'
 import ChileImg from '../images/chile.png'
 
 export default function Landing() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <div id='landing'>
       <section className='landing-text'>
         <Container fluid>
-          <h2>Proceso<br/>Participativo</h2>
-          <p>Invitamos a toda la ciudadanía a ser parte del próximo gobierno de Gabriel Boric. Acá podrás presentar ideas, propuestas y anhelos de este nuevo proceso político.</p>
+          <h2>¡Participa!</h2>
+          <p className='subtitle'>Conoce más sobre el proceso participativo 
+            <a href='#mesas-content'>
+              <Arrow href='#mesas-content' />
+            </a>
+          </p>
         </Container>
       </section>
-      <section className='mesas'>
-        <Container fluid>
-          <div className='items-list'>
-            <div className='item text'>
-              <span className='text-med'>
-                Nemo enim ipsam
-              </span>
-              <h2>Mesas<br/>Ciudadanas</h2>
-              <span className='text-sm'>
-                Invitamos a la ciudadanía a participar de mesas ciudadanas que tienen por objetivo crear instancias de escucha y participación.
-              </span>
-            </div> 
-            <div className='item item-card' style={{backgroundImage: `url(${LandingImage1})`}}>
-              <div className='card-content'>
-                <h3>Mesas territoriales</h3>
-                <span className='text-sm'>
-                Júntate con amigos, familiares, vecinos y arma tu propia mesa.
-                </span>
-                <button>
-                  ¡Súmate!
-                </button>
-              </div>
-            </div>
-            <div className='item item-card' style={{backgroundImage: `url(${LandingImage2})`}}>
-              <div className='card-content'>
-                <h3>Mesas temáticas</h3>
-                <span className='text-sm'>
-                ¡Queremos escuchar todas las opiniones y anhelos de la ciudadanía!
-                </span>
-                <button>
-                  ¡Participa!
-                </button>
-              </div>
-            </div>
-            <div className='item item-card' style={{backgroundImage: `url(${LandingImage3})`}}>
-              <div className='card-content'>
-                <h3>Mesas por Causa</h3>
-                <span className='text-sm'>
-                ¿El reciclaje de plásticos es tu foco de trabajo? ¡Queremos escucharte!
-                </span>
-                <button>
-                  ¡Únete!
-                </button>
-              </div>
-            </div>
+      <div className='description'>
+            <p>
+              Este un espacio de participación donde todas las personas podrán compartir<br/>ideas, propuestas, anhelos, prioridades y opiniones para para construir, juntos<br/>y juntas, un Gobierno a puertas abiertas y de cara a la ciudadanía.
+            </p>
+            {/* <div className='see-more'>
+              <a href='#mesas-content'>Conoce más</a>
+              <ArrowDown />
+            </div> */}
           </div>
-        </Container>
+      <section id='mesas-content' className='mesas'>
+        <div className='mesas-container' >
+          <Row style={{marginBottom: '100px'}}>
+            <Col xs={12} md={6}>
+              <h2>Mesas<br/>Ciudadanas</h2>
+              <p>¡Únete a una o crea la tuya propia! Siéntate virtual o presencialmente con otras personas, conversa sobre los temas que te interesan y aporta a la construcción de un programa que nace desde la ciudadanía.</p>
+              <Button as={Link} to='/como-participar'>¡Súmate acá!</Button>
+
+            </Col>
+            <Col xs={12} md={6}>
+              <img src={LandingImage1} alt='Chile' />
+            </Col>
+          </Row>
+        </div>
+        <div className='mesas-container'>
+          <Row>
+            <Col xs={12} md={6}>
+              <img src={LandingImage2} alt='Chile' />
+            </Col>
+            <Col xs={12} md={6}>
+              <h2 className='green' style={{textAlign: 'right'}} >Consulta<br/>Ciudadana</h2>
+              <p style={{textAlign: 'right'}}>Contesta estas preguntas y cuéntanos los temas que más te importan.</p>
+              <Button as={Link} to='/como-participar' style={{float: 'right'}} className='green'>Responde acá</Button>
+            </Col>
+          </Row>
+        </div>
       </section>
+
       <section className='territorios'>
         <img src={ChileImg} alt='Chile' className='territorios-img' />
         <div className='content'>
           <span className='text-med'>
-            Nemo enim ipsam
+            Infórmate desde tu
           </span>
-          <h2>Territorios</h2>
-          <button>Descubre más</button>
+          <h2>Territorio</h2>
+          <a href='https://forms.gle/gx5VToy6BgKjuBxT9' target='_blank' className='btn red'>Descubre más</a>
+        </div>
+      </section>
+
+      <section className='contact'>
+        <div className='content'>
+          <h2>¿Tienes dudas?</h2>
+          <span className='text-med'>
+            ¡Ponte en contacto con nosotros!
+          </span>
+          <a className='btn' href='mailto:contacto@boricpresidente.cl'>Contacto</a>
         </div>
       </section>
     </div>

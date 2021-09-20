@@ -22,8 +22,9 @@ import 'flamelink/storage'
 import 'flamelink/navigation'
 import 'flamelink/users'
 
-import Home from './components/Home'
+import Participar from './components/Participar'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Login from './components/Login'
 import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
@@ -71,11 +72,13 @@ ReactDOM.render(
             <Switch>
               <Route path="/" component={Landing} exact />
               <Route path="/welcome" component={Landing} exact />
+              <Route path="/como-participar" component={Participar} exact />
               <Route path="/sign-in" component={Login} exact />
               <Route path="/mesas/:mesaId" component={ShowMesa} exact />
               <Route path="/mesas" component={Mesas} exact />
               <Route path="/:page" flamelink={flamelink} component={CmsContent} />
             </Switch>
+            <Footer />
           </Router>
         </NavigationContextProvider>
       </MesaContextProvider>

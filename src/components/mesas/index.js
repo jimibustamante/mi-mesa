@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as MesasIcon } from '../../images/mesas.svg'
-
+import { useHistory } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useUserContext } from '../../contexts/UserContext'
@@ -18,15 +18,21 @@ export default function Mesas() {
   const [mesaState, dispatch] = useMesaContext()
   const { currentUser } = userState
   const { myMesas } = mesaState
+  const history = useHistory()
   
   const fetchMyMesas = async () => {
-    let content = await getContent('mesa')
-    console.log('Fetched', {content})
-    setFetched(true)
-    if (!content) return
-    content = Object.values(content)
-    const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
-    dispatch({type: 'SET_MY_MESAS', payload: mesas})
+    try {
+      let content = await getContent('mesa')
+      console.log('Fetched', {content})
+      setFetched(true)
+      if (!content) return
+      content = Object.values(content)
+      const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
+      dispatch({type: 'SET_MY_MESAS', payload: mesas})
+    } catch (error) {
+      history.push('/sign-in')
+      throw error
+    }
   }
 
   const subscribeToMesas = async () => {
@@ -49,8 +55,12 @@ export default function Mesas() {
 
   useEffect(() => {
     if (flamelinkApp && myMesas.length === 0) {
-      fetchMyMesas()
-      subscribeToMesas()
+      try {
+        fetchMyMesas()
+        subscribeToMesas()
+      } catch (error) {
+        history.push('/sign-in')
+      }
     }
   }, [flamelinkApp])
 
@@ -72,16 +82,6 @@ export default function Mesas() {
               <h3>Mis mesas</h3>
             </div>
           </Col>
-          {/* <Col md={6}>
-            <div className='buttons'>
-              <Button size='md' className='button secondary' variant='secondary'>
-                <EditIcon className='icon' size='15' />Editar mis Mesas
-              </Button>
-              <Button onClick={() => setShowNewMesa(true)} size='md' className='button primary' variant='secondary'>
-                <AddIcon className='icon' size={15} />Crear nueva mesa
-              </Button>
-            </div>
-          </Col> */}
         </Row>
           <MesaList createMesa={() => setShowNewMesa(true)} mesas={myMesas} emptyMessage='No tienes mesas creadas aun' />
         </Container>
