@@ -55,6 +55,7 @@ font-display:auto;font-style:normal;font-weight:900;
   --bs-secondary: #DADCE5 !important;
   --main-color: #FF1D63;
   --header-height: 114px;
+  --header-height-mobile: 90px;
   --main-text-color: #E4DCED;
   --header-bg: #094C68;
   --bs-font-sans-serif: 'Work Sans', sans-serif !important;
@@ -121,18 +122,44 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  display: flex;
+  padding: 20px 0;
   height: var(--header-height);
+  max-height: var(--header-height);
   background-color: var(--header-bg);
   color: var(--main-text-color);
-  justify-content: space-between;
-  align-items: center;
+  @media screen and (max-width: 768px) {
+    height: var(--header-height-mobile);
+    max-height: var(--header-height-mobile);
+  }
   .social-networks {
     display: flex;
     gap: 10px;
     > a svg{
       width: 30px;
       height: 30px;
+    }
+  }
+  .navbar {
+    background-color: var(--header-bg);
+    padding: 0 55px;
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+    .navbar-nav {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding-left: 60px;
+    }
+    @media screen and (max-width: 768px) {
+      padding: 0 20px 20px !important;
+      height: initial;
+      .navbar-nav {
+        padding-top: 25px;
+        display: initial;
+
+      }
     }
   }
   .navbar-collapse {
@@ -151,7 +178,7 @@ header {
     cursor: pointer;
     img {
       max-width: 8rem;
-      @media screen and (max-width: 575px) {
+      @media screen and (max-width: 768px) {
         max-width: 5rem;
       }
     }
@@ -163,9 +190,6 @@ header {
     text-transform: uppercase;
     color: #DBF87B;
   }
-  @media screen and (max-width: 575px) {
-    background-color: var(--bs-purple);
-  }
   .sign-out {
     color: #DBF87B !important;
   }
@@ -174,6 +198,10 @@ header {
 .page-wrapper {
   min-height: calc(100vh - var(--header-height));
   margin-top: var(--header-height);
+  @media screen and (max-width: 768px) {
+    margin-top: var(--header-height-mobile);
+    min-height: calc(100vh - var(--header-height-mobile));
+  }
 }
 
 span.span-link {
@@ -219,6 +247,13 @@ span.span-link {
 #landing, #participar {
   margin-bottom: 10rem;
   margin-top: var(--header-height);
+  @media screen and (max-width: 768px) {
+    margin-top: var(--header-height-mobile);
+    h2 {
+      font-size: 52px !important;
+      line-height: 1.2 !important;
+    }
+  }
   section.landing-text {
     position: relative;
     background-image: url('./images/bg-landing.png');
@@ -227,6 +262,17 @@ span.span-link {
     background-size: cover;
     width: 100%;
     height: calc(100vh - var(--header-height));
+    @media screen and (max-width: 768px) {
+      height: calc(100vh - var(--header-height-mobile));
+      h2, p {
+        padding: 0 20px !important;
+      }
+      p.subtitle {
+        margin-bottom: 110px;
+        margin-top: 10px;
+        font-size: 19px;
+      }
+    }
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -248,8 +294,8 @@ span.span-link {
       color: var(--bs-green);
       font-family: var(--bs-font-sans-serif);
     }
-    @media screen and (max-width: 575px) {
-      margin-top: var(--header-height);
+    @media screen and (max-width: 768px) {
+      margin-top: var(--header-height-mobile);
       font-weight: 600;
     }
     h2 {
@@ -268,6 +314,16 @@ span.span-link {
     justify-content: center;
     align-items: center;
     padding: 42px 0;
+    @media screen and (max-width: 768px) {
+      padding: 42px 25px;
+      p {
+        line-height: 21px !important;
+        font-size: 15px !important;
+        // padding-top: 22px 40px;
+        font-family: var(--bs-font-sans-serif) !important;
+        margin-bottom: 0 !important;
+      }
+    }
     p {
       color: black;
       text-align: center;
@@ -286,6 +342,9 @@ span.span-link {
     width: 100%;
     overflow: hidden;
     padding-top: var(--header-height);
+    @media screen and (max-width: 768px) {
+      padding-top: var(--header-height-mobile);
+    }
 
     h2 {
       @include title;
@@ -342,7 +401,7 @@ span.span-link {
 
   section.contact {
     position: relative;
-    margin-top: 3.125rem;
+    margin-top: 150px;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -483,7 +542,6 @@ footer {
   background-image: url('./images/bg-footer.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
-
   p {
     font-style: italic;
     font-family: 'lexia';
@@ -492,6 +550,10 @@ footer {
     line-height: 1.2;
     text-align: center;
     color: white;
+    @media screen and (max-width: 768px) {
+      font-size: 20px;
+      line-height: 1.1;
+    }
   }
   img {
     max-width: 165px;
@@ -502,6 +564,13 @@ footer {
     > a svg{
       width: 60px;
       height: 60px;
+    }
+    @media screen and (max-width: 768px) {
+      gap: 20px;
+      > a svg{
+        width: 40px;
+        height: 40px;
+      } 
     }
   }
 }
