@@ -68,7 +68,6 @@ export default function Mesas() {
   }
 
   if (currentUser) {
-    const { displayName: name, email } = currentUser
     return (
       <>
         <NewMesa show={showNewMesa} onCreate={onMesaCreated} onClose={() => setShowNewMesa(false)} />

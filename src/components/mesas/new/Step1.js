@@ -8,15 +8,15 @@ const Step1 = ({next}) => {
     <Container fluid>
       <Next onNext={next} />
       <Row>
-        <Col md={3}>
+        <Col lg={4} >
           <TablesIcon />
         </Col>
-        <Col md={6}>
+        <Col lg={8}>
           <h2>Crea tu mesa de participación</h2>
         </Col>
       </Row>
       <Row>
-        <Col md={12}>
+        <Col lg={12}>
           <p>
             Para configurar tu Mesa, por favor responde las siguientes preguntas....
           </p>

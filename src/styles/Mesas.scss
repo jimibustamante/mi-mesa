@@ -140,6 +140,9 @@ span.option-button {
     align-items: center;
     gap: 30px;
     color: var(--mesas-blue);
+    svg {
+      clip-path: url(#clip1) !important;
+    }
     h3 {
       font-size: 45px;
       font-weight: 700;
