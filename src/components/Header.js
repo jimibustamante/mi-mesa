@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useUserContext } from '../contexts/UserContext'
-import {Nav,  Navbar, Container } from 'react-bootstrap'
+import {Nav,  Navbar } from 'react-bootstrap'
 import Logo from '../images/logo.svg'
 import SignOutButton from './SignOut'
 import { ReactComponent as Facebook } from '../images/facebook.svg'

@@ -39,11 +39,11 @@ export default function Landing() {
             <Col className='col-wrapper' xs={12} md={6}>
               <h2>Mesas<br/>Ciudadanas</h2>
               <p>¡Únete a una o crea la tuya propia! Siéntate virtual o presencialmente con otras personas, conversa sobre los temas que te interesan y aporta a la construcción de un programa que nace desde la ciudadanía.</p>
-              <Button as={Link} to='/como-participar'>¡Súmate acá!</Button>
+              <Button as={Link} to='/como-participar'>¡Quiero conocer más!</Button>
 
             </Col>
             <Col xs={12} md={6}>
-              <img src={LandingImage1} alt='Chile' />
+              <img src={LandingImage1} alt='Chile' /> 
             </Col>
           </Row>
         </div>
@@ -55,7 +55,7 @@ export default function Landing() {
             <Col className='col-wrapper' style={{alignItems: 'flex-end'}} xs={12} md={6}>
               <h2 className='green' style={{textAlign: 'right'}} >Consulta<br/>Ciudadana</h2>
               <p style={{textAlign: 'right'}}>Contesta estas preguntas y cuéntanos los temas que más te importan.</p>
-              <Button as={Link} to='/como-participar' style={{float: 'right'}} className='green'>Responde acá</Button>
+              <Button as={Link} to='/como-participar' style={{float: 'right'}} className='green'>¡Quiero conocer más!</Button>
             </Col>
           </Row>
         </div>

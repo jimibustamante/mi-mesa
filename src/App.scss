@@ -79,12 +79,17 @@ font-display:auto;font-style:normal;font-weight:900;
   border: 1px solid #FFFFFF;
   border-radius: 32px;
   background-color: $bg-color;
-
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
   line-height: 29px;
   color: #FFFFFF;
+  @media screen and (max-width: 768px) {
+    font-size: 15px;
+    line-height: 18px;
+    padding: 8px 20px;
+
+  }
 }
 
 .btn-primary {
@@ -343,7 +348,27 @@ span.span-link {
     overflow: hidden;
     padding-top: var(--header-height);
     @media screen and (max-width: 768px) {
-      padding-top: var(--header-height-mobile);
+      padding-top: 0;
+      .mesas-container {
+        padding: 0;
+        margin: 0;
+        > .row {
+          margin-bottom: 0 !important;
+        }
+        .col-wrapper {
+          padding: 40px 25px;
+          order: 2;
+          align-items: flex-start !important;
+          h2, p {
+            text-align: left !important; 
+          }
+          p {
+            padding: 22px 0;
+            font-size: 16px !important;
+            font-weight: 400 !important;
+          }
+        }
+      }
     }
 
     h2 {
@@ -366,6 +391,10 @@ span.span-link {
     background-repeat: no-repeat;
     background-size: cover;
     color: var(--bs-blue);
+
+    @media screen and (max-width: 768px) {
+      margin-top: 0;
+    }
     img.territorios-img {
       object-fit: cover;
       position: absolute;
@@ -387,11 +416,19 @@ span.span-link {
         font-weight: 300;
         font-size: 1.875rem;
         color: black;
+        @media screen and (max-width: 768px) {
+          text-align: center;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 17px;
+          line-height: 20px;
+        }
       }
       h2 {
         @include title;
         color: var(--bs-red);
         font-size: 5.279rem;
+        letter-spacing: 0.11em;
       }
       button, a.btn {
         @include button(var(--bs-red));
@@ -424,6 +461,13 @@ span.span-link {
       font-size: 26px;
       line-height: 30px;
       margin-bottom: 30px;
+      @media screen and (max-width: 768px) {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 17px;
+        line-height: 20px;
+        text-align: center;
+      }
     }
     button, a.btn {
       @include button(var(--landing-blue));
@@ -542,6 +586,10 @@ footer {
   background-image: url('./images/bg-footer.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  @media screen and (max-width: 768px) {
+    background-image: url('./images/bg-footer-mob.png');
+    
+  }
   p {
     font-style: italic;
     font-family: 'lexia';
