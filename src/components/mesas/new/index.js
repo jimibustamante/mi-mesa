@@ -33,7 +33,6 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   useEffect(() => {
     if (mesaTypes.length === 0) {
       getTypes().then((types) => {
-        console.log('Fetching TYPES')
         dispatch({ type: 'SET_MESA_TYPES', payload: types })
       })
     }
@@ -95,7 +94,6 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   }
 
   const onLastStepChange = (lastStep) => {
-    console.log(lastStep)
     setLastStep(lastStep)
   }
 
@@ -122,8 +120,6 @@ const NewMesa = ({ onCreate , show, onClose }) => {
     }
   }
 
-
-  console.log({createButtonDisabled: createButtonDisabled()})
   const disabled = createButtonDisabled()
   return (
     <Modal show={show} onHide={onHide} size="lg">

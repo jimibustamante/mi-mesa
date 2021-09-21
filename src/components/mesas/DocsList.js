@@ -9,8 +9,6 @@ import { ReactComponent as TxtIcon } from '../../images/txt-icon.svg'
 import { ReactComponent as VideoIcon } from '../../images/video-icon.svg'
 
 const DocItem = ({ mesaFile }) => {
-  console.log({mesaFile})
-
   const getIcon = (contentType) => {
     if (contentType.includes('pdf'))
       return <PdfIcon />
@@ -20,7 +18,7 @@ const DocItem = ({ mesaFile }) => {
       return <VideoIcon />
     return <TxtIcon />
   }
-
+  console.log({url: mesaFile.url})
   return(
     <div className='doc-item'>
       <a href={mesaFile.url} target='_blank' className='body'>
@@ -44,14 +42,20 @@ export default function DocsList({mesa, mesaTypes}) {
   const getMesaFiles =  async (mesa) => {
     const mesaType = mesaTypeName(mesa?.mesaType?.id)
     const files = await getFolderFiles(mesaType)
-    let _mesaFiles = []
-    Object.values(files).forEach((file) => {
-      getFileUrl(file.id).then((url) => {
-        let mesaFile = new MesaFile(file)
-        mesaFile.url = url
-        _mesaFiles.push(mesaFile)
-        setMesaFiles(_mesaFiles)
+
+    const promises = Object.values(files).map(file => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const mesaFile = new MesaFile(file)
+          await mesaFile.fetchUrl(getFileUrl(mesaFile.id))
+          resolve(mesaFile)
+        } catch (error) {
+          reject(error)
+        }
       })
+    })
+    await Promise.all(promises).then(files => {
+      setMesaFiles(files)
     })
   }
 
@@ -60,7 +64,7 @@ export default function DocsList({mesa, mesaTypes}) {
       getMesaFiles(mesa)
     }
   }, [mesa, mesaTypes])
-
+  
   return (
     <div id='docs-list'>
       <Row md={12} className='docs-header'>

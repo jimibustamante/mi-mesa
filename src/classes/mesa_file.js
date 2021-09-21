@@ -32,8 +32,14 @@ export default class MesaFile {
   get url() {
     return this._url
   }
-
+  
   get contentType() {
     return this.file.contentType
+  }
+
+  async fetchUrl(promise) {
+    const url = await promise
+    this._url = url
+    return this
   }
 }

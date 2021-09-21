@@ -23,7 +23,6 @@ export default function Mesas() {
   const fetchMyMesas = async () => {
     try {
       let content = await getContent('mesa')
-      console.log('Fetched', {content})
       setFetched(true)
       if (!content) return
       content = Object.values(content)
@@ -41,7 +40,6 @@ export default function Mesas() {
         schemaKey: 'mesa', 
         callback: (err, content) => {
           // TODO: handle error
-          console.log('Fetch callback', {content})
           setFetched(true)
           if (err) console.error({err})
           if (!content) return

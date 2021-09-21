@@ -39,12 +39,11 @@ function EditMesa({mesaId, onUpdate, onCancel}) {
       mesaType: db().doc(`/fl_content/${mesa.mesaType.id}`),
     }
     const updatedRecord = await updateRecord('mesa', mesaId, data)
-    console.log({updatedRecord})
+
     onUpdate()
   }
 
   useEffect(() => {
-    console.log({mesaId})
     if(!mesaId) return
     getMesa()
   }, [mesaId])
@@ -52,8 +51,6 @@ function EditMesa({mesaId, onUpdate, onCancel}) {
   function mesaTypeName(typeId) {
     return mesaTypes.find(mt => mt.id === typeId).name
   }
-
-  console.log({mesa})
 
   return (mesa ? (
     <Modal show={mesaId ? true : false} onHide={onCancel}>

@@ -31,7 +31,6 @@ const useFlameLinkApp = () => {
   
   const getMesaById = async (mesaId) => {
     const mesa = await app.current.content.getByField({schemaKey: 'mesa', field: 'id', value: mesaId})
-    console.log({mesa})
     return mesa[mesaId]
   }
 
@@ -43,7 +42,6 @@ const useFlameLinkApp = () => {
 
   const updateRecord = async (schemaKey, entryId, data) => {
     if (!app.current) return
-    debugger
     const record = await app.current.content.update({schemaKey, entryId, data})
     return record
   }
@@ -92,7 +90,6 @@ const useFlameLinkApp = () => {
   }
 
   useEffect(() => {
-    console.log({'app.current': app.current, flamelink, firebaseApp})
     if (app.current) return
     app.current = flamelink({
       firebaseApp,

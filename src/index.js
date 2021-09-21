@@ -50,7 +50,6 @@ const AuthListener = () => {
       if (user) {
         // Signed in
         initFlamelink()
-        console.log({user})
         dispatchUser({type: 'AUTH_SIGNED_IN', payload: user})
       } else {
         // Signed out

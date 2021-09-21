@@ -18,7 +18,6 @@ export default function Show() {
   const getMesa = useCallback(async () => {
     try {
       const mesa = await getMesaById(mesaId)
-      console.log({mesa})
       setMesa(mesa)
     } catch (error) {
       console.error(error)
@@ -28,7 +27,6 @@ export default function Show() {
   useEffect(() => {
     if (mesaTypes.length === 0) {
       getTypes().then((types) => {
-        console.log('Fetching TYPES')
         dispatch({ type: 'SET_MESA_TYPES', payload: types })
       })
     }

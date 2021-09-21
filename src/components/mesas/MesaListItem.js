@@ -27,10 +27,8 @@ export default function MesaItem({mesa, onEdit, deleteMesa}) {
     return mesa ? mesa.name : ''
   }
   const mesaType = mesaTypeName(mesa.mesaType.id)
-  console.log({mesa, mesaType})
   const name = mesa.name || ''
 
-  console.log({mesa})
   return (
     <div className='mesa-item'>
       <div className='body'>

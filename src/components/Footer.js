@@ -10,12 +10,10 @@ import { useLocation } from 'react-router-dom'
 
 export default function Footer() {
   const location = useLocation()
-  console.log({location})
   const showFooter = location.pathname.includes('/home')|| location.pathname.includes('/welcome') || location.pathname.includes('/login') || location.pathname.includes('/como-participar') || location.pathname === '/'
   return (
     showFooter ? (
       <footer>
-        {/* <Background className='bg-footer' /> */}
         <img src={Logo} />
         <p>Por un Chile en el que nadie quede fuera.</p>
         <div className='social-networks'>

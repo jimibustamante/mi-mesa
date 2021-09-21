@@ -21,7 +21,6 @@ const ComunaPicker = ({ onSelect }) => {
   useEffect(() => {
     if (selectedRegion) {
       const comunas = REGIONES_DB[selectedRegion].comunas
-      console.log({comunas})
       setComunas(comunas)
     }
   }, [selectedRegion, REGIONES_DB])

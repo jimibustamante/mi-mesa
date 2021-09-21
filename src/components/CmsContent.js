@@ -26,7 +26,6 @@ export default function CmsContent() {
     getContent()
   }, [])
 
-  console.log({content})
   return (
     <div className='container'>
       {content && (

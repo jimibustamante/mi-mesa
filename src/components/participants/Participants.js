@@ -24,11 +24,9 @@ export default function Participants({mesa}) {
   const { getContentBy, flamelinkApp, deleteParticipant } = useFlameLinkApp()
 
   const fetchParticipants = async () => {
-    console.log({mesa})
     const participants = await getContentBy('participante', 'mesaId', mesa.id)
     setParticipants(participants)
     setFetched(true)
-    console.log({participants})
   }
 
   const subscribeParticipants = async () => {
@@ -37,7 +35,6 @@ export default function Participants({mesa}) {
         schemaKey: 'participante', 
         callback: (err, content) => {
           // TODO: handle error
-          console.log('Fetch participant callback', {content})
           fetchParticipants()
         }
       }
@@ -72,6 +69,7 @@ export default function Participants({mesa}) {
   const onConfirmDelete = () => {
     deleteParticipant(deleteId)
     setShowDelete(false)
+    fetchParticipants()
   }
 
   return (
