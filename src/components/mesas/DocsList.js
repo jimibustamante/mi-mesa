@@ -5,6 +5,7 @@ import MesaFile from '../../classes/mesa_file'
 
 import { ReactComponent as DocsIcon } from '../../images/docs-icon-green.svg'
 import { ReactComponent as PdfIcon } from '../../images/pdf-icon.svg'
+// import PdfIcon from '../../images/pdf-icon.svg' 
 import { ReactComponent as TxtIcon } from '../../images/txt-icon.svg'
 import { ReactComponent as VideoIcon } from '../../images/video-icon.svg'
 
@@ -18,7 +19,7 @@ const DocItem = ({ mesaFile }) => {
       return <VideoIcon />
     return <TxtIcon />
   }
-  console.log({url: mesaFile.url})
+
   return(
     <div className='doc-item'>
       <a href={mesaFile.url} target='_blank' className='body'>

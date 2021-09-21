@@ -183,6 +183,9 @@ span.span-link {
   .modal-content {
     .modal-body {
       padding: 70px 30px !important;
+      svg g {
+        clip-path: url(#clip1) !important;
+      }
     }
     background-color: var(--mesas-green);
     h3 {

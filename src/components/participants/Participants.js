@@ -66,8 +66,8 @@ export default function Participants({mesa}) {
     setShowDelete(true)
   }
 
-  const onConfirmDelete = () => {
-    deleteParticipant(deleteId)
+  const onConfirmDelete = async () => {
+    await deleteParticipant(deleteId)
     setShowDelete(false)
     fetchParticipants()
   }

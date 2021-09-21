@@ -51,7 +51,7 @@ const ThemePicker = ({ onSelect }) => {
               <div className='theme-dropdown'>
                 {filteredThemes.map((theme, i) => {
                   return (
-                    <div key={i} className='theme-item' onFocus={() => {debugger; setSelectedTheme(null); setSearchQuery('')}} onClick={onClickItemSearch}>
+                    <div key={i} className='theme-item' onFocus={() => {setSelectedTheme(null); setSearchQuery('')}} onClick={onClickItemSearch}>
                       {theme}
                     </div>
                   )

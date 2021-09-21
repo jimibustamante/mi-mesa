@@ -436,6 +436,9 @@ span.option-button {
       justify-content: center;
       align-items: center;
       text-align: center;
+      svg g {
+        clip-path: url(#clip1) !important;
+      }
     }
     .footer {
       display: flex;
