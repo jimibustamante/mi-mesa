@@ -623,6 +623,10 @@ span.span-link {
       margin-bottom: 55px;
       @media screen and (max-width: 768px) {
         margin-bottom: 0;
+        padding: 40px 22px;
+        svg {
+          max-height: 86px !important;
+        }
       }
 
       svg {
