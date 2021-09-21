@@ -418,11 +418,11 @@ span.option-button {
     line-height: 41px;
   }
   .list {
-    display: flex;
-    grid-gap: 1rem;
-    gap: 1rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 260px);
     justify-content: space-between;
+    grid-column-gap: 1.3rem;
+    grid-row-gap: 3rem;
   }
   .doc-item {
     display: flex;
