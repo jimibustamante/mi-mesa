@@ -34,7 +34,6 @@ export default function Header() {
                   <Link className="menu-item" to='/mesas'>Mesas</Link>
                 </Navbar.Brand>                
               )}
-              { !currentUser && (
                 <>
                   <Navbar.Brand>
                     <a className="menu-item" href='https://www.boricpresidente.cl/programa/' target='_blank'>Propuestas</a>
@@ -45,11 +44,12 @@ export default function Header() {
                   <Navbar.Brand>
                     <Link className="menu-item" style={{color: '#19CBB5'}} to='/welcome'>¡Participa aquí!</Link>
                   </Navbar.Brand>
-                  <Navbar.Brand>
-                    <Link className="menu-item signin" to='/sign-in'>Ingresa</Link>
-                  </Navbar.Brand>
+                  { !currentUser && (
+                    <Navbar.Brand>
+                      <Link className="menu-item signin" to='/sign-in'>Ingresa</Link>
+                    </Navbar.Brand>
+                  )}
                 </>
-              )}
               { !currentUser && (
                 <div className='social-networks'>
                   <a href='https://www.facebook.com/gabrielboric/' target='_blank' rel='noopener noreferrer'>

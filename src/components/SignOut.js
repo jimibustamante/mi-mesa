@@ -14,7 +14,7 @@ const SignOutButton = () => {
 
   return (
     currentUser ? (
-      <span className='span-link' onClick={signOut}>
+      <span className='span-link menu-item sign-out' onClick={signOut}>
         Sign Out
       </span>
     ) : ( '' )
