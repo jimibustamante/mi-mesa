@@ -24,7 +24,7 @@ const DocItem = ({ mesaFile }) => {
     <div className='doc-item'>
       <a href={mesaFile.url} target='_blank' className='body'>
         {getIcon(mesaFile.contentType)}
-        <span>{mesaFile.name}</span>
+        <span title={mesaFile.name}>{mesaFile.name}</span>
       </a>
     </div>
   )

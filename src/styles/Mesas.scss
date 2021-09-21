@@ -439,6 +439,11 @@ span.option-button {
       justify-content: center;
       align-items: center;
       text-align: center;
+      span {
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
       svg g {
         clip-path: url(#clip1) !important;
       }
