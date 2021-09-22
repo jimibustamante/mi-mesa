@@ -174,7 +174,11 @@ header {
       .navbar-nav {
         padding-top: 25px;
         display: initial;
-
+        .nav-item {
+          padding: 5px 0;
+          display: flex;
+          justify-content: flex-end;
+        }
       }
     }
   }

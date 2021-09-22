@@ -29,24 +29,24 @@ export default function Header() {
         <Navbar.Collapse>
           <Nav >
             { currentUser && (
-              <Nav.Link>
+              <Nav.Item>
                 <Link className="menu-item" to='/mesas'>Mesas</Link>
-              </Nav.Link>                
+              </Nav.Item>                
             )}
             <>
-              <Nav.Link>
+              <Nav.Item>
                 <a className="menu-item" href='https://www.boricpresidente.cl/programa/' target='_blank'>Propuestas</a>
-              </Nav.Link>
-              <Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
                 <a className="menu-item" href='https://www.boricpresidente.cl/donar-a-la-campana/' target='_blank'>Aporta</a>
-              </Nav.Link>
-              <Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
                 <Link className="menu-item" style={{color: '#19CBB5'}} to='/welcome'>¡Participa aquí!</Link>
-              </Nav.Link>
+              </Nav.Item>
               { !currentUser && (
-                <Nav.Link>
+                <Nav.Item>
                   <Link className="menu-item signin" to='/sign-in'>Ingresa</Link>
-                </Nav.Link>
+                </Nav.Item>
               )}
             </>
             { !currentUser && (
@@ -69,9 +69,9 @@ export default function Header() {
               </div>
             )}
             { currentUser && (
-              <Navbar.Brand>
+              <Nav.Item>
                 <SignOutButton />
-              </Navbar.Brand>
+              </Nav.Item>
             )}
           </Nav>
         </Navbar.Collapse>
