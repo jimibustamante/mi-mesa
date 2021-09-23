@@ -283,7 +283,7 @@ span.option-button {
       }
       .footer {
         display: flex;
-        gap: 15px;
+        gap: 17px;
         justify-content: center;
         align-items: center;
         margin-top: 21px;
@@ -332,7 +332,7 @@ span.option-button {
   }
   .participants-title {
     margin-left: 15px;
-    color: var(--mesas-green);
+    color: var(--bs-green);
     font-family: var(--bs-font-sans-serif);
     font-style: normal;
     font-weight: 600;
@@ -392,8 +392,8 @@ span.option-button {
     min-width: 120px; 
     border-radius: 20px;
     color: white;
-    border-color: var(--mesas-green);
-    background-color: var(--mesas-green);
+    border-color: var(--bs-green);
+    background-color: var(--bs-green);
     text-transform: none;
     font-weight: 600;
     font-size: 14px;
@@ -413,7 +413,7 @@ span.option-button {
   }
   .docs-title {
     margin-left: 15px;
-    color: var(--mesas-green);
+    color: var(--bs-green);
     font-family: var(--bs-font-sans-serif);
     font-style: normal;
     font-weight: 600;
@@ -465,7 +465,7 @@ span.option-button {
   .modal-content {
     padding: 40px 40px;
     h2 {
-      color: var(--mesas-green);
+      color: var(--bs-green);
       font-weight: bold;
       font-size: 30px;
       line-height: 31px;
@@ -478,12 +478,12 @@ span.option-button {
         justify-content: center;
         border-radius: 20px;
         color: white;
-        border-color: var(--mesas-green);
+        border-color: var(--bs-green);
         text-transform: uppercase;
         font-weight: 600;
         font-size: 14px;
         line-height: 16.42px;
-        background-color: var(--mesas-green);
+        background-color: var(--bs-green);
         svg {
           height: 14px;
         }

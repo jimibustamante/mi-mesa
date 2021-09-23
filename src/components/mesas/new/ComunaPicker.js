@@ -32,7 +32,8 @@ const ComunaPicker = ({ onSelect }) => {
         <Form.Group controlId="type">
           <Row className='justify-content-sm-center'>
             <Col sm={6}>
-              <Form.Control style={{marginBottom: '30px'}} as="select" name='región' value={selectedRegion} onChange={handleRegionChange}>
+              <Form.Control style={{marginBottom: '30px'}} as="select" name='región' value={selectedRegion} placeholder='Región' onChange={handleRegionChange}>
+                <option key='none' value=''>Selecciona región</option>
                 {regiones.map((reg) => (
                   <option key={reg} value={reg}>{reg}</option>
                 ))}
@@ -43,6 +44,7 @@ const ComunaPicker = ({ onSelect }) => {
             <Row className='justify-content-sm-center'>
               <Col sm={6}>
                 <Form.Control as="select" name='comuna' value={selectedComuna} onChange={handleComunaChange}>
+                  <option key='none' value=''>Selecciona comuna</option>
                   {comunas.map((comuna) => (
                     <option key={comuna} value={comuna}>{comuna}</option>
                   ))}

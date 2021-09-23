@@ -18,7 +18,8 @@ export default function Participar() {
       <section className='landing-text'>
         <Container fluid>
           <h2>¿Cómo<br/>participar?</h2>
-          <p className='subtitle'>Tenemos dos mecanismos de participación abiertos a toda la ciudadanía para que creemos, juntos y juntas, el futuro Gobierno de Gabriel Boric.
+          <p className='subtitle'>Tenemos dos mecanismos de participación abiertos a toda la ciudadanía para que creemos, 
+            juntos y juntas, el futuro Gobierno de Gabriel Boric.
             <br/>
             <a href='#content'>
               <ArrowDown href='#content' />
@@ -46,18 +47,30 @@ export default function Participar() {
             <Col xs={12} md={6} style={{margin: '30px 0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
               <div>
                 <p className='question'>¿Qué es una mesa ciudadana?</p>
-                <p className='answer'>Son espacios de participación donde te <b>invitamos a sentarte a una mesa, virtual o presencial</b>, y así conversar sobre un tema, un territorio o una causa. Puedes crear la tuya propia o sumarte a una ya existente.</p>
+                <p className='answer'>Son espacios de participación donde te <b>invitamos a sentarte a una mesa, virtual o presencial</b>
+                  , y así conversar sobre un tema, un territorio o una causa. Puedes crear la tuya propia o sumarte a una ya existente.
+                </p>
               </div>
               <div>
                 <p className='question'>¿Para qué sirven?</p>
-                <p className='answer'>Queremos escuchar a la ciudadanía, por eso creamos las mesas ciudadanas que tienen por objetivo <b>generar conversaciones</b> de manera descentralizada, tanto a nivel territorial como de sector de interés, que incidan directamente en el programa de gobierno de Gabriel Boric. Todo lo que sea compartido en estas mesas será sistematizado por el equipo de Gabriel y utilizado para no sólo enriquecer el programa, sino también para priorizar el trabajo durante los primeros meses de un eventual gobierno.</p>
+                <p className='answer'>Queremos escuchar a la ciudadanía, por eso creamos las mesas ciudadanas que tienen por objetivo <b>
+                  generar conversaciones</b> de manera descentralizada, tanto a nivel territorial como de sector de interés, que incidan 
+                  directamente en el programa de gobierno de Gabriel Boric. Todo lo que sea compartido en estas mesas será sistematizado 
+                  por el equipo de Gabriel y utilizado para no sólo enriquecer el programa, sino también para priorizar el trabajo durante 
+                  os primeros meses de un eventual gobierno.
+                </p>
               </div>
               <div>
                 <p className='question'>¿Cómo puedo participar?</p>
-                <p className='answer'>Puedes <b>crear tu propia mesa o o unirte a una ya existente,</b> gestionada desde nuestro comando para sumarlas a este proyecto transformador. En ambos casos podrás elegir el tema o causa a tratar para hacer llegar tus ideas, propuestas y anhelos para este nuevo gobierno.</p>
+                <p className='answer'>Puedes <b>crear tu propia mesa o o unirte a una ya existente,</b> gestionada desde nuestro comando 
+                  para sumarlas a este proyecto transformador. En ambos casos podrás elegir el tema o causa a tratar para hacer llegar tus 
+                  ideas, propuestas y anhelos para este nuevo gobierno.
+                </p>
               </div>
               <div className='buttons'>
-                <a className='btn' href='https://forms.gle/gx5VToy6BgKjuBxT9' target='_blank' >Únete a una mesa</a>
+                <a className='btn' href='https://forms.gle/gx5VToy6BgKjuBxT9' target='_blank' >
+                  Únete a una mesa
+                </a>
                 <Button as={Link} to='/sign-in'>Create tu mesa</Button>
               </div>
             </Col>
@@ -68,7 +81,7 @@ export default function Participar() {
       <section className='consulta-ciudadana'>
         <div className='header'>
           <h2>
-            Consulta<br/>Ciudadanas
+            Consulta<br/>Ciudadana
           </h2>
           <NotepadIcon />
         </div>
@@ -77,18 +90,27 @@ export default function Participar() {
             <Col className='faqs' xs={12} md={6} style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
               <div>
                 <p className='question' style={{color: '#1BDAB0'}}>¿Qué es una consulta ciudadana?</p>
-                <p className='answer'>Es un espacio donde podrás contestar de forma individual a un cuestionario. En él, te invitamos a priorizar los temas que más te importan y con ello, aportar a la hoja de ruta de un eventual Gobierno de Apruebo Dignidad.</p>
+                <p className='answer'>Es un espacio donde podrás contestar de forma individual a un cuestionario. En él, te invitamos 
+                  a priorizar los temas que más te importan y con ello, aportar a la hoja de ruta de un eventual Gobierno de Apruebo 
+                  Dignidad.
+                </p>
               </div>
               <div>
                 <p className='question' style={{color: '#1BDAB0'}}>¿Para qué sirven?</p>
-                <p className='answer'>Es la forma más rápida para poder participar. La consulta ciudadana nos servirá para identificar cuáles son los temas más relevantes para la ciudadanía, y con ellos, poder priorizar el trabajo en marzo de 2022.</p>
+                <p className='answer'>Es la forma más rápida para poder participar. La consulta ciudadana nos servirá para identificar 
+                  cuáles son los temas más relevantes para la ciudadanía, y con ellos, poder priorizar el trabajo en marzo de 2022.
+                </p>
               </div>
               <div>
                 <p className='question' style={{color: '#1BDAB0'}}>¿Qué harán con las respuestas?</p>
-                <p className='answer'>Tus respuestas serán sistematizadas, junto a la de muchas otras personas, gracias a una tecnología de inteligencia artificial que es capaz de procesar texto y lenguaje.</p>
+                <p className='answer'>Tus respuestas serán sistematizadas, junto a la de muchas otras personas, gracias a una tecnología 
+                  de inteligencia artificial que es capaz de procesar texto y lenguaje.
+                </p>
               </div>
               <div className='buttons' style={{display: 'flex', gap: '10px'}}>
-                <a className='btn' style={{backgroundColor: '#1BDAB0'}} href='https://tll5o6hb21g.typeform.com/to/gRt8fnSE' target='_blank' >Contesta acá</a>
+                <a className='btn' style={{backgroundColor: '#1BDAB0'}} href='https://tll5o6hb21g.typeform.com/to/gRt8fnSE' target='_blank' >
+                  Contesta acá
+                </a>
               </div>
             </Col>
             <Col xs={12} md={6}>

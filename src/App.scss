@@ -49,9 +49,9 @@ font-display:auto;font-style:normal;font-weight:900;
 @import "~bootstrap/scss/bootstrap";
 
 :root {
-  --mesas-blue: #4200FF;
-  --mesas-green: #1BDAB0;
-  --bs-primary: #5200FF !important; 
+  --mesas-blue: #7853C1;
+  --mesas-green: #59C885;
+  --bs-primary: #7853C1 !important; 
   --bs-secondary: #DADCE5 !important;
   --main-color: #FF1D63;
   --header-height: 114px;
@@ -60,9 +60,11 @@ font-display:auto;font-style:normal;font-weight:900;
   --header-bg: #094C68;
   --bs-font-sans-serif: 'Work Sans', sans-serif !important;
   --bs-purple: #3B007D !important;
-  --bs-red: #E75A7E !important;
-  --bs-blue: #5200FF !important;
-  --bs-green: #00FFA3 !important;
+  --bs-red: #FB4C7E !important;
+  --bs-green: #59C885 !important;
+  --bs-blue: #7853C1 !important;
+  --bs-oil-green: #177596 !important;
+  --bs-light-blue: #70E7D3 !important;
   --bs-body-bg: white !important;
   --landing-blue: #6300FF;
 }
@@ -90,6 +92,23 @@ font-display:auto;font-style:normal;font-weight:900;
     padding: 8px 20px;
 
   }
+}
+
+@mixin moreInfoButton {
+  background-color: white;
+  font-family: 'Work Sans';
+  color: black;
+  padding: 10px 3px !important;
+  line-height: 1;
+  border-bottom: solid 1px black;
+  border-radius: 0px;
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 25px;
+  
+  display: flex;
+  align-items: center;
 }
 
 .btn-primary {
@@ -150,6 +169,10 @@ header {
   .social-networks {
     display: flex;
     gap: 10px;
+    @media screen and (max-width: 768px) {
+      justify-content: flex-end;
+      padding: 10px 0;
+    }
     > a svg{
       width: 30px;
       height: 30px;
@@ -238,7 +261,7 @@ span.span-link {
         clip-path: url(#clip1) !important;
       }
     }
-    background-color: var(--mesas-green);
+    background-color: var(--bs-green);
     h3 {
       color: black;
       font-style: normal;
@@ -256,9 +279,9 @@ span.span-link {
         @include link;
       }
       button {
-        color: var(--mesas-green);
+        color: var(--bs-green);
         background-color: white;
-        border-color: var(--mesas-green);
+        border-color: var(--bs-green);
       }
     }
   }
@@ -273,6 +296,9 @@ span.span-link {
       font-size: 52px !important;
       line-height: 1.2 !important;
     }
+  }
+  .more-info {
+    @include moreInfoButton;
   }
   section.landing-text {
     position: relative;
@@ -317,7 +343,7 @@ span.span-link {
       font-size: 1.375rem;
       font-weight: 600;
       line-height: 1.8rem;
-      color: var(--bs-green);
+      color: var(--bs-light-blue);
       font-family: var(--bs-font-sans-serif);
     }
     @media screen and (max-width: 768px) {
@@ -326,7 +352,7 @@ span.span-link {
     }
     h2 {
       @include title;
-      color: var(--bs-green);
+      color: var(--bs-light-blue);
 
     }
     img.landing-img {
@@ -336,17 +362,16 @@ span.span-link {
   .description {
     display: flex;
     flex-direction: column;
-    background-color: var(--bs-green);
+    background-color: var(--bs-light-blue);
     justify-content: center;
     align-items: center;
     padding: 42px 0;
+
     @media screen and (max-width: 768px) {
       padding: 42px 25px;
       p {
         line-height: 21px !important;
         font-size: 15px !important;
-        // padding-top: 22px 40px;
-        font-family: var(--bs-font-sans-serif) !important;
         margin-bottom: 0 !important;
       }
     }
@@ -355,11 +380,12 @@ span.span-link {
       text-align: center;
       width: 100%;
       font-style: normal;
-      font-weight: normal;
-      font-size: 32px;
-      line-height: 1.2;
+      font-weight: 400;
+      font-size: 27px;
+      padding: 0 20%;
+      line-height: 40px;
       max-width: fit-content;
-      font-family: 'EB Garamond', serif;
+      font-family: var(--bs-font-sans-serif);
     }
   }
   section.mesas {
@@ -399,7 +425,7 @@ span.span-link {
       font-weight: 700;
       color: var(--mesas-blue);
       &.green {
-        color: var(--mesas-green);
+        color: var(--bs-green);
       }
     }
   }
@@ -408,13 +434,28 @@ span.span-link {
     margin-top: 3.125rem;
     width: 100vw;
     height: 55.438rem;
-    background-image: url('./images/territorios.png');
-    background-repeat: no-repeat;
-    background-size: cover;
     color: var(--bs-blue);
-
     @media screen and (max-width: 768px) {
       margin-top: 0;
+      max-height: 450px;
+    }
+    .carousel {
+      z-index: -1;
+      .carousel-inner {
+        .carousel-item {
+          img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+          }
+          @media screen and (max-width: 768px) {
+            min-height: 450px;
+            img {
+              min-height: 450px;
+            }
+          }
+        }
+      }
     }
     img.territorios-img {
       object-fit: cover;
@@ -473,7 +514,7 @@ span.span-link {
     }
     h2 {
       @include title;
-      color: var(--landing-blue);
+      color: var(--bs-oil-green);
       font-size: 5.279rem;
     }
     .text-med {
@@ -491,7 +532,7 @@ span.span-link {
       }
     }
     button, a.btn {
-      @include button(var(--landing-blue));
+      @include button(var(--bs-oil-green));
       width: fit-content;
       align-self: center;
     }
@@ -523,7 +564,7 @@ span.span-link {
   button, a.btn {
     @include button(var(--bs-blue));
     &.green {
-      @include button(var(--mesas-green));
+      @include button(var(--bs-green));
     }
   }
   .question {
@@ -573,7 +614,7 @@ span.span-link {
   }
   section.landing-text {
     background-image: url('./images/bg-participar.png');
-    background-position-y: 0;
+    background-position-y: bottom;
     h2 {
       color: white;
     }
@@ -619,7 +660,7 @@ span.span-link {
       }
     }
     .header {
-      background-color: var(--mesas-green);
+      background-color: var(--bs-green);
       justify-content: flex-start;
       display: flex;
       align-items: center;
@@ -696,6 +737,31 @@ footer {
         width: 40px;
         height: 40px;
       } 
+    }
+  }
+}
+
+.modal.more-info-modal {
+  .modal-content {
+    .modal-body {
+      padding: 64px !important;
+      .question {
+        font-family: 'Work Sans';
+        color: #7853C1;
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 1.2;
+      }
+      .answer {
+        font-family: 'Work Sans';
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 1.3;
+        b {
+          font-weight: 600;
+        }
+      }
     }
   }
 }

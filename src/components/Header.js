@@ -31,17 +31,17 @@ export default function Header() {
             { currentUser && (
               <Nav.Item>
                 <Link className="menu-item" to='/mesas'>Mesas</Link>
-              </Nav.Item>                
+              </Nav.Item>
             )}
             <>
               <Nav.Item>
-                <a className="menu-item" href='https://www.boricpresidente.cl/programa/' target='_blank'>Propuestas</a>
+                <a className="menu-item" href='https://boricpresidente.cl/propuestas' target='_blank'>Propuestas</a>
               </Nav.Item>
               <Nav.Item>
-                <a className="menu-item" href='https://www.boricpresidente.cl/donar-a-la-campana/' target='_blank'>Aporta</a>
+                <a className="menu-item" href='https://boricpresidente.cl/aporta' target='_blank'>Aporta</a>
               </Nav.Item>
               <Nav.Item>
-                <Link className="menu-item" style={{color: '#19CBB5'}} to='/welcome'>¡Participa aquí!</Link>
+                <Link className="menu-item" style={{color: '#19CBB5'}} to='/como-participar'>¡Participa aquí!</Link>
               </Nav.Item>
               { !currentUser && (
                 <Nav.Item>
