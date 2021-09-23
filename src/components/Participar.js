@@ -89,26 +89,26 @@ export default function Participar() {
           <Row style={{marginBottom: '100px'}}>
             <Col className='faqs' xs={12} md={6} style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
               <div>
-                <p className='question' style={{color: '#1BDAB0'}}>¿Qué es una consulta ciudadana?</p>
+                <p className='question' style={{color: '#59C885'}}>¿Qué es una consulta ciudadana?</p>
                 <p className='answer'>Es un espacio donde podrás contestar de forma individual a un cuestionario. En él, te invitamos 
                   a priorizar los temas que más te importan y con ello, aportar a la hoja de ruta de un eventual Gobierno de Apruebo 
                   Dignidad.
                 </p>
               </div>
               <div>
-                <p className='question' style={{color: '#1BDAB0'}}>¿Para qué sirven?</p>
+                <p className='question' style={{color: '#59C885'}}>¿Para qué sirven?</p>
                 <p className='answer'>Es la forma más rápida para poder participar. La consulta ciudadana nos servirá para identificar 
                   cuáles son los temas más relevantes para la ciudadanía, y con ellos, poder priorizar el trabajo en marzo de 2022.
                 </p>
               </div>
               <div>
-                <p className='question' style={{color: '#1BDAB0'}}>¿Qué harán con las respuestas?</p>
+                <p className='question' style={{color: '#59C885'}}>¿Qué harán con las respuestas?</p>
                 <p className='answer'>Tus respuestas serán sistematizadas, junto a la de muchas otras personas, gracias a una tecnología 
                   de inteligencia artificial que es capaz de procesar texto y lenguaje.
                 </p>
               </div>
               <div className='buttons' style={{display: 'flex', gap: '10px'}}>
-                <a className='btn' style={{backgroundColor: '#1BDAB0'}} href='https://tll5o6hb21g.typeform.com/to/gRt8fnSE' target='_blank' >
+                <a className='btn' style={{backgroundColor: '#59C885'}} href='https://tll5o6hb21g.typeform.com/to/gRt8fnSE' target='_blank' >
                   Contesta acá
                 </a>
               </div>

@@ -22,9 +22,9 @@ export default function Header() {
   return (
     <header>
       <Navbar expand="md" >
-        <Navbar.Brand onClick={goHome} className='logo'>
+        <Nav.Link href='https://boricpresidente.cl' className='logo'>
           <img src={Logo} alt="Boric presidente" />
-        </Navbar.Brand>
+        </Nav.Link>
         <Navbar.Toggle className="navbar-dark" />
         <Navbar.Collapse>
           <Nav >

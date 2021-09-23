@@ -72,9 +72,11 @@ export default function Landing() {
               <button onClick={() => setShowInfoConsult(true)} className='more-info'>
                 Conoce más    +
               </button>
-              <a className='btn' style={{backgroundColor: '#1BDAB0'}} href='https://tll5o6hb21g.typeform.com/to/gRt8fnSE' target='_blank' >
-                ¡Responde acá!
-              </a>
+              <div className='mesa-buttons'>
+                <a className='btn' style={{backgroundColor: '#59C885'}} href='https://tll5o6hb21g.typeform.com/to/gRt8fnSE' target='_blank' >
+                  ¡Responde acá!
+                </a>
+              </div>
             </Col>
           </Row>
         </div>
