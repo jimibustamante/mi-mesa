@@ -41,7 +41,7 @@ export default function Header() {
                 <a className="menu-item" href='https://boricpresidente.cl/aporta' target='_blank'>Aporta</a>
               </Nav.Item>
               <Nav.Item>
-                <Link className="menu-item" style={{color: '#19CBB5'}} to='/como-participar'>¡Participa aquí!</Link>
+                <Link className="menu-item" style={{color: '#19CBB5'}} to='/'>¡Participa aquí!</Link>
               </Nav.Item>
               { !currentUser && (
                 <Nav.Item>

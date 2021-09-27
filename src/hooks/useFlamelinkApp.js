@@ -89,6 +89,12 @@ const useFlameLinkApp = () => {
     return participante
   }
 
+  const getCoordinator = async (userId) => {
+    if (!app.current) return
+    const coordinator = await app.current.content.getByField({schemaKey: 'coordinador', field: 'userId', value: userId})
+    return coordinator
+  }
+
   useEffect(() => {
     if (app.current) return
     app.current = flamelink({
@@ -112,6 +118,7 @@ const useFlameLinkApp = () => {
     getFileUrl,
     deleteMesa,
     deleteParticipant,
+    getCoordinator,
   }
 }
 

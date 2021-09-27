@@ -1,0 +1,42 @@
+#complete-register {
+  margin-top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+  .form-wrapper {
+    .form-group {
+      margin-bottom: 50px;
+      .select {
+        margin-bottom: 0;
+      }
+      @media screen and (max-width: 768px) {
+        margin-bottom: 30px;
+      }
+    }
+    h3 {
+      color: var(--bs-primary);
+      font-weight: 600;
+      font-size: 28px;
+      line-height: 33px;
+      margin-bottom: 10px;
+    }
+    .mesa-buttons {
+      button {
+        border-color: var(--bs-primary);
+        background-color: white;
+        color: var(--bs-primary);
+      }
+      margin-top: 10px;
+    }
+    .react-tel-input .form-control {
+      width: 100%;
+    }
+    .comuna-wrapper {
+      margin-top: 40px;
+    }
+  }
+}

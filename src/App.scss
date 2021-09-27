@@ -130,7 +130,7 @@ font-display:auto;font-style:normal;font-weight:900;
 
 body {
   background-color: var(--bs-body-bg);
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-height)) !important;
   min-width: 100vw;
   margin: 0;
   position: relative;
@@ -149,8 +149,24 @@ body {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-height)) !important;
   min-width: 100vw;
+}
+
+#loading {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  background-color: #000000;
+  opacity: 0.8;
+  svg {
+    color: var(--bs-primary);
+    animation: spin 2s linear infinite;
+  }
 }
 
 header {
@@ -786,5 +802,14 @@ footer {
         }
       }
     }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

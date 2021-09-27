@@ -26,6 +26,7 @@ import Participar from './components/Participar'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './components/Login'
+import CompleteRegister from './components/CompleteRegister'
 import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
 import Mesas from './components/mesas'
@@ -73,6 +74,7 @@ ReactDOM.render(
               <Route path="/welcome" component={Landing} exact />
               <Route path="/como-participar" component={Participar} exact />
               <Route path="/sign-in" component={Login} exact />
+              <Route path="/sign-in-success" component={CompleteRegister} exact />
               <Route path="/mesas/:mesaId" component={ShowMesa} exact />
               <Route path="/mesas" component={Mesas} exact />
               <Route path="/:page" flamelink={flamelink} component={CmsContent} />
