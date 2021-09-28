@@ -7,6 +7,7 @@ import { useUserContext } from '../../contexts/UserContext'
 import { useMesaContext } from '../../contexts/MesaContext'
 import NewMesa from './new/index'
 import MesaList from './List'
+import InfoOverlay from '../InfoOverlay'
 
 import '../../styles/Mesas.scss'
 
@@ -70,6 +71,7 @@ export default function Mesas() {
   if (currentUser) {
     return (
       <>
+        <InfoOverlay />
         <NewMesa show={showNewMesa} onCreate={onMesaCreated} onClose={() => setShowNewMesa(false)} />
         <Container id='mesas' className='page-wrapper'>
         <Row className='content-head justify-content-md-between align-items-center'>

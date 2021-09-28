@@ -14,12 +14,11 @@ function Login() {
     } catch (error) {
       console.error({error})
     }
-
   }, [firebaseApp, firebaseui])
 
   return (
     <div className="login-container container text-center">
-      <h1>Ingresa</h1>
+      <h1>Ingresa sesión</h1>
       <div id="firebase-login" />
     </div>
   )
