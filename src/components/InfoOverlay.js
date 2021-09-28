@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { MdInfo } from 'react-icons/md'
+import { ReactComponent as VideoIcon } from '../images/tutorial.svg'
 import useFlameLinkApp from '../hooks/useFlamelinkApp'
 import Loading from './Loading'
 import '../styles/Info.scss'
@@ -97,7 +97,8 @@ export default function InfoOverlay() {
         <InfoVideo src={videoSrc} onClose={() => setIsOpen(false)} />
       )}
       <div onClick={() => setIsOpen(true)} className='info-action-button'>
-        <MdInfo size={40} />
+        <VideoIcon />
+        <button className='btn'>Ver tutorial</button>
       </div>
     </>
   )

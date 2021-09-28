@@ -14,5 +14,6 @@
   line-height: 29px;
   @media screen and (max-width: 768px) {
     padding: 1rem;
+    margin-top: var(--header-height-mobile);
   }
 }
