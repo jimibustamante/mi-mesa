@@ -56,8 +56,6 @@ export default function CompleteRegister() {
         phone: phoneNumber,
         comuna: selectedComuna,
       })
-      console.log({coordinator})
-      debugger
       if (coordinator) {
         setCoordinator(coordinator)
         history.push('/mesas')
@@ -82,7 +80,6 @@ export default function CompleteRegister() {
   useEffect(() => {
     if (currentUser && !coordinator) {
       getCoordinator(currentUser.id || currentUser.uid).then((_coordinator) => {
-        console.log({_coordinator})
         setCoordinator(_coordinator)
         setLoading(false)
         if (_coordinator) {

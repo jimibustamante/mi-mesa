@@ -11,6 +11,18 @@ function InfoVideo({ src, onClose }) {
     videoRef.current.volume = 0.7
   }
 
+  useEffect(() => {
+    const setVideoPlayed = () => {
+      localStorage.setItem('intro-video-player', true)
+    }
+    if (videoRef.current) {
+      videoRef.current.addEventListener('playing', setVideoPlayed)
+      return () => {
+        videoRef.current?.removeEventListener('playing', setVideoPlayed)
+      }
+    }
+  }, [src])
+
   return ( src ?
     (
       <div className="info-video-container" onClick={onClose}>
@@ -36,6 +48,15 @@ export default function InfoOverlay() {
   const [videoSrc, setVideoSrc] = useState(null)
   const { getFolderFiles, getFileUrl } = useFlameLinkApp()
 
+  //Check if the video has been played before or if it's the first time,
+  // by reading localStorage.
+  const checkFirstRun = () => {
+    const firstRun = localStorage.getItem('intro-video-player')
+    if (!firstRun) {
+      setIsOpen(true)
+    }
+  }
+
   const getVideo = async () => {
     const files = await getFolderFiles('Root')
     const videoFile = Object.values(files).find(file => file.file === 'intro.mp4')
@@ -50,9 +71,7 @@ export default function InfoOverlay() {
   // Catpure when user press ESC key to close the overlay.
   useEffect(() => {
     const handleKeyDown = (e) => {
-      console.log('key pressed')
       if (e.keyCode === 27) {
-        console.log('ESC')
         setIsOpen(false)
       }
     }
@@ -60,6 +79,10 @@ export default function InfoOverlay() {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
+  }, [])
+
+  useEffect(() => {
+    checkFirstRun()
   }, [])
 
   useEffect(() => {
