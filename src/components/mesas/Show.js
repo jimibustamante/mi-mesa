@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
+import { functions } from '../../lib/firebaseApp'
 import { useMesaContext } from '../../contexts/MesaContext'
 import { Container, Row, Col } from 'react-bootstrap'
 import Participants from '../participants/Participants'
@@ -12,13 +13,30 @@ export default function Show() {
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
   const [mesa, setMesa] = useState(null)
-  const { getMesaById, getTypes } = useFlameLinkApp()
-
+  const { getMesaById, getTypes, updateRecord } = useFlameLinkApp()
 
   const getMesa = useCallback(async () => {
     try {
       const mesa = await getMesaById(mesaId)
-      setMesa(mesa)
+      if (!mesa.calendarId) {
+        functions().useEmulator("localhost", 5001)
+        const createCalendar = functions().httpsCallable('createCalendar')
+        const data = {
+          mesaId: mesaId,
+          mesaName: mesa.name,
+          mesaType: mesa.type,
+        }
+        const response = await createCalendar(data)
+        const calendarId = response.data.calendarId
+        if (calendarId) {
+            await updateRecord('mesa', mesa.id, {
+            calendarId,
+          })
+          return setMesa(_mesa => ({..._mesa, calendarId}))
+        }
+      } else {
+        setMesa(mesa)
+      }
     } catch (error) {
       console.error(error)
     }
@@ -37,6 +55,10 @@ export default function Show() {
     if (mesaTypes.length > 0)
       getMesa()
   }, [mesaId, mesaTypes])
+
+  useEffect(() => {
+    console.log({mesa})
+  }, [mesa])
 
   return (
     mesa ? (
@@ -61,6 +83,7 @@ export default function Show() {
         </Row>
         <Participants mesa={mesa} />
         <DocsList mesa={mesa} mesaTypes={mesaTypes} />
+        <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FSantiago&showCalendars=1&showTitle=0&showNav=0&showPrint=0&showDate=0&src=ZGVzYXJyb2xsb0Bib3JpY3ByZXNpZGVudGUuY2w&color=%23039BE5" style={{borderWidth:0}} width="800" height="600" frameBorder="0" scrolling="no"></iframe>
       </Container>
     ) : (
       // TODO: Here should be a loading component

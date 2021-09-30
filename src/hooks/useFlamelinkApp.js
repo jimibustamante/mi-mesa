@@ -43,6 +43,7 @@ const useFlameLinkApp = () => {
   const updateRecord = async (schemaKey, entryId, data) => {
     if (!app.current) return
     const record = await app.current.content.update({schemaKey, entryId, data})
+    debugger
     return record
   }
 

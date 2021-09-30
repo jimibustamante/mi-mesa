@@ -14,7 +14,7 @@ import { NavigationContextProvider, useNavigationContext } from './contexts/Navi
 
 import './App.scss'
 
-import firebaseApp from './lib/firebaseApp'
+import firebaseApp, { functions } from './lib/firebaseApp'
 
 import flamelink from 'flamelink/app'
 import 'flamelink/content'
@@ -31,6 +31,9 @@ import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
 import Mesas from './components/mesas'
 import ShowMesa from  './components/mesas/Show'
+
+// functions.useEmulator("localhost", 5001)
+// functions.useFunctionsEmulator("http://localhost:5001")
 
 const AuthListener = () => {
   const [userState, dispatchUser] = useUserContext()
