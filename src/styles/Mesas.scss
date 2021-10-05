@@ -401,25 +401,29 @@ span.option-button {
   }
 }
 
+.docs-header, .events-header {
+  margin-bottom: 45px;
+  .col{
+    display: flex;
+    align-items: center;
+  }
+  svg g {
+    clip-path: url(#clip1) !important;
+  }
+}
+.docs-title, .events-title {
+  margin-left: 15px;
+  color: var(--bs-green);
+  font-family: var(--bs-font-sans-serif);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 35px;
+  line-height: 41px;
+}
+
 #docs-list {
   margin-top: var(--header-height);
   margin-bottom: 80px;
-  .docs-header {
-    margin-bottom: 45px;
-    .col{
-      display: flex;
-      align-items: center;
-    }
-  }
-  .docs-title {
-    margin-left: 15px;
-    color: var(--bs-green);
-    font-family: var(--bs-font-sans-serif);
-    font-style: normal;
-    font-weight: 600;
-    font-size: 35px;
-    line-height: 41px;
-  }
   .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, 260px);

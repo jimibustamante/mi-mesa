@@ -5,7 +5,6 @@ import MesaFile from '../../classes/mesa_file'
 
 import { ReactComponent as DocsIcon } from '../../images/docs-icon-green.svg'
 import { ReactComponent as PdfIcon } from '../../images/pdf-icon.svg'
-// import PdfIcon from '../../images/pdf-icon.svg' 
 import { ReactComponent as TxtIcon } from '../../images/txt-icon.svg'
 import { ReactComponent as VideoIcon } from '../../images/video-icon.svg'
 
@@ -67,7 +66,7 @@ export default function DocsList({mesa, mesaTypes}) {
   }, [mesa, mesaTypes])
   
   return (
-    <div id='docs-list'>
+    <section id='docs-list'>
       <Row md={12} className='docs-header'>
         <Col>
           <DocsIcon />
@@ -79,6 +78,6 @@ export default function DocsList({mesa, mesaTypes}) {
           <DocItem key={index} mesaFile={mesaFile} />
         ))}
       </div>
-    </div>
+    </section>
   )
 }

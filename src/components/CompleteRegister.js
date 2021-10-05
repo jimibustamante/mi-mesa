@@ -104,7 +104,6 @@ export default function CompleteRegister() {
                     value={phoneNumber}
                     placeholder='+56 912345678'
                     onChange={(phone) => setPhoneNumbre(phone)}
-                    regions={['south-america']}
                   />
                 </Form.Group>
               </Col>

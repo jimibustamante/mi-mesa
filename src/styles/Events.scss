@@ -1,0 +1,46 @@
+#events {
+  margin-bottom: 3rem;
+  form {
+    margin-bottom: 3rem;
+    .form-group {
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    @media screen and (min-width: 768px) {
+      padding: 0 3rem;
+    }
+  }
+  .date-picker {
+    .MuiFormControl-root.MuiTextField-root {
+      width: 100%;
+    }
+    input {
+      padding: 0.375rem 0.75rem;
+    }
+  }
+  .mesa-buttons {
+    justify-content: flex-start;
+    button {
+      text-transform: none;
+      color: white;
+      border-color: var(--bs-green);
+      background-color: var(--bs-green);
+      font-style: normal;
+      font-weight: 600;
+      padding: 0 25px;
+      font-size: 17px;
+      line-height: 1.5;
+      align-items: center;
+    }
+  }
+  .iframe-wrapper {
+    min-height: 600px;
+  }
+  iframe {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .loading-icon {
+    animation: spin 1s linear infinite;
+  }
+}

@@ -1,9 +1,11 @@
 const functions = require('firebase-functions')
 const { google } = require('googleapis')
 const OAuth2 = google.auth.OAuth2
+const admin = require('firebase-admin')
 
+admin.initializeApp()
 calendar = google.calendar('v3')
-
+const db = admin.firestore()
 const googleCredentials = require('./credentials.json')
 
 const ERROR_RESPONSE = {
@@ -11,19 +13,7 @@ const ERROR_RESPONSE = {
   message: 'Error creating Google Calendar',
 }
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
-
-// exports.test = functions.https.onCall((data, context) => {
-
-exports.createCalendar = functions.https.onCall(async (data, context) => {
-  console.log({data})
-  const { mesaId, mesaName } = data
+const getOAuth2Client = async () => {
   const oauth2Client = new OAuth2(
     googleCredentials.web.client_id,
     googleCredentials.web.client_secret,
@@ -35,27 +25,184 @@ exports.createCalendar = functions.https.onCall(async (data, context) => {
   })
 
   await oauth2Client.getAccessToken()
-  // return 
+  return oauth2Client
+}
+
+const getUserEmail = async (uid) => {
+  const user = await admin.auth().getUser(uid)
+  return user.email
+}
+
+const getMesaParticipantsEmail = async (mesaId) => {
+  console.log({getMesaParticipantsEmail: mesaId})
+  const ref = db.collection('fl_content')
+  return ref.where('mesaId', '==', mesaId).get()
+    .then(snapshot => {
+      let mesaParticipants = snapshot.docs.map(doc => doc.data())
+      const emails = mesaParticipants.map(participant => participant.email)
+      return emails
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+const aclResource = (auth, calendarId, role, scope) => {
+  return {
+    auth,
+    calendarId,
+    resource: {
+      role,
+      scope,
+    },
+  }
+}
+
+const createParticipantAcl = async (participant) => {
+  const ref = db.collection('fl_content').doc(participant.mesaId)
+  const doc = await ref.get()
+  if (doc.exists) {
+    const mesa = doc.data()
+    const oauth2Client = await getOAuth2Client()
+    return calendar.acl.insert(aclResource(oauth2Client, mesa.calendarId, 'reader', {
+      type: 'user',
+      value: participant.email,
+    }))
+  }
+}
+
+const createCalendar = async (data) => {
+  const { mesaId, mesaName, userId } = data
+  const oauth2Client = await getOAuth2Client()
+  const ownerEmail = await getUserEmail(userId)
+
   return calendar.calendars.insert({
     auth: oauth2Client,
     resource: {
-      summary: mesaName || 'New Calendar',
-      description: mesaName || 'New Calendar',
-      // location: data.data.location,
-      // colorId: data.data.colorId,
-      // timeZone: data.data.timeZone,
+      summary: 'Mesa Ciudadana',
+      description: mesaName,
+      timeZone: 'Chile/Continental',
     },
+  }).then(async (_calendar) => {
+    await calendar.acl.insert(aclResource(oauth2Client, _calendar.data.id, 'owner', {
+      type: 'user',
+      value: ownerEmail,
+    }))
+    await db.collection('fl_content').doc(mesaId).update({
+      calendarId: _calendar.data.id,
+    })
+    return {
+      status: 200,
+      message: 'Successfully created Google Calendar',
+      calendarId: _calendar.data.id,
+    }
   })
-    .then(calendar => {
-      console.log({calendar})
-      return {
-        status: 200,
-        message: 'Successfully created Google Calendar',
-        calendarId: calendar.data.id,
-      }
+  .catch(error => {
+    console.log({error})
+    return(ERROR_RESPONSE)
+  })
+}
+
+exports.createParticipantAcl = functions.https.onCall(async (data, context) => {
+  createParticipantAcl(data)
+})
+
+exports.getMesaParticipantsEmail = functions.https.onCall(async (data, context) => {
+  const { mesaId } = data
+  return getMesaParticipantsEmail(mesaId)
+})
+
+exports.createCalendar = functions.https.onCall(async (data, context) => {
+  createCalendar(data)
+})
+
+exports.onNewMesa = functions.firestore
+  .document('fl_content/{contentId}')
+  .onCreate(async (snapshot, context) => {
+    const { id, name, userId, email, mesaId, _fl_meta_ } = snapshot.data()
+
+    if (_fl_meta_.schema === 'mesa') {
+      createCalendar({mesaId: id, mesaName: name, userId})
+    }
+
+  })
+  
+exports.createCalendarAll = functions.https.onCall(async (data, context) => {
+  const oauth2Client = await getOAuth2Client()
+  const ref = db.collection('fl_content')
+  let query = ref.where('_fl_meta_.schema', '==', 'mesa')
+
+  query.get()
+    .then(snapshot => {
+      snapshot.docs.forEach(doc => {
+        const { id, name, email, _fl_meta_, calendarId, mesaId} = doc.data()
+        console.log({schema: _fl_meta_.schema, calendarId})
+        if (_fl_meta_.schema === 'mesa' && !calendarId) {
+          console.log({id, name, email, _fl_meta_, calendarId})
+          console.log('\n-- NO CALENDAR ASSIGNED --\n')
+          calendar.calendars.insert({
+            auth: oauth2Client,
+            resource: {
+              summary: 'Mesa Ciudadana',
+              description: name,
+              timeZone: 'Chile/Continental',
+            },
+          }).then(async (_calendar) => {
+
+            await db.collection('fl_content').doc(id).update({
+              calendarId: _calendar.data.id,
+            })
+            console.log('\n-- CALENDAR ID UPDATED --\n')
+            await calendar.acl.insert(aclResource(oauth2Client, _calendar.data.id, 'owner', {
+              type: 'user',
+              value: email,
+            }))
+            console.log('\n-- COORDINATOR ACL CREATED --\n')
+
+          })
+          .catch(error => {
+            console.error(error)
+          })
+        }
+      })
     })
     .catch(error => {
       console.log({error})
       return(ERROR_RESPONSE)
     })
+
+})
+
+exports.createEvent = functions.https.onCall(async (data, context) => {
+  const { calendarId, event, mesaId } = data
+  console.log({data})
+  try {
+    const oauth2Client = await getOAuth2Client()
+    if (!event.end) {
+      event.end = {
+        dateTime: event.start.dateTime,
+      }
+    }
+    const participantsEmail = await getMesaParticipantsEmail(mesaId)
+    event.attendees = participantsEmail.map(email => ({email: email, responseStatus: 'needsAction'}))
+    console.log({event})
+
+    const response = await calendar.events.insert({
+      auth: oauth2Client,
+      calendarId,
+      conferenceDataVersion: 1,
+      sendUpdates: 'all',
+      resource: event,
+      visibility: 'public',
+    })
+    console.log({response})
+    return {
+      status: 200,
+      message: 'Successfully Event created',
+      event: response.data,
+    }
+  } catch (error) {
+    return(ERROR_RESPONSE, error)
+    
+  }
 })

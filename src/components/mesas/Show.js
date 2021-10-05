@@ -6,6 +6,7 @@ import { useMesaContext } from '../../contexts/MesaContext'
 import { Container, Row, Col } from 'react-bootstrap'
 import Participants from '../participants/Participants'
 import DocsList from './DocsList'
+import Events from './Events'
 import { ReactComponent as TableIcon } from '../../images/table.svg'
 
 export default function Show() {
@@ -18,13 +19,15 @@ export default function Show() {
   const getMesa = useCallback(async () => {
     try {
       const mesa = await getMesaById(mesaId)
+      console.log({mesa})
+      setMesa(mesa)
       if (!mesa.calendarId) {
-        functions().useEmulator("localhost", 5001)
+        // functions().useEmulator("localhost", 5001)
         const createCalendar = functions().httpsCallable('createCalendar')
         const data = {
           mesaId: mesaId,
           mesaName: mesa.name,
-          mesaType: mesa.type,
+          userId: mesa.userId,
         }
         const response = await createCalendar(data)
         const calendarId = response.data.calendarId
@@ -32,10 +35,8 @@ export default function Show() {
             await updateRecord('mesa', mesa.id, {
             calendarId,
           })
-          return setMesa(_mesa => ({..._mesa, calendarId}))
+          setMesa({...mesa, calendarId})
         }
-      } else {
-        setMesa(mesa)
       }
     } catch (error) {
       console.error(error)
@@ -56,10 +57,16 @@ export default function Show() {
       getMesa()
   }, [mesaId, mesaTypes])
 
-  useEffect(() => {
-    console.log({mesa})
-  }, [mesa])
+  // useEffect(() => {
+  //   // console.log({mesa})
+  //   functions().useEmulator("localhost", 5001)
+  //   const createCalendarAll = functions().httpsCallable('createCalendarAll')
+  //   createCalendarAll().then((resp) => {
+  //     console.log({resp})
+  //   })
+  // }, [])
 
+  
   return (
     mesa ? (
       <Container id='show-mesa'>
@@ -77,13 +84,13 @@ export default function Show() {
               Por favor lee con cuidado los documentos metodológicos, revisa los videos tutoriales, 
               y revisa también las herramientas de tabulación de los resultados de tu Mesa Ciudadana. 
               Queremos que conozcas bien toda la información antes de iniciar el trabajo de tu mesa. 
-              Si necesitas apoyo no dudes en escribirnos en mesasciudadanas@boricpresidente.cl
+              Si necesitas apoyo no dudes en escribirnos en mesas@boricpresidente.cl
             </p>
           </Col>
         </Row>
         <Participants mesa={mesa} />
         <DocsList mesa={mesa} mesaTypes={mesaTypes} />
-        <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FSantiago&showCalendars=1&showTitle=0&showNav=0&showPrint=0&showDate=0&src=ZGVzYXJyb2xsb0Bib3JpY3ByZXNpZGVudGUuY2w&color=%23039BE5" style={{borderWidth:0}} width="800" height="600" frameBorder="0" scrolling="no"></iframe>
+        <Events mesa={mesa} />
       </Container>
     ) : (
       // TODO: Here should be a loading component

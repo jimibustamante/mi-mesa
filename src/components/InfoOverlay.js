@@ -98,7 +98,7 @@ export default function InfoOverlay() {
       )}
       <div onClick={() => setIsOpen(true)} className='info-action-button'>
         <VideoIcon />
-        <button className='btn'>Ver tutorial</button>
+        <button className='btn'>Video bienvenida</button>
       </div>
     </>
   )

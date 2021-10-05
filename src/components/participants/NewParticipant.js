@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
-import { db } from '../../lib/firebaseApp'
+import { db, functions } from '../../lib/firebaseApp'
 import { ReactComponent as CloseModalIcon } from '../../images/close-modal.svg'
 import { ReactComponent as SaveIcon } from '../../images/save-icon.svg'
 import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
