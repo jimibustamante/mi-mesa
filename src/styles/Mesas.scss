@@ -243,6 +243,9 @@ span.option-button {
         box-shadow: 2px 3px 9px rgba(0, 0, 0, 0.25);
         border-radius: 26px;
         gap: 21px;
+        svg g {
+          clip-path: url(#clip1) !important;
+        }
         a.title {
           min-height: 52px;
           text-decoration: none;

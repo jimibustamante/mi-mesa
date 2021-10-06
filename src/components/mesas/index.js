@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as MesasIcon } from '../../images/mesas.svg'
-import { useHistory } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useUserContext } from '../../contexts/UserContext'
@@ -14,12 +14,13 @@ import '../../styles/Mesas.scss'
 export default function Mesas() {
   const [fetched, setFetched] = useState(false)
   const [showNewMesa, setShowNewMesa] = useState(false)
-  const { flamelinkApp, getContent } = useFlameLinkApp()
+  const { flamelinkApp, flamelinkLoaded, getContent } = useFlameLinkApp()
   const [userState] = useUserContext()
   const [mesaState, dispatch] = useMesaContext()
   const { currentUser } = userState
   const { myMesas } = mesaState
   const history = useHistory()
+  const location = useLocation()
   
   const fetchMyMesas = async () => {
     try {
@@ -45,7 +46,7 @@ export default function Mesas() {
           if (err) console.error({err})
           if (!content) return
           content = Object.values(content)
-          const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
+          const mesas = content.filter((mesa) => mesa?.userId === currentUser.id || mesa?.userId === currentUser.uid)
           dispatch({type: 'SET_MY_MESAS', payload: mesas})
         }
       }
@@ -53,7 +54,8 @@ export default function Mesas() {
   }
 
   useEffect(() => {
-    if (flamelinkApp && myMesas.length === 0) {
+    console.log({flamelinkApp, myMesas})
+    if (flamelinkLoaded && flamelinkApp && myMesas.length === 0) {
       try {
         fetchMyMesas()
         subscribeToMesas()
@@ -61,7 +63,7 @@ export default function Mesas() {
         history.push('/sign-in')
       }
     }
-  }, [flamelinkApp])
+  }, [flamelinkLoaded, flamelinkApp, myMesas])
 
   const onMesaCreated = (newMesa) => {
     console.debug({newMesa})

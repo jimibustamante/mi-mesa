@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import firebaseApp from '../lib/firebaseApp'
 
 import flamelink from 'flamelink/app'
@@ -8,6 +8,7 @@ import 'flamelink/users'
 import 'flamelink/content'
 
 const useFlameLinkApp = () => {
+  const [flamelinkLoaded, setFlamelinkLoaded] = useState(false)
   const app = useRef(null)
 
   const getContent = async (schemaKey) => {
@@ -96,15 +97,20 @@ const useFlameLinkApp = () => {
   }
 
   useEffect(() => {
+    console.log({app: app.current, firebaseApp})
     if (app.current) return
     app.current = flamelink({
       firebaseApp,
       dbType: 'cf',
     })
+    setFlamelinkLoaded(true)
+    console.log({app: app.current})
+
   }, [app.current, flamelink])
 
   return {
     flamelinkApp: app.current,
+    flamelinkLoaded,
     getContent,
     getContentBy,
     getMesaById,

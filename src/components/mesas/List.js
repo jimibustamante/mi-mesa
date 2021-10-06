@@ -39,9 +39,6 @@ const MesaList = ({ mesas, emptyMessage, createMesa }) => {
       <Container fluid>
         <div className='mesa-list'>
           <div className='mesa-item add-mesa'>
-            {/* <div className='mesa-item shadow'>
-              <div className='body' />
-            </div> */}
             <div className='body'>
               <a className='create-mesa' href='#' onClick={() => createMesa()}>
                 <AddIcon className='add-mesa-icon' />
