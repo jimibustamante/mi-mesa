@@ -1,16 +1,18 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
-import { functions } from '../../lib/firebaseApp'
 import { useMesaContext } from '../../contexts/MesaContext'
 import { Container, Row, Col } from 'react-bootstrap'
 import Participants from '../participants/Participants'
 import DocsList from './DocsList'
 import Events from './Events'
+import Alert from '../Alert'
+
 import { ReactComponent as TableIcon } from '../../images/table.svg'
 
 export default function Show() {
   const { mesaId } = useParams()
+  const [showAlert, setShowAlert] = useState(false)
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
   const [mesa, setMesa] = useState(null)
@@ -19,24 +21,24 @@ export default function Show() {
   const getMesa = useCallback(async () => {
     try {
       const mesa = await getMesaById(mesaId)
-      console.log({mesa})
       setMesa(mesa)
       if (!mesa.calendarId) {
+        setShowAlert(true)
         // functions().useEmulator("localhost", 5001)
-        const createCalendar = functions().httpsCallable('createCalendar')
+        // const createCalendar = functions().httpsCallable('createCalendar')
         const data = {
           mesaId: mesaId,
           mesaName: mesa.name,
           userId: mesa.userId,
         }
-        const response = await createCalendar(data)
-        const calendarId = response.data.calendarId
-        if (calendarId) {
-            await updateRecord('mesa', mesa.id, {
-            calendarId,
-          })
-          setMesa({...mesa, calendarId})
-        }
+        // const response = await createCalendar(data)
+        // const calendarId = response.data.calendarId
+        // if (calendarId) {
+        //     await updateRecord('mesa', mesa.id, {
+        //     calendarId,
+        //   })
+        //   setMesa({...mesa, calendarId})
+        // }
       }
     } catch (error) {
       console.error(error)
@@ -56,20 +58,11 @@ export default function Show() {
     if (mesaTypes.length > 0)
       getMesa()
   }, [mesaId, mesaTypes])
-
-  // useEffect(() => {
-  //   // console.log({mesa})
-  //   functions().useEmulator("localhost", 5001)
-  //   const createCalendarAll = functions().httpsCallable('createCalendarAll')
-  //   createCalendarAll().then((resp) => {
-  //     console.log({resp})
-  //   })
-  // }, [])
-
   
   return (
     mesa ? (
       <Container id='show-mesa'>
+        <Alert show={showAlert} onHide={() => setShowAlert(false)} message='Para que los eventos aparezcan en tu calendario, debes aceptar la invitación que llegó a tu correo.' />
         <Row style={{marginBottom: '25px'}} md={12} className='show-mesa-header'>
           <Col md={2}>
             <TableIcon className='show-mesa-header-icon' />
@@ -90,7 +83,7 @@ export default function Show() {
         </Row>
         <Participants mesa={mesa} />
         <DocsList mesa={mesa} mesaTypes={mesaTypes} />
-        <Events mesa={mesa} />
+        {mesa.calendarId && <Events mesa={mesa} />}
       </Container>
     ) : (
       // TODO: Here should be a loading component

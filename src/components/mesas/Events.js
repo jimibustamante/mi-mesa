@@ -62,6 +62,16 @@ export default function Events({ mesa }) {
           <span className='events-title'>Eventos</span>
         </Col>
       </Row>
+      <Row md={12}>
+        <Col>
+          <p>
+            <b>Organiza la reunión de tu mesa.</b>
+          </p>
+          <p>
+            Anota un nombre al evento para que se registre en el calendario de las y los participantes. Luego ingresa día y hora de tu mesa. En el calendario se creará un link de video llamada para el caso de que la mesa se reúna digitalmente.
+          </p>
+        </Col>
+      </Row>
       <Form onSubmit={createEvent} autoComplete='off'>
         <Form.Group as={Row}>
           <Form.Label column md='2'>Nombre evento:</Form.Label>

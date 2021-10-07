@@ -84,6 +84,8 @@ const deleteCalendar = async ({calendarId}) => {
 }
 
 const createCalendar = async (data) => {
+  console.info('********* START NEW CALENDAR *********')
+  
   const { mesaId, mesaName, userId } = data
   const oauth2Client = await getOAuth2Client()
   const ownerEmail = await getUserEmail(userId)
@@ -96,13 +98,16 @@ const createCalendar = async (data) => {
       timeZone: 'Chile/Continental',
     },
   }).then(async (_calendar) => {
+    console.info(`********* CALENDAR CREATED: ${_calendar.data.id} *********`)
     await calendar.acl.insert(aclResource(oauth2Client, _calendar.data.id, 'owner', {
       type: 'user',
       value: ownerEmail,
     }))
+    console.info('********* PARTICIPANT ACL CREATED *********')
     await db.collection('fl_content').doc(mesaId).update({
       calendarId: _calendar.data.id,
     })
+    console.info('********* MESA UPDATED *********')
     return {
       status: 200,
       message: 'Successfully created Google Calendar',
@@ -110,7 +115,7 @@ const createCalendar = async (data) => {
     }
   })
   .catch(error => {
-    console.log({error})
+    console.error({error})
     return(ERROR_RESPONSE)
   })
 }
@@ -125,15 +130,15 @@ exports.getMesaParticipantsEmail = functions.https.onCall(async (data, context) 
 })
 
 exports.createCalendar = functions.https.onCall(async (data, context) => {
-  createCalendar(data)
+  return createCalendar(data)
 })
 
 exports.onNewMesa = functions.firestore
   .document('fl_content/{contentId}')
   .onCreate(async (snapshot, context) => {
-    const { id, name, userId, email, mesaId, _fl_meta_ } = snapshot.data()
-
-    if (_fl_meta_.schema === 'mesa') {
+    const { id, name, userId, email, mesaId, _fl_meta_, calendarId } = snapshot.data()
+    console.info({ id, name, userId, email, mesaId, _fl_meta_, calendarId })
+    if (_fl_meta_.schema === 'mesa' && !calendarId) {
       createCalendar({mesaId: id, mesaName: name, userId})
     }
 
