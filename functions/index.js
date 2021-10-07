@@ -71,6 +71,18 @@ const createParticipantAcl = async (participant) => {
   }
 }
 
+const deleteCalendar = async ({calendarId}) => {
+  try {
+    const oauth2Client = await getOAuth2Client()
+    return calendar.calendars.delete({
+      auth: oauth2Client,
+      calendarId,
+    })
+  } catch (error) {
+    return ERROR_RESPONSE
+  }
+}
+
 const createCalendar = async (data) => {
   const { mesaId, mesaName, userId } = data
   const oauth2Client = await getOAuth2Client()
@@ -125,6 +137,21 @@ exports.onNewMesa = functions.firestore
       createCalendar({mesaId: id, mesaName: name, userId})
     }
 
+  })
+
+exports.onDeleteMesa = functions.firestore
+  .document('fl_content/{contentId}')
+  .onDelete(async (snapshot, context) => {
+    try {
+      const { id, calendarId, _fl_meta_ } = snapshot.data()
+      console.log({id, calendarId, _fl_meta_})
+      if (_fl_meta_.schema === 'mesa' && calendarId) {
+        console.info('********* DELETING CALENDAR *********')
+        deleteCalendar({calendarId})
+      }
+    } catch (error) {
+      console.info('********* ERROR: DELETING CALENDAR *********', {error})
+    }
   })
   
 exports.createCalendarAll = functions.https.onCall(async (data, context) => {
