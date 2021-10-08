@@ -141,7 +141,6 @@ exports.onNewMesa = functions.firestore
     if (_fl_meta_.schema === 'mesa' && !calendarId) {
       createCalendar({mesaId: id, mesaName: name, userId})
     }
-
   })
 
 exports.onDeleteMesa = functions.firestore

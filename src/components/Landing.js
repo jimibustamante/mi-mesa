@@ -82,7 +82,16 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className='territorios'>
+      <section className='mesa-finder' id='mesa-finder'>
+        <Container>
+          <div>
+            <h2>Encuentra tu mesa</h2>
+            <MesaFinder />
+          </div>
+        </Container>
+      </section>
+
+      {/* <section className='territorios'>
         <Carousel fade controls={false} touch={false} interval={5000}>
           <Carousel.Item>
             <img src={CarouselImage1} alt='Norte' />
@@ -102,7 +111,7 @@ export default function Landing() {
           <h2>Territorio</h2>
           <a href='https://forms.gle/gx5VToy6BgKjuBxT9' target='_blank' className='btn red'>Descubre más</a>
         </div>
-      </section>
+      </section> */}
 
       <section className='contact'>
         <div className='content'>
@@ -110,7 +119,7 @@ export default function Landing() {
           <span className='text-med'>
             ¡Ponte en contacto con nosotros!
           </span>
-          <a className='btn' href='mailto:contacto@boricpresidente.cl'>Contacto</a>
+          <a className='btn' href='mailto:mesas@boricpresidente.cl'>Contacto</a>
         </div>
       </section>
     </div>

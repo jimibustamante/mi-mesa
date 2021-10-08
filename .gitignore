@@ -26,3 +26,6 @@ yarn-error.log*
 serviceAccountKey.json
 
 *.log
+
+/node_modules
+/functions/node_modules

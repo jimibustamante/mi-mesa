@@ -79,7 +79,13 @@ export default function Mesas() {
       mesaName: newMesa.name,
       userId: newMesa.userId,
     }
-    await createCalendar(data)
+    const response = await createCalendar(data)
+    const calendarId = response.data.calendarId
+    if (calendarId) {
+        await updateRecord('mesa', newMesa.id, {
+        calendarId,
+      })
+    }
     setLoading(false)
     setCalendarAlert(true)
   }

@@ -16,7 +16,7 @@ export default function Show() {
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
   const [mesa, setMesa] = useState(null)
-  const { getMesaById, getTypes, updateRecord } = useFlameLinkApp()
+  const { getMesaById, getTypes } = useFlameLinkApp()
 
   const getMesa = useCallback(async () => {
     try {
@@ -24,21 +24,6 @@ export default function Show() {
       setMesa(mesa)
       if (!mesa.calendarId) {
         setShowAlert(true)
-        // functions().useEmulator("localhost", 5001)
-        // const createCalendar = functions().httpsCallable('createCalendar')
-        const data = {
-          mesaId: mesaId,
-          mesaName: mesa.name,
-          userId: mesa.userId,
-        }
-        // const response = await createCalendar(data)
-        // const calendarId = response.data.calendarId
-        // if (calendarId) {
-        //     await updateRecord('mesa', mesa.id, {
-        //     calendarId,
-        //   })
-        //   setMesa({...mesa, calendarId})
-        // }
       }
     } catch (error) {
       console.error(error)
