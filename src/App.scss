@@ -555,6 +555,76 @@ span.span-link {
       align-self: center;
     }
   }
+  section#mesa-finder {
+    padding-top: var(--header-height);
+    margin-bottom: 3rem;
+    min-height: 500px;
+    overflow-y: hidden;
+    @media screen and (max-width: 768px) {
+      height: 90vh;
+      padding-top: var(--header-height-mobile);
+    }
+    h2 {
+      @include title;
+      color: var(--bs-green);
+      font-size: 60px;
+      line-height: 1;
+      margin-bottom: 3rem;
+      font-weight: 700;
+      @media screen and (max-width: 768px) {
+        font-size: 52px !important;
+        margin-bottom: 3rem;
+      }
+    }
+    .table-wrapper {
+      margin-top: 2rem;
+      min-height: 500px;
+      height: calc(70vh - var(--header-height));
+      min-height: 500px;
+      overflow-y: scroll;
+      @media screen and (max-width: 768px) {
+        height: calc(100vh - var(--header-height-mobile));
+        min-height: 500px;
+      }
+      table {
+        overflow-y: scroll;
+        a {
+          text-transform: none !important;
+          font-family: var(--bs-font-sans-serif);
+          color: var(--bs-green);
+        }
+        tbody {
+          td {
+            text-transform: capitalize;
+            a.btn {
+              padding: 0px 25px;
+              border: 1px solid #FFFFFF;
+              border-radius: 32px;
+              background-color: var(--bs-green);
+              font-style: normal;
+              font-weight: 600;
+              font-size: 14px;
+              line-height: 1.6;
+              color: #FFFFFF;
+            }
+          }
+          @media screen and (max-width: 768px) {
+            font-size: 12px;
+          }
+        }
+        thead {
+          @media screen and (max-width: 768px) {
+            font-size: 14px;
+          }
+          a {
+            font-size: 16px;
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+
 }
 
 .mesas-container {
@@ -710,6 +780,8 @@ span.span-link {
     }
   }
 }
+
+
 footer {
   display: flex;
   min-height: 400px;

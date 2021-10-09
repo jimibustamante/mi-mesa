@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as MesasIcon } from '../../images/mesas.svg'
 import { functions } from '../../lib/firebaseApp'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useUserContext } from '../../contexts/UserContext'
@@ -25,7 +25,6 @@ export default function Mesas() {
   const { currentUser } = userState
   const { myMesas } = mesaState
   const history = useHistory()
-  const location = useLocation()
   
   const fetchMyMesas = async () => {
     try {
@@ -33,7 +32,6 @@ export default function Mesas() {
       setFetched(true)
       if (!content) return
       content = Object.values(content)
-      console.log({currentUser})
       const mesas = content.filter((mesa) => mesa.userId === currentUser.id || mesa.userId === currentUser.uid)
       dispatch({type: 'SET_MY_MESAS', payload: mesas})
     } catch (error) {
@@ -60,7 +58,8 @@ export default function Mesas() {
   }
 
   useEffect(() => {
-    if (currentUser && flamelinkLoaded && myMesas.length === 0) {
+    if (currentUser && flamelinkLoaded && !fetched) {
+      console.log('FETCHING', {myMesas})
       try {
         fetchMyMesas()
         subscribeToMesas()
@@ -90,14 +89,23 @@ export default function Mesas() {
     setCalendarAlert(true)
   }
 
-  if (currentUser) {
-    return (
-      <>
-        <Alert show={calendarAlert} onHide={() => setCalendarAlert(false)} message='En breve llegará a tu correo una invitación al calendario de tu mesa. Debes aceptarla antes de crear eventos.' />
-        {loading && <Loading />}
-        <InfoOverlay />
-        <NewMesa show={showNewMesa} onCreate={onMesaCreated} onClose={() => setShowNewMesa(false)} />
-        <Container id='mesas' className='page-wrapper'>
+  // useEffect(() => {
+  //     functions().useEmulator("localhost", 5001)
+  //     const relateMesaToCoordinator = functions().httpsCallable('relateMesaToCoordinator')
+  //     relateMesaToCoordinator().then((resp) => {
+  //       console.log('relateMesaToCoordinator', resp)
+  //       debugger
+  //     })
+
+  // }, [])
+
+  return (
+    <>
+      <Alert show={calendarAlert} onHide={() => setCalendarAlert(false)} message='En breve llegará a tu correo una invitación al calendario de tu mesa. Debes aceptarla antes de crear eventos.' />
+      {loading && <Loading />}
+      <InfoOverlay />
+      <NewMesa show={showNewMesa} onCreate={onMesaCreated} onClose={() => setShowNewMesa(false)} />
+      <Container id='mesas' className='page-wrapper'>
         <Row className='content-head justify-content-md-between align-items-center'>
           <Col md={6}>
             <div className='title'>
@@ -106,11 +114,9 @@ export default function Mesas() {
             </div>
           </Col>
         </Row>
-          <MesaList createMesa={() => setShowNewMesa(true)} mesas={myMesas} emptyMessage='No tienes mesas creadas aun' />
-        </Container>
-      </>
-    )
-  } else {
-    return ''
-  }
+        <MesaList createMesa={() => setShowNewMesa(true)} mesas={myMesas} emptyMessage='No tienes mesas creadas aun' />
+      </Container>
+    </>
+  )
+
 }

@@ -53,6 +53,11 @@ const useFlameLinkApp = () => {
     return mesas
   }
 
+  const getOpenedMesas = async () => {
+    const mesas = await app.current.content.getByField({schemaKey: 'mesa', field: 'open', value: true})
+    return (mesas) ? Object.values(mesas) : []
+  }
+
   const getTypes = async () => {
     if (!app.current) return
     let types = await getContent('tipoMesa')
@@ -90,6 +95,12 @@ const useFlameLinkApp = () => {
     return participante
   }
 
+  const getCoordinators = async () => {
+    if (!app.current) return
+    const coordinadores = await getContent('coordinador')
+    return coordinadores
+  }
+
   const getCoordinator = async (userId) => {
     if (!app.current) return
     const coordinator = await app.current.content.getByField({schemaKey: 'coordinador', field: 'userId', value: userId})
@@ -119,12 +130,14 @@ const useFlameLinkApp = () => {
     getSchema,
     getTypes,
     getMesas,
+    getOpenedMesas,
     getFolderFiles,
     getFolders,
     getFileUrl,
     deleteMesa,
     deleteParticipant,
     getCoordinator,
+    getCoordinators,
   }
 }
 

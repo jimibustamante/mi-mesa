@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect, useCallback } from 'react'
 import { db } from '../../../lib/firebaseApp'
 import useFlameLinkApp from '../../../hooks/useFlamelinkApp'
 import { ReactComponent as CloseModalIcon } from '../../../images/close-modal.svg'
@@ -47,7 +47,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
       return theme
     } else if (type === 'territorial') {
       return comuna
-    } else if (type === 'interés común') {
+    } else if (type === 'por causa') {
       return cause
     }
   }
@@ -94,6 +94,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   }
 
   const onLastStepChange = (lastStep) => {
+    console.log('onLastStepChange')
     setLastStep(lastStep)
   }
 
@@ -105,64 +106,69 @@ const NewMesa = ({ onCreate , show, onClose }) => {
     setCarouselCurrentIndex(index => index - 1)
   }
 
-  const createButtonDisabled = () => {
+  const createButtonDisabled = useCallback(() => {
+    console.log({cause, comuna, lastStep, theme})
     switch (lastStep) {
       case 'territorial':
         return comuna === ''
-      case 'interés común':
+      case 'por causa':
         return cause.length < 5
       case 'temática':
         return theme.length < 5
-      case 'interés común territorial':
+      case 'por causa territorial':
         return cause.length < 5 || comuna === ''
       default:
         return true
     }
-  }
+  }, [cause, comuna, lastStep, theme])
+  // console.log({carouselCurrentIndex, onCreate , show, onClose})
 
   const disabled = createButtonDisabled()
   return (
     <Modal show={show} onHide={onHide} size="lg">
       <CloseModalIcon className='close-modal' onClick={onHide} />
-      <Modal.Body>
-        <Carousel
-          slide={false}
-          controls={false}
-          activeIndex={carouselCurrentIndex}
-          onSelect={handleCarouselSelect}
-          indicators={false}
-          interval={null}
-          >
-          <Carousel.Item>
-            <Step1 next={next} />
-          </Carousel.Item>
-          <Carousel.Item>
-            <Step2 next={next} back={back} onSelect={onIsOpenChange} isMesaOpen={isOpen} />
-          </Carousel.Item>
-          <Carousel.Item>
-            <Step3 back={back} onSelect={onTypeChange} onLastStepChange={onLastStepChange} type={type} />
-          </Carousel.Item>
-          <Carousel.Item>
-            <Container>
-              <Back onBack={back} />
-              {lastStep.includes('interés común') && (
-                <CausePicker onSelect={(cause) => setCause(cause)} cause={cause} />
-              )}
-              {lastStep.includes('territorial') && (
-                <ComunaPicker onSelect={(comuna) => setComuna(comuna)} />
-              )}
-              {lastStep.includes('temática') && (
-                <ThemePicker onSelect={(theme) => setTheme(theme)} theme={theme} />
-              )}
-              <Row className='justify-content-md-center'>
-                <Col className='mesa-buttons' md={6}>
-                  <Button disabled={disabled} className='button' onClick={createMesa}>Crear Mesa</Button>
-                </Col>
-              </Row>
-            </Container>
-          </Carousel.Item>
-        </Carousel>
-      </Modal.Body>
+      {show && (
+        <Modal.Body>
+          <Carousel
+            slide={false}
+            controls={false}
+            activeIndex={carouselCurrentIndex}
+            onSelect={handleCarouselSelect}
+            indicators={false}
+            interval={null}
+            >
+            <Carousel.Item>
+              
+              <Step1 next={next} />
+            </Carousel.Item>
+            <Carousel.Item>
+              <Step2 next={next} back={back} onSelect={onIsOpenChange} isMesaOpen={isOpen} />
+            </Carousel.Item>
+            <Carousel.Item>
+              <Step3 back={back} onSelect={onTypeChange} onLastStepChange={onLastStepChange} type={type} />
+            </Carousel.Item>
+            <Carousel.Item>
+              <Container>
+                <Back onBack={back} />
+                {lastStep.includes('por causa') && (
+                  <CausePicker onSelect={(cause) => setCause(cause)} cause={cause} />
+                )}
+                {lastStep.includes('territorial') && (
+                  <ComunaPicker onSelect={(comuna) => setComuna(comuna)} />
+                )}
+                {lastStep.includes('temática') && (
+                  <ThemePicker onSelect={(theme) => setTheme(theme)} theme={theme} />
+                )}
+                <Row className='justify-content-md-center'>
+                  <Col className='mesa-buttons' md={6}>
+                    <Button disabled={disabled} className='button' onClick={createMesa}>Crear Mesa</Button>
+                  </Col>
+                </Row>
+              </Container>
+            </Carousel.Item>
+          </Carousel>
+        </Modal.Body>
+      )}
     </Modal>
   )
 }

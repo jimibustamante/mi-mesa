@@ -3,15 +3,17 @@ import { Link } from 'react-router-dom'
 import { Button, Col, Container, Row, Carousel} from 'react-bootstrap'
 import LandingImage1 from '../images/landing-img-1.png'
 import LandingImage2 from '../images/landing-img-2.png'
-import CarouselImage1 from '../images/territorios1.png'
-import CarouselImage2 from '../images/territorios2.png'
-import CarouselImage3 from '../images/territorios3.png'
+
+// import CarouselImage1 from '../images/territorios1.png'
+// import CarouselImage2 from '../images/territorios2.png'
+// import CarouselImage3 from '../images/territorios3.png'
+// import ChileImg from '../images/chile.png'
 
 import { ReactComponent as Arrow } from '../images/arrow.svg'
-import ChileImg from '../images/chile.png'
 
 import MesasMoreInfo from '../components/MesasMoreInfo'
 import ConsultMoreInfo from '../components/ConsultMoreInfo'
+import MesaFinder from '../components/MesaFinder'
 
 export default function Landing() {
   const [showInfoMesas, setShowInfoMesas] = useState(false)
@@ -50,7 +52,7 @@ export default function Landing() {
                 Conoce más    +
               </button>
               <div className='mesa-buttons'>
-                <a className='btn' href='https://forms.gle/gx5VToy6BgKjuBxT9' target='_blank' >
+                <a className='btn' href='#mesa-finder' >
                   Únete a una mesa
                 </a>
                 <Button as={Link} to='/sign-in'>Crea tu mesa</Button>
@@ -82,10 +84,15 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className='mesa-finder' id='mesa-finder'>
+      <section id='mesa-finder'>
         <Container>
-          <div>
-            <h2>Encuentra tu mesa</h2>
+          <h2>Encuentra tu mesa</h2>
+          <Row>
+            <Col xs={12} md={9}>
+              <p>Súmate a alguna de estas Mesas Ciudadanas. Haz click en 'Participar' para notificar via email a la coordinación de la mesa, quien te contactará muy pronto para que puedas participar.</p>
+            </Col>
+          </Row>
+          <div className='table-wrapper'>
             <MesaFinder />
           </div>
         </Container>
