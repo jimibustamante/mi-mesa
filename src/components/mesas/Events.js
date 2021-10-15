@@ -46,6 +46,8 @@ export default function Events({ mesa }) {
       console.error(error)
     } finally {
       setLoading(false)
+      setEventName('')
+      setStartTime(null)
     }
   }
 

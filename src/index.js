@@ -6,6 +6,7 @@ import {
   Switch,
   Route,
   useHistory,
+  useLocation,
 } from 'react-router-dom'
 
 import { UserContextProvider, useUserContext } from './contexts/UserContext'
@@ -14,7 +15,7 @@ import { NavigationContextProvider, useNavigationContext } from './contexts/Navi
 
 import './App.scss'
 
-import firebaseApp, { functions } from './lib/firebaseApp'
+import firebaseApp from './lib/firebaseApp'
 
 import flamelink from 'flamelink/app'
 import 'flamelink/content'
@@ -31,6 +32,7 @@ import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
 import Mesas from './components/mesas'
 import ShowMesa from  './components/mesas/Show'
+import FinderWrapper from './components/FinderWrapper'
 
 // functions.useEmulator("localhost", 5001)
 // functions.useFunctionsEmulator("http://localhost:5001")
@@ -64,6 +66,23 @@ const AuthListener = () => {
   return ''
 }
 
+const Background = ({children}) => {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.pathname.includes('/busca-tu-mesa')) {
+      document.body.classList.add('busca-tu-mesa')
+    } else {
+      document.body.classList.remove('busca-tu-mesa')
+    }
+  }, [location])
+  return (
+    <>
+      {children}
+    </>
+  )
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
@@ -72,16 +91,19 @@ ReactDOM.render(
           <Router>
             <Header />
             <AuthListener />
-            <Switch>
-              <Route path="/" component={Landing} exact />
-              <Route path="/welcome" component={Landing} exact />
-              <Route path="/como-participar" component={Participar} exact />
-              <Route path="/sign-in" component={Login} exact />
-              <Route path="/sign-in-success" component={CompleteRegister} exact />
-              <Route path="/mesas/:mesaId" component={ShowMesa} exact />
-              <Route path="/mesas" component={Mesas} exact />
-              <Route path="/:page" flamelink={flamelink} component={CmsContent} />
-            </Switch>
+            <Background>
+              <Switch>
+                <Route path="/" component={Landing} exact />
+                <Route path="/welcome" component={Landing} exact />
+                <Route path="/busca-tu-mesa" component={FinderWrapper} exact />
+                <Route path="/como-participar" component={Participar} exact />
+                <Route path="/sign-in" component={Login} exact />
+                <Route path="/sign-in-success" component={CompleteRegister} exact />
+                <Route path="/mesas/:mesaId" component={ShowMesa} exact />
+                <Route path="/mesas" component={Mesas} exact />
+                <Route path="/:page" flamelink={flamelink} component={CmsContent} />
+              </Switch>
+            </Background>
             <Footer />
           </Router>
         </NavigationContextProvider>

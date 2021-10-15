@@ -15,6 +15,7 @@
   "dependencies": {
     "firebase-admin": "^9.8.0",
     "firebase-functions": "^3.14.1",
+    "flamelink": "^1.0.0-alpha.34",
     "googleapis": "^87.0.0"
   },
   "devDependencies": {

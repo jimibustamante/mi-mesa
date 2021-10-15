@@ -1,25 +1,85 @@
 import React, { useEffect, useState } from 'react'
+import { functions } from '../lib/firebaseApp'
+import { ReactComponent as SearchIcon } from '../images/search-icon.svg'
 import useFlameLinkApp from '../hooks/useFlamelinkApp'
-import { Table } from 'react-bootstrap'
+import { Table, Button } from 'react-bootstrap'
 import { useMesaContext } from '../contexts/MesaContext'
-import { Button } from '@mui/material'
+// import { Button } from '@mui/material'
+import Participate from './participants/Participate'
+
+const FinderFileters = ({filters, mesaTypes, setFilters}) => {
+  const { type, query } = filters
+
+  const onChange = (e) => {
+    const { name, value } = e.target
+    setFilters({ ...filters, [name]: value })
+  }
+
+  return (
+    <div className='filters'>
+      <label>
+        <SearchIcon />
+        <input type="text" placeholder='Buscar por palabra clave' value={query} name='query' onChange={onChange} />
+      </label>
+      <label>
+        Tipo de de mesa:
+        <select value={filters.type} name='type' onChange={onChange}>
+          <option value="">Todo</option>
+          {mesaTypes?.map(mesaType => (
+            <option key={mesaType.id} value={mesaType.name}>
+              {mesaType.name}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  )
+}
 
 export default function MesaFinder() {
   const { flamelinkLoaded, getOpenedMesas, getTypes, getCoordinators } = useFlameLinkApp()
   const [mesas, setMesas] = useState([])
+  const [filteredMesas, setFilteredMesas] = useState([])
+  const [filters, setFilters] = useState({})
   const [sortings, setSortings] = useState({})
   const [coordinators, setCoordinators] = useState([])
+  const [showParticipate, setShowParticipate] = useState(false)
+  const [toParticipateMesa, setToParticipateMesa] = useState(null)
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
+
+  // useEffect(() => {
+  //   if (mesas.length) {
+  //     const mesa = mesas[0]
+  //     functions().useEmulator("localhost", 5001)
+  //     functions().httpsCallable('getCalendarEvents')(mesa.calendarId).then(res => {
+  //       console.log({res})
+  //     })
+  //   }
+  // }, [mesas])
+
+  const filterMesas = () => {
+    const { type, query } = filters
+    const filteredMesas = mesas.filter(mesa => {
+      if (type && mesaTypeName(mesa?.mesaType.id) !== type) return false
+      if (query && mesa.name.toLowerCase().indexOf(query.toLowerCase()) === -1) return false
+      return true
+    })
+    return filteredMesas
+  }
+
+  useEffect(() => {
+    if (filters) {
+      setFilteredMesas(filterMesas())
+    }
+  }, [filters])
 
   useEffect(() => {
     if (flamelinkLoaded) {
       getOpenedMesas().then(_mesas => {
-        console.log(_mesas)
         setMesas(Object.values(_mesas))
       })
       getCoordinators().then(_coordinators => {
-        console.log({_coordinators})
         setCoordinators(Object.values(_coordinators))
       })
     }
@@ -44,14 +104,13 @@ export default function MesaFinder() {
     return email || 'mesas@boricpresidente.cl'
   }
 
-  function setEmail(mesa) {
-    console.log({mesa})
-    const body = `
-      Hola, te envío este correo para unirme a la mesa ciudadana que coordinas.
-    `
-    const subject = `Mesa Ciudadana - ${mesa.name}`
-    return `mailto:${getCoordinatorContact(mesa.userId)}?subject=${decodeURIComponent(subject)}&body=${decodeURIComponent(body)}`
-  }
+  // function setEmail(mesa) {
+  //   const body = `
+  //     Hola, te envío este correo para unirme a la mesa ciudadana que coordinas.
+  //   `
+  //   const subject = `Mesa Ciudadana - ${mesa.name}`
+  //   return `mailto:${getCoordinatorContact(mesa.userId)}?subject=${decodeURIComponent(subject)}&body=${decodeURIComponent(body)}`
+  // }
 
   function sortByMesaTypeName(a, b) {
     const aName = mesaTypeName(a.mesaType.id)
@@ -78,33 +137,46 @@ export default function MesaFinder() {
     }
   }
 
+  const participate = (mesa) => {
+    setToParticipateMesa(mesa)
+    setShowParticipate(true)
+  }
+
+  const list = Object.keys(filters).length > 0 ? filteredMesas : mesas
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>Título</th>
-          <th>
-            <Button as='a' href='#' name='mesaType' onClick={sortListBy}>Mesa</Button>
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {mesas.map(mesa => {
-          const mailTo = setEmail(mesa)
-          return (
-            <tr key={mesa.id}>
-              <td>{mesa.name}</td>
-              <td>{mesaTypeName(mesa.mesaType.id)}</td>
-              <td>
-                <Button as='a' href={mailTo} className='btn'>
-                  Participar
-                </Button>
-              </td>
+    <div id='find-your-mesa'>
+      {toParticipateMesa && (
+        <Participate mesa={toParticipateMesa} show={showParticipate} onClose={() => setShowParticipate(false)} />
+      )}
+      <FinderFileters filters={filters} mesaTypes={mesaTypes} setFilters={setFilters} />
+      <div className='table-wrapper'>
+        <Table>
+          <thead className='sticky-top'>
+            <tr>
+              <th>Nombre mesa</th>
+              <th>
+                <a name='mesaType' href='#' onClick={sortListBy}>Tipo de mesa</a>
+              </th>
+              <th></th>
             </tr>
-          )}
-        )}
-      </tbody>
-    </Table>
+          </thead>
+          <tbody>
+            {list.map(mesa => {
+              return (
+                <tr key={mesa.id}>
+                  <td>{mesa.name}</td>
+                  <td>{mesaTypeName(mesa.mesaType.id)}</td>
+                  <td>
+                    <Button onClick={() => participate(mesa)} className='btn'>
+                      Participar
+                    </Button>
+                  </td>
+                </tr>
+              )}
+            )}
+          </tbody>
+        </Table>
+      </div>
+    </div>
   )
 }

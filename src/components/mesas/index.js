@@ -59,7 +59,6 @@ export default function Mesas() {
 
   useEffect(() => {
     if (currentUser && flamelinkLoaded && !fetched) {
-      console.log('FETCHING', {myMesas})
       try {
         fetchMyMesas()
         subscribeToMesas()
@@ -94,9 +93,7 @@ export default function Mesas() {
   //     const relateMesaToCoordinator = functions().httpsCallable('relateMesaToCoordinator')
   //     relateMesaToCoordinator().then((resp) => {
   //       console.log('relateMesaToCoordinator', resp)
-  //       debugger
   //     })
-
   // }, [])
 
   return (

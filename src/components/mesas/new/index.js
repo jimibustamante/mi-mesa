@@ -27,9 +27,14 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   const [userState] = useUserContext()
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
-  const { createRecord, getTypes } = useFlameLinkApp()
+  const { createRecord, getTypes, getContentBy } = useFlameLinkApp()
   const { currentUser } = userState
 
+  const getCoordinator = useCallback(async () => {
+    const data = await getContentBy('coordinador', 'userId', currentUser.uid)
+    return data[0] || {}
+  }, [currentUser])
+    
   useEffect(() => {
     if (mesaTypes.length === 0) {
       getTypes().then((types) => {
@@ -56,6 +61,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
     // TODO: Validate
     const selectedType = mesaTypes.find(mt => mt.name === type)
     if (!selectedType) return
+    const coordinator = await getCoordinator()
 
     const newMesa = await createRecord('mesa', {
       name: mesaName(),
@@ -65,6 +71,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
       cause,
       theme,
       mesaType: db().doc(`/fl_content/${selectedType.id}`),
+      coordinator: db().doc(`/fl_content/${coordinator.id}`),
     })
     setIsOpen(null)
     setCause('')
@@ -94,7 +101,6 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   }
 
   const onLastStepChange = (lastStep) => {
-    console.log('onLastStepChange')
     setLastStep(lastStep)
   }
 
@@ -107,7 +113,6 @@ const NewMesa = ({ onCreate , show, onClose }) => {
   }
 
   const createButtonDisabled = useCallback(() => {
-    console.log({cause, comuna, lastStep, theme})
     switch (lastStep) {
       case 'territorial':
         return comuna === ''

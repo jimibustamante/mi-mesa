@@ -35,13 +35,16 @@ export default function Header() {
             )}
             <>
               <Nav.Item>
+                <a className="menu-item" href='https://boricpresidente.cl/unete' target='_blank'>Únete</a>
+              </Nav.Item>
+              <Nav.Item>
                 <a className="menu-item" href='https://boricpresidente.cl/propuestas' target='_blank'>Propuestas</a>
               </Nav.Item>
               <Nav.Item>
                 <a className="menu-item" href='https://boricpresidente.cl/aporta' target='_blank'>Aporta</a>
               </Nav.Item>
               <Nav.Item>
-                <Link className="menu-item" style={{color: '#19CBB5'}} to='/'>¡Participa aquí!</Link>
+                <Link className="menu-item" style={{color: '#81c9c3'}} to='/'>Participa aquí</Link>
               </Nav.Item>
               { !currentUser && (
                 <Nav.Item>

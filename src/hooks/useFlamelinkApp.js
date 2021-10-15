@@ -108,14 +108,12 @@ const useFlameLinkApp = () => {
   }
 
   useEffect(() => {
-    console.log({app: app.current, firebaseApp})
     if (app.current) return
     app.current = flamelink({
       firebaseApp,
       dbType: 'cf',
     })
     setFlamelinkLoaded(true)
-    console.log({app: app.current})
 
   }, [app.current, flamelink])
 

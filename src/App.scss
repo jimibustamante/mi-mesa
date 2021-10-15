@@ -54,8 +54,8 @@ font-display:auto;font-style:normal;font-weight:900;
   --bs-primary: #7853C1 !important; 
   --bs-secondary: #DADCE5 !important;
   --main-color: #FF1D63;
-  --header-height: 114px;
-  --header-height-mobile: 90px;
+  --header-height: 70px;
+  --header-height-mobile: 70px;
   --main-text-color: #E4DCED;
   --header-bg: #094C68;
   --bs-font-sans-serif: 'Work Sans', sans-serif !important;
@@ -135,6 +135,9 @@ body {
   margin: 0;
   position: relative;
   font-family: var(--bs-font-sans-serif);
+  &.busca-tu-mesa {
+    background-color: var(--bs-light-blue);
+  }
 }
 
 .hide-mob {
@@ -199,16 +202,22 @@ header {
   }
   .navbar {
     background-color: var(--header-bg);
-    padding: 0 55px;
+    padding: 0 2rem;
     align-items: center;
     display: flex;
     height: 100%;
     justify-content: space-between;
     .navbar-nav {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       width: 100%;
       padding-left: 60px;
+      .nav-item {
+        padding: 0 .7em;
+        a, span {
+          font-size: 14px;
+        }
+      }
     }
     @media screen and (max-width: 768px) {
       padding: 0 20px 20px !important;
@@ -238,8 +247,9 @@ header {
   }
   .logo {
     cursor: pointer;
+    padding: 0;
     img {
-      max-width: 8rem;
+      max-width: 7rem;
       @media screen and (max-width: 768px) {
         max-width: 5rem;
       }
@@ -306,7 +316,7 @@ span.span-link {
   }
 }
 
-#landing, #participar {
+#landing, #participar, #mesa-finder-wrapper {
   margin-bottom: 10rem;
   margin-top: var(--header-height);
   @media screen and (max-width: 768px) {
@@ -560,73 +570,218 @@ span.span-link {
     margin-bottom: 3rem;
     min-height: 500px;
     overflow-y: hidden;
-    @media screen and (max-width: 768px) {
-      height: 90vh;
-      padding-top: var(--header-height-mobile);
-    }
     h2 {
       @include title;
-      color: var(--bs-green);
-      font-size: 60px;
-      line-height: 1;
-      margin-bottom: 3rem;
-      font-weight: 700;
+      font-family: Lexia;
+      font-style: italic;
+      font-weight: bold;
+      font-size: 64px;
+      line-height: 79px;
+      color: var(--header-bg);
       @media screen and (max-width: 768px) {
         font-size: 52px !important;
         margin-bottom: 3rem;
       }
     }
-    .table-wrapper {
-      margin-top: 2rem;
-      min-height: 500px;
-      height: calc(70vh - var(--header-height));
-      min-height: 500px;
-      overflow-y: scroll;
-      @media screen and (max-width: 768px) {
-        height: calc(100vh - var(--header-height-mobile));
-        min-height: 500px;
+    p {
+      color: var(--header-bg);
+      font-family: Work Sans;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 25px;
+      line-height: 29px;
+    }
+    @media screen and (max-width: 768px) {
+      padding-top: var(--header-height-mobile);
+    }
+    .mesa-finder-img-wrapper {
+      background: white;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      margin-left: 7rem;
+      position: relative;
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-70%, -50%);
+        width: 120%;
       }
-      table {
-        overflow-y: scroll;
-        a {
-          text-transform: none !important;
-          font-family: var(--bs-font-sans-serif);
+    }
+  }
+}
+
+#find-your-mesa {
+  margin-top: 2rem;
+  padding: 2rem;
+  min-height: 500px;
+  min-height: 500px;
+  background-color: white;
+  @media screen and (max-width: 768px) {
+    min-height: 500px;
+    padding: 0;
+  }
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      margin-bottom: 0;
+    }
+    svg {
+      padding: 3px;
+      margin-right: 10px;
+      @media screen and (max-width: 768px) {
+        display: none;
+      }
+    }
+    select, input {
+      font-size: 18px;
+      margin-left: 10px;
+      font-family: var(--bs-font-sans-serif);
+      padding: 5px 10px;
+      min-width: 250px;
+      line-height: 1.2;
+      border: 1px solid #ccc;
+    }
+    label {
+      font-size: 18px;
+      font-family: var(--bs-font-sans-serif);
+      @media screen and (max-width: 768px) {
+        width: 100%;
+        font-size: 16px;
+      }
+      input {
+        // width: clamp(100%, 500px, 600px);
+        @media screen and (max-width: 768px) {
+          font-size: 14px;
+          width: 100%;
+          margin-left: 0;
+        }
+      }
+    }
+    select, select option {
+      font-size: 18px;
+      font-family: var(--bs-font-sans-serif);
+      padding: 5px 10px;
+      line-height: 1.2;
+      text-transform: capitalize;
+      @media screen and (max-width: 768px) {
+        font-size: 14px;
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+  }
+  .table-wrapper {
+    overflow-y: scroll;
+    height: 100%;
+    overflow-x: scroll;
+    padding-bottom: 2rem;
+    height: calc(70vh - var(--header-height));
+    @media screen and (max-width: 768px) {
+      height: calc(100vh - var(--header-height-mobile));
+      min-height: 500px;
+    }
+    table {
+      overflow-y: scroll;
+      font-family: 'lexia';
+      a {
+        text-transform: none !important;
+        color: var(--bs-green);
+      }
+      thead {
+        z-index: 10;
+        @media screen and (max-width: 768px) {
+          font-size: 14px;
+        }
+        tr {
+          background-color: white;
           color: var(--bs-green);
-        }
-        tbody {
-          td {
-            text-transform: capitalize;
-            a.btn {
-              padding: 0px 25px;
-              border: 1px solid #FFFFFF;
-              border-radius: 32px;
-              background-color: var(--bs-green);
-              font-style: normal;
-              font-weight: 600;
-              font-size: 14px;
-              line-height: 1.6;
-              color: #FFFFFF;
-            }
-          }
+          font-weight: 700;
+          font-family: 'lexia';
+          font-size: 27px;
+          white-space: nowrap;
           @media screen and (max-width: 768px) {
-            font-size: 12px;
+            font-size: 20px;
           }
         }
-        thead {
-          @media screen and (max-width: 768px) {
+      }
+      tbody {
+        td {
+          text-transform: capitalize;
+          align-self: center;
+          button.btn {
+            padding: 0px 25px;
+            border: 1px solid #FFFFFF;
+            border-radius: 32px;
+            background-color: var(--bs-green);
+            font-style: normal;
+            font-weight: 600;
             font-size: 14px;
+            line-height: 1.6;
+            color: #FFFFFF;
           }
-          a {
-            font-size: 16px;
-            padding: 0;
-          }
+        }
+        @media screen and (max-width: 768px) {
+          font-size: 12px;
         }
       }
     }
   }
-
 }
-
+.participate-modal.modal .modal-dialog {
+  .modal-content {
+    padding: 3rem 4rem;
+  }
+  form {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    .form-group {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      label {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        color: var(--bs-green);
+        font-weight: 600;
+        input, .react-tel-input {
+          width: 70%;
+        }
+        .react-tel-input .form-control {
+          margin: 0;
+          width: 100%;
+        }
+      }
+    }
+    button.btn {
+      padding: 0px 25px;
+      border: 1px solid #FFFFFF;
+      border-radius: 32px;
+      background-color: var(--bs-green);
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #FFFFFF;
+    }
+  }
+}
 .mesas-container {
   display: flex;
   margin: 0 70px;
