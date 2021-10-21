@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { functions } from '../../lib/firebaseApp'
 import { useParams } from 'react-router-dom'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useMesaContext } from '../../contexts/MesaContext'
@@ -24,7 +25,20 @@ export default function Show() {
       setMesa(mesa)
       if (!mesa.calendarId) {
         setShowAlert(true)
-      }
+      // functions().useEmulator("localhost", 5001)
+      const createCalendar = functions().httpsCallable('createCalendar')
+        const data = {
+          mesaId: mesa.id,
+          mesaName: mesa.name,
+          userId: mesa.userId,
+        }
+        await createCalendar(data)
+      } 
+      // else {
+      //   functions().useEmulator("localhost", 5001)
+      //   const createAllEvents = await functions().httpsCallable('createAllEvents')
+      //   createAllEvents()
+      // }
     } catch (error) {
       console.error(error)
     }
@@ -43,7 +57,8 @@ export default function Show() {
     if (mesaTypes.length > 0)
       getMesa()
   }, [mesaId, mesaTypes])
-  
+
+
   return (
     mesa ? (
       <Container id='show-mesa'>

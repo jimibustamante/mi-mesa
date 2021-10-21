@@ -93,7 +93,8 @@ ReactDOM.render(
             <AuthListener />
             <Background>
               <Switch>
-                <Route path="/" component={Landing} exact />
+                <Route path="/" component={() => { window.location = 'https://boricpresidente.cl/participa'; return null;} } exact/>
+                {/* <Route path="/" component={Landing} exact /> */}
                 <Route path="/welcome" component={Landing} exact />
                 <Route path="/busca-tu-mesa" component={FinderWrapper} exact />
                 <Route path="/como-participar" component={Participar} exact />

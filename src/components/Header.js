@@ -28,11 +28,6 @@ export default function Header() {
         <Navbar.Toggle className="navbar-dark" />
         <Navbar.Collapse>
           <Nav >
-            { currentUser && (
-              <Nav.Item>
-                <Link className="menu-item" to='/mesas'>Mesas</Link>
-              </Nav.Item>
-            )}
             <>
               <Nav.Item>
                 <a className="menu-item" href='https://boricpresidente.cl/unete' target='_blank'>Únete</a>
@@ -44,7 +39,9 @@ export default function Header() {
                 <a className="menu-item" href='https://boricpresidente.cl/aporta' target='_blank'>Aporta</a>
               </Nav.Item>
               <Nav.Item>
-                <Link className="menu-item" style={{color: '#81c9c3'}} to='/'>Participa aquí</Link>
+                {/* <Link className="menu-item" style={{color: '#81c9c3'}} to='/'>Participa aquí</Link> */}
+                <a className="menu-item" href='https://boricpresidente.cl/participa'>Participa aquí</a>
+
               </Nav.Item>
               { !currentUser && (
                 <Nav.Item>
@@ -52,24 +49,10 @@ export default function Header() {
                 </Nav.Item>
               )}
             </>
-            { !currentUser && (
-              <div className='social-networks'>
-                <a href='https://www.facebook.com/gabrielboric/' target='_blank' rel='noopener noreferrer'>
-                  <Facebook />
-                </a>
-                <a href='https://twitter.com/gabrielboric' target='_blank' rel='noopener noreferrer'>
-                  <Twitter />
-                </a>
-                <a href='https://www.instagram.com/gabrielboric' target='_blank' rel='noopener noreferrer'>
-                  <Instagram />
-                </a>
-                <a href='https://www.tiktok.com/@gabrielboric' target='_blank' rel='noopener noreferrer'>
-                  <Tiktok />
-                </a>
-                <a href='https://wa.link/5gu30s' target='_blank' rel='noopener noreferrer'>
-                  <Whatsapp />
-                </a>
-              </div>
+            { currentUser && (
+              <Nav.Item>
+                <Link className="menu-item" to='/mesas'>Mesas</Link>
+              </Nav.Item>
             )}
             { currentUser && (
               <Nav.Item>

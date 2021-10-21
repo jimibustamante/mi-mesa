@@ -131,8 +131,10 @@ const createCalendar = async (data) => {
   })
 }
 
-const getCalendarEvents = async (calendarId) => {
-  const oauth2Client = await getOAuth2Client()
+const getCalendarEvents = async (calendarId, oauth2Client) => {
+  if (!oauth2Client) {
+    oauth2Client = await getOAuth2Client()
+  }
   const response = await calendar.events.list({
     auth: oauth2Client,
     calendarId,
@@ -140,7 +142,7 @@ const getCalendarEvents = async (calendarId) => {
     singleEvents: true,
     maxResults: 10,
     showDeleted: false,
-    timeMin: (new Date()).toISOString(),
+    // timeMin: (new Date()).toISOString(),
   })
   const list = response.data.items
   return list
@@ -163,15 +165,70 @@ exports.createCalendar = functions.https.onCall(async (data, context) => {
   return createCalendar(data)
 })
 
-// exports.onNewMesa = functions.firestore
-//   .document('fl_content/{contentId}')
-//   .onCreate(async (snapshot, context) => {
-//     const { id, name, userId, email, mesaId, _fl_meta_, calendarId } = snapshot.data()
-//     console.info({ id, name, userId, email, mesaId, _fl_meta_, calendarId })
-//     if (_fl_meta_.schema === 'mesa' && !calendarId) {
-//       createCalendar({mesaId: id, mesaName: name, userId})
-//     }
-//   })
+exports.updateMesaEvent = functions.https.onCall(async (data, context) => {
+  const { mesaId, start } = data
+  const response = await updateMesaEvent({mesaId, start})
+  return response
+})
+
+const updateMesaEvent = async ({mesaId, start}) => {
+  console.log(`********* START NEW EVENT: ${mesaId} *********`)
+
+  const mesa = await flamelinkApp.content.get({
+    schemaKey: 'mesa',
+    entryId: mesaId,
+    fields: ['id', 'events'],
+    populate: {
+      field: 'events',
+      populate: [
+        'start',
+      ]
+    }
+  })
+
+  const startDate = new Date(start)
+  const { events } = mesa
+  const promises = events.map(event => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const eventData = await event.get()
+        let { start } = eventData.data()
+        resolve(new Date(start).getTime())
+      } catch (error) {
+        reject(error)
+      }
+    })
+  })
+
+  let dates = await Promise.all(promises)
+  dates.push(startDate.getTime())
+  dates = dates.filter(date => date > new Date().getTime()).sort()
+  const minDate = new Date(dates[0])
+  console.log({minDate})
+  await flamelinkApp.content.update({
+    schemaKey: 'mesa',
+    entryId: mesaId,
+    data: {
+      nextEvent: minDate.toISOString(),
+    },
+  })
+  return minDate.toISOString()
+}
+
+exports.onNewEvent = functions.firestore
+  .document('fl_content/{contentId}')
+  .onCreate(async (snapshot, context) => {
+    console.log(`********* NEW EVENT CALLBACK *********`)
+    try {
+      const { id, start, mesa, _fl_meta_ } = snapshot.data()
+      if (_fl_meta_.schema === 'evento') {
+        const mesaData = await mesa.get()
+        await updateMesaEvent({mesaId: mesaData.id, start})
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  })
 
 exports.onDeleteMesa = functions.firestore
   .document('fl_content/{contentId}')
@@ -236,7 +293,7 @@ exports.createCalendarAll = functions.https.onCall(async (data, context) => {
 exports.createEvent = functions.https.onCall(async (data, context) => {
   const { calendarId, event, mesaId } = data
   console.log('***** CREATING EVENT *****')
-  console.log({calendarId, event, mesaId})
+
   try {
     const oauth2Client = await getOAuth2Client()
     if (!event.end) {
@@ -244,9 +301,9 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
         dateTime: event.start.dateTime,
       }
     }
+
     const participantsEmail = await getMesaParticipantsEmail(mesaId)
     event.attendees = participantsEmail.map(email => ({email: email, responseStatus: 'needsAction'}))
-    console.log({event})
 
     if (!calendarId) {
       console.log('***** NO CALENDAR CREATED YET *****')
@@ -261,14 +318,45 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
       visibility: 'public',
     })
 
-    console.log({response})
+    // Create new event in Flamelink
+    const flEvent = await flamelinkApp.content.add({
+      schemaKey: 'evento', 
+      data: {
+        eventId: response?.data.id,
+        start: new Date(event.start.dateTime).toISOString(),
+        mesa: db.doc(`/fl_content/${mesaId}`),
+      }
+    })
+
+    console.log({flEvent})
+
+    // Update the mesa's events in Flamelink
+    const mesa = await flamelinkApp.content.getByField({
+      schemaKey: 'mesa',
+      field: 'id',
+      value: mesaId,
+      fields: ['events'],
+    })
+    let events = Object.values(mesa)[0].events
+    console.log({events})
+    events.push(db.doc(`/fl_content/${flEvent.id}`))
+    console.log({events})
+    await flamelinkApp.content.update({
+      schemaKey: 'mesa',
+      entryId: mesaId,
+      data: {
+        events,
+      }
+    })
+    
     return {
-      status: 200,
+      status: 201,
       message: 'Successfully Event created',
       event: response.data,
     }
   } catch (error) {
-    return(ERROR_RESPONSE, error)
+    console.log({error})
+    return(ERROR_RESPONSE, error.message || error)
   }
 })
 
@@ -302,7 +390,6 @@ exports.createMesaParticipation = functions.https.onCall(async (data, context) =
     await calendarEvents.forEach(async event => {
       if (event.attendees) {
         let attendeesEmail = event.attendees.map(attendee => attendee.email)
-        console.log({attendeesEmail})
         if (attendeesEmail.includes(email)) {
           console.log('***** ALREADY PARTICIPATING *****')
           return
@@ -327,11 +414,104 @@ exports.createMesaParticipation = functions.https.onCall(async (data, context) =
     return {
       status: 200,
       message: 'Successfully invited',
-      participant: record,
     }
   } catch (error) {
     console.error({error})
     return(ERROR_RESPONSE)
+  }
+})
+
+exports.getOpenMesas = functions.https.onCall(async (data, context) => {
+  console.info('***** GETTING OPEN MESAS *****')
+  try {
+    const openMesas = await flamelinkApp.content.getByField({
+      schemaKey: 'mesa',
+      field: 'open',
+      value: true,
+      fields: ['id', 'name', 'open', 'theme', 'cause', 'comuna', 'coordinator', 'mesaType', 'calendarId', 'nextEvent'],
+      populate: [
+        {
+          field: 'coordinator',
+          fields: ['id', 'email'],
+        },
+        {
+          field: 'mesaType',
+          fields: ['id', 'name'],
+        }
+      ],
+    })
+    console.log({openMesas: Object.values(openMesas)[0]})
+    return openMesas
+  } catch (error) {
+    console.error({error})
+    return error.message || error
+  }
+})
+
+exports.createAllEvents = functions.https.onCall(async (data, context) => {
+  console.info('***** CREATING ALL EVENTS *****')
+  try {
+    const oauth2Client = await getOAuth2Client()
+    let mesas = await flamelinkApp.content.get({
+      schemaKey: 'mesa',
+      fields: ['id', 'calendarId', 'events'],
+    })
+    mesas = Object.values(mesas)
+
+    await mesas.forEach(async mesa => {
+      const delay = new Promise(resolve => setTimeout(resolve, 1000))
+      await delay
+      const calendarId = mesa.calendarId
+      const mesaEvents = mesa.events
+      if (!calendarId) {
+        return
+      }
+      const calendarEvents = await getCalendarEvents(calendarId, oauth2Client)
+      if (calendarEvents.length <= 0) {
+        return
+      } else {
+        calendarEvents.forEach(async event => {
+          // Check if event already exists
+          console.log({mesaEvents})
+
+          const flEvent = await flamelinkApp.content.getByField({
+            schemaKey: 'evento',
+            field: 'eventId',
+            value: event.id,
+            fields: ['id'],
+          })
+
+          if (flEvent && Object.values(flEvent).length > 0) {
+            console.log('***** EVENT ALREADY EXIST *****')
+            return
+          }
+          // Lets create the event in Flamelink
+          const newFlEvent = await flamelinkApp.content.add({
+            schemaKey: 'evento',
+            data: {
+              eventId: event.id,
+              start: new Date(event.start.dateTime).toISOString(),
+              mesa: db.doc(`/fl_content/${mesa.id}`),
+            }
+          })
+          console.log('***** FLAMELINK EVENT CREATED *****')
+          mesaEvents?.push(db.doc(`/fl_content/${newFlEvent.id}`))
+          await flamelinkApp.content.update({
+            schemaKey: 'mesa',
+            entryId: mesa.id,
+            data: {
+              events: mesaEvents || [db.doc(`/fl_content/${newFlEvent.id}`)],
+            }
+          })
+
+          console.log('***** MESA EVENTS UPDATED! *****')
+
+        })
+      }
+    })
+  } catch (error) {
+    console.error({error})
+    return error.message || error
   }
 })
 

@@ -593,6 +593,15 @@ span.span-link {
     }
     @media screen and (max-width: 768px) {
       padding-top: var(--header-height-mobile);
+      overflow-x: hidden;
+      > .container {
+        padding-left: 0;
+        padding-right: 0;
+        .text-content {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
     }
     .mesa-finder-img-wrapper {
       background: white;
@@ -620,7 +629,7 @@ span.span-link {
   background-color: white;
   @media screen and (max-width: 768px) {
     min-height: 500px;
-    padding: 0;
+    padding: 10px;
   }
   .filters {
     display: flex;

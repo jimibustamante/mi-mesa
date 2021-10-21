@@ -88,14 +88,6 @@ export default function Mesas() {
     setCalendarAlert(true)
   }
 
-  // useEffect(() => {
-  //     functions().useEmulator("localhost", 5001)
-  //     const relateMesaToCoordinator = functions().httpsCallable('relateMesaToCoordinator')
-  //     relateMesaToCoordinator().then((resp) => {
-  //       console.log('relateMesaToCoordinator', resp)
-  //     })
-  // }, [])
-
   return (
     <>
       <Alert show={calendarAlert} onHide={() => setCalendarAlert(false)} message='En breve llegará a tu correo una invitación al calendario de tu mesa. Debes aceptarla antes de crear eventos.' />

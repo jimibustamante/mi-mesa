@@ -8,7 +8,7 @@ export default function FinderWrapper() {
     <div id='mesa-finder-wrapper'>
       <section id='mesa-finder'>
         <Container>
-          <Row>
+          <Row className='text-content'>
             <Col xs={12} md={6}>
               <h2>Únete a una mesa</h2>
               <p>Revisa la oferta de mesas acá. Puedes buscar por <b>interés, causa o territorio</b> como también por <b>palabra clave.</b> ¡Súmate!</p>

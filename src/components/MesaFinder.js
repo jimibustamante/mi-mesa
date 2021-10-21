@@ -75,15 +75,12 @@ export default function MesaFinder() {
   }, [filters])
 
   useEffect(() => {
-    if (flamelinkLoaded) {
-      getOpenedMesas().then(_mesas => {
-        setMesas(Object.values(_mesas))
-      })
-      getCoordinators().then(_coordinators => {
-        setCoordinators(Object.values(_coordinators))
-      })
-    }
-  }, [flamelinkLoaded])
+    // functions().useEmulator("localhost", 5001)
+    functions().httpsCallable('getOpenMesas')().then(_mesas => {
+      console.log({mesas: _mesas.data})
+      setMesas(Object.values(_mesas.data))
+    })
+  }, [])
 
   useEffect(() => {
     if (mesaTypes.length === 0) {
@@ -103,14 +100,6 @@ export default function MesaFinder() {
     const email = coordinators.find(c => c.userId === coordinatorId)?.email
     return email || 'mesas@boricpresidente.cl'
   }
-
-  // function setEmail(mesa) {
-  //   const body = `
-  //     Hola, te envío este correo para unirme a la mesa ciudadana que coordinas.
-  //   `
-  //   const subject = `Mesa Ciudadana - ${mesa.name}`
-  //   return `mailto:${getCoordinatorContact(mesa.userId)}?subject=${decodeURIComponent(subject)}&body=${decodeURIComponent(body)}`
-  // }
 
   function sortByMesaTypeName(a, b) {
     const aName = mesaTypeName(a.mesaType.id)
@@ -157,15 +146,25 @@ export default function MesaFinder() {
               <th>
                 <a name='mesaType' href='#' onClick={sortListBy}>Tipo de mesa</a>
               </th>
+              <th>Fecha</th>
+              <th>Estado</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {list.map(mesa => {
+              if (mesa.name === 'Disidencias Sexuales') debugger
+              const nextEventDate = mesa.nextEvent ? new Date(mesa.nextEvent) : null
+              const isInactive = !nextEventDate
+              const dateFormated = nextEventDate ? `${nextEventDate.getDate()}-${nextEventDate.getMonth()}-${nextEventDate.getFullYear()}` : '-'
+              const isFinished = nextEventDate && nextEventDate < new Date()
+              console.log({isInactive, dateFormated})
               return (
                 <tr key={mesa.id}>
                   <td>{mesa.name}</td>
-                  <td>{mesaTypeName(mesa.mesaType.id)}</td>
+                  <td>{mesa.mesaType.name || ''}</td>
+                  <td style={{textAlign: 'center'}} >{dateFormated}</td>
+                  <td>{isInactive ? '-' : (isFinished ? 'Concluida' : 'Abierta')}</td>
                   <td>
                     <Button onClick={() => participate(mesa)} className='btn'>
                       Participar

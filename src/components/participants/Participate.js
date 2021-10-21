@@ -36,7 +36,7 @@ export default function Participate({mesa, show, onClose}) {
       }
       onClose()
     } catch (error) {
-      console.log({error})
+      console.error({error})
       setAlertMessage(error.message || 'No se ha podido crear la invitación.')
       onClose()
     }
