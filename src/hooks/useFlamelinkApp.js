@@ -54,8 +54,30 @@ const useFlameLinkApp = () => {
   }
 
   const getOpenedMesas = async () => {
-    const mesas = await app.current.content.getByField({schemaKey: 'mesa', field: 'open', value: true})
-    return (mesas) ? Object.values(mesas) : []
+    if (!app.current) return
+    try {
+      const openMesas = await app.current.content.getByField({
+        schemaKey: 'mesa',
+        field: 'open',
+        value: true,
+        fields: ['id', 'name', 'open', 'theme', 'cause', 'comuna', 'coordinator', 'mesaType', 'calendarId', 'nextEvent'],
+        populate: [
+          {
+            field: 'coordinator',
+            fields: ['id', 'email'],
+          },
+          {
+            field: 'mesaType',
+            fields: ['id', 'name'],
+          }
+        ],
+      })
+      return (openMesas) ? Object.values(openMesas) : []
+    } catch (error) {
+      console.error({error})
+      return error.message || error
+    }
+    
   }
 
   const getTypes = async () => {

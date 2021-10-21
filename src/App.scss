@@ -696,6 +696,20 @@ span.span-link {
     overflow-x: scroll;
     padding-bottom: 2rem;
     height: calc(70vh - var(--header-height));
+    position: relative;
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    svg {
+      animation: spin 2s linear infinite;
+      color: var(--bs-green);
+    }
+    th, tr {
+      text-align: center;
+    }
     @media screen and (max-width: 768px) {
       height: calc(100vh - var(--header-height-mobile));
       min-height: 500px;

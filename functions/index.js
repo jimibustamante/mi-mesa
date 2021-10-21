@@ -440,7 +440,6 @@ exports.getOpenMesas = functions.https.onCall(async (data, context) => {
         }
       ],
     })
-    console.log({openMesas: Object.values(openMesas)[0]})
     return openMesas
   } catch (error) {
     console.error({error})

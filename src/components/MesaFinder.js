@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { functions } from '../lib/firebaseApp'
 import { ReactComponent as SearchIcon } from '../images/search-icon.svg'
 import useFlameLinkApp from '../hooks/useFlamelinkApp'
 import { Table, Button } from 'react-bootstrap'
 import { useMesaContext } from '../contexts/MesaContext'
-// import { Button } from '@mui/material'
 import Participate from './participants/Participate'
+import { VscLoading as LoadingSpinner } from 'react-icons/vsc'
 
 const FinderFileters = ({filters, mesaTypes, setFilters}) => {
   const { type, query } = filters
@@ -38,6 +37,7 @@ const FinderFileters = ({filters, mesaTypes, setFilters}) => {
 
 export default function MesaFinder() {
   const { flamelinkLoaded, getOpenedMesas, getTypes, getCoordinators } = useFlameLinkApp()
+  const [loading, setLoading] = useState(true)
   const [mesas, setMesas] = useState([])
   const [filteredMesas, setFilteredMesas] = useState([])
   const [filters, setFilters] = useState({})
@@ -75,12 +75,12 @@ export default function MesaFinder() {
   }, [filters])
 
   useEffect(() => {
-    // functions().useEmulator("localhost", 5001)
-    functions().httpsCallable('getOpenMesas')().then(_mesas => {
-      console.log({mesas: _mesas.data})
-      setMesas(Object.values(_mesas.data))
+    getOpenedMesas().then(_mesas => {
+      setMesas(_mesas)
+      setLoading(false)
     })
-  }, [])
+
+  }, [flamelinkLoaded])
 
   useEffect(() => {
     if (mesaTypes.length === 0) {
@@ -139,29 +139,34 @@ export default function MesaFinder() {
       )}
       <FinderFileters filters={filters} mesaTypes={mesaTypes} setFilters={setFilters} />
       <div className='table-wrapper'>
+        {loading && (
+          <div className='loading'>
+            <LoadingSpinner size={70} />
+          </div>
+        )}
         <Table>
           <thead className='sticky-top'>
             <tr>
-              <th>Nombre mesa</th>
+              <th style={{textAlign: 'left'}}>Nombre mesa</th>
               <th>
                 <a name='mesaType' href='#' onClick={sortListBy}>Tipo de mesa</a>
               </th>
               <th>Fecha</th>
-              <th>Estado</th>
+              <th>
+                Estado
+              </th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {list.map(mesa => {
-              if (mesa.name === 'Disidencias Sexuales') debugger
               const nextEventDate = mesa.nextEvent ? new Date(mesa.nextEvent) : null
               const isInactive = !nextEventDate
               const dateFormated = nextEventDate ? `${nextEventDate.getDate()}-${nextEventDate.getMonth()}-${nextEventDate.getFullYear()}` : '-'
               const isFinished = nextEventDate && nextEventDate < new Date()
-              console.log({isInactive, dateFormated})
               return (
                 <tr key={mesa.id}>
-                  <td>{mesa.name}</td>
+                  <td style={{textAlign: 'left'}}>{mesa.name}</td>
                   <td>{mesa.mesaType.name || ''}</td>
                   <td style={{textAlign: 'center'}} >{dateFormated}</td>
                   <td>{isInactive ? '-' : (isFinished ? 'Concluida' : 'Abierta')}</td>

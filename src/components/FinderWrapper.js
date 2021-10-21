@@ -19,7 +19,6 @@ export default function FinderWrapper() {
               </div>
             </Col>
           </Row>
-
           <MesaFinder />
         </Container>
       </section>
