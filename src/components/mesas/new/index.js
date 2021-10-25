@@ -70,6 +70,7 @@ const NewMesa = ({ onCreate , show, onClose }) => {
       comuna,
       cause,
       theme,
+      nextEvent: (new Date(0)).toISOString(),
       mesaType: db().doc(`/fl_content/${selectedType.id}`),
       coordinator: db().doc(`/fl_content/${coordinator.id}`),
     })

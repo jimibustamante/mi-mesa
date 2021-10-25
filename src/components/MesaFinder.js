@@ -160,8 +160,9 @@ export default function MesaFinder() {
           </thead>
           <tbody>
             {list.map(mesa => {
-              const nextEventDate = mesa.nextEvent ? new Date(mesa.nextEvent) : null
+              const nextEventDate = mesa.nextEvent && new Date(mesa.nextEvent).getTime() > 0 ? new Date(mesa.nextEvent) : null
               const isInactive = !nextEventDate
+              // if (mesa.name === 'Agua en el Territorio Rural') {debugger}
               const dateFormated = nextEventDate ? `${nextEventDate.getDate()}-${nextEventDate.getMonth()}-${nextEventDate.getFullYear()}` : '-'
               const isFinished = nextEventDate && nextEventDate < new Date()
               return (

@@ -34,11 +34,14 @@ export default function Show() {
         }
         await createCalendar(data)
       } 
-      // else {
-      //   functions().useEmulator("localhost", 5001)
-      //   const createAllEvents = await functions().httpsCallable('createAllEvents')
-      //   createAllEvents()
-      // }
+      else {
+        functions().useEmulator("localhost", 5001)
+        const createAllEvents = functions().httpsCallable('createAllEvents')
+        await createAllEvents()
+        // const updateMesaEvent = functions().httpsCallable('updateMesaEvent')
+        // const resp = await updateMesaEvent({mesaId, start: new Date(2021, 10, 23, 18, 0)})
+        // console.log({resp})
+      }
     } catch (error) {
       console.error(error)
     }
