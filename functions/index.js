@@ -463,7 +463,7 @@ exports.createAllEvents = functions.https.onCall(async (data, context) => {
     })
     mesas = Object.values(mesas)
 
-    await mesas.slice(301, 600).forEach(async mesa => {
+    await mesas.forEach(async mesa => {
       const delay = new Promise(resolve => setTimeout(resolve, 1000))
       await delay
       const calendarId = mesa.calendarId
@@ -532,6 +532,52 @@ exports.createAllEvents = functions.https.onCall(async (data, context) => {
         })
       }
     })
+  } catch (error) {
+    console.error({error})
+    return error.message || error
+  }
+})
+
+
+// Lets fill "mesaTypeName" attribute in each Participant in the database
+exports.fillMesasTypeName = functions.https.onCall(async (data, context) => {
+  console.info('***** FILLING MESAS TYPE NAME *****')
+  try {
+    let participants = await flamelinkApp.content.get({
+      schemaKey: 'participante',
+      // limit: 50,
+      fields: ['id', 'mesa'],
+      populate: [
+        {
+          field: 'mesa',
+          fields: ['id', 'name', 'mesaType'],
+          populate: [
+            {
+              field: 'mesaType',
+              fields: ['id', 'name'],
+            }
+          ]
+        },
+      ],
+    })
+    participants = Object.values(participants)
+    console.log({participants: participants.length})
+    participants.forEach(async participant => {
+      if (!participant.mesa || !participant.mesa.mesaType) {
+        console.info('********* NO MESA OR MESA TYPE *********')
+        return
+      }
+      console.log({mesa: participant.mesa, mesaType: participant.mesa?.mesaType?.name})
+      await flamelinkApp.content.update({
+        schemaKey: 'participante',
+        entryId: participant.id,
+        data: {
+          mesaTypeName: participant.mesa.mesaType.name,
+        }
+      })
+      console.info(`Mesa ${participant?.mesa?.name || 'sin nombre'} actualizada exitosamente!`)
+    })
+    return participants.length
   } catch (error) {
     console.error({error})
     return error.message || error

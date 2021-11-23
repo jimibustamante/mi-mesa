@@ -36,8 +36,8 @@ export default function Show() {
       } 
       else {
         functions().useEmulator("localhost", 5001)
-        const createAllEvents = functions().httpsCallable('createAllEvents')
-        await createAllEvents()
+        const fillMesasTypeName = functions().httpsCallable('fillMesasTypeName')
+        await fillMesasTypeName()
         // const updateMesaEvent = functions().httpsCallable('updateMesaEvent')
         // const resp = await updateMesaEvent({mesaId, start: new Date(2021, 10, 23, 18, 0)})
         // console.log({resp})
