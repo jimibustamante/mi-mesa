@@ -11,7 +11,11 @@ import {
 
 import { UserContextProvider, useUserContext } from './contexts/UserContext'
 import { MesaContextProvider } from './contexts/MesaContext'
-import { NavigationContextProvider, useNavigationContext } from './contexts/NavigationContext'
+import { CommandContextProvider } from './contexts/CommandContext'
+import {
+  NavigationContextProvider,
+  useNavigationContext,
+} from './contexts/NavigationContext'
 
 import './App.scss'
 
@@ -31,9 +35,10 @@ import CompleteRegister from './components/CompleteRegister'
 import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
 import Mesas from './components/mesas'
-import ShowMesa from  './components/mesas/Show'
+import ShowMesa from './components/mesas/Show'
 import FinderWrapper from './components/FinderWrapper'
-
+import Commands from './components/commands'
+import ShowCommand from './components/commands/Show'
 // functions.useEmulator("localhost", 5001)
 // functions.useFunctionsEmulator("http://localhost:5001")
 
@@ -47,26 +52,28 @@ const AuthListener = () => {
       firebaseApp: firebaseApp,
       dbType: 'cf',
     })
-    const navigation = await flamelinkApp.nav.get('menu', {structure: 'nested'})
+    const navigation = await flamelinkApp.nav.get('menu', {
+      structure: 'nested',
+    })
     dispatchNavigation({ type: 'SET_NAVIGATION', payload: navigation })
   }
 
   useEffect(() => {
-    firebaseApp.auth().onAuthStateChanged(user => {
+    firebaseApp.auth().onAuthStateChanged((user) => {
       if (user) {
         // Signed in
         initFlamelink()
-        dispatchUser({type: 'AUTH_SIGNED_IN', payload: user})
+        dispatchUser({ type: 'AUTH_SIGNED_IN', payload: user })
       } else {
         // Signed out
-        dispatchUser({type: 'AUTH_SIGNED_OUT'})
+        dispatchUser({ type: 'AUTH_SIGNED_OUT' })
       }
     })
   }, [history, firebaseApp])
   return ''
 }
 
-const Background = ({children}) => {
+const Background = ({ children }) => {
   const location = useLocation()
 
   useEffect(() => {
@@ -76,11 +83,7 @@ const Background = ({children}) => {
       document.body.classList.remove('busca-tu-mesa')
     }
   }, [location])
-  return (
-    <>
-      {children}
-    </>
-  )
+  return <>{children}</>
 }
 
 ReactDOM.render(
@@ -93,16 +96,32 @@ ReactDOM.render(
             <AuthListener />
             <Background>
               <Switch>
-                <Route path="/" component={() => { window.location = 'https://boricpresidente.cl/participa'; return null;} } exact/>
-                {/* <Route path="/" component={Landing} exact /> */}
-                <Route path="/welcome" component={Landing} exact />
-                <Route path="/busca-tu-mesa" component={FinderWrapper} exact />
-                <Route path="/como-participar" component={Participar} exact />
-                <Route path="/sign-in" component={Login} exact />
-                <Route path="/sign-in-success" component={CompleteRegister} exact />
-                <Route path="/mesas/:mesaId" component={ShowMesa} exact />
-                <Route path="/mesas" component={Mesas} exact />
-                <Route path="/:page" flamelink={flamelink} component={CmsContent} />
+                {/* <Route path="/" component={() => { window.location = 'https://boricpresidente.cl/participa'; return null;} } exact/> */}
+                <Route path='/' component={Landing} exact />
+                <Route path='/welcome' component={Landing} exact />
+                <Route path='/busca-tu-mesa' component={FinderWrapper} exact />
+                <Route path='/como-participar' component={Participar} exact />
+                <Route path='/sign-in' component={Login} exact />
+                <Route
+                  path='/sign-in-success'
+                  component={CompleteRegister}
+                  exact
+                />
+                <Route path='/mesas/:mesaId' component={ShowMesa} exact />
+                <Route path='/mesas' component={Mesas} exact />
+                <CommandContextProvider>
+                  <Route
+                    path='/comandos/:commandId'
+                    component={ShowCommand}
+                    exact
+                  />
+                  <Route path='/comandos' component={Commands} exact />
+                </CommandContextProvider>
+                <Route
+                  path='/:page'
+                  flamelink={flamelink}
+                  component={CmsContent}
+                />
               </Switch>
             </Background>
             <Footer />

@@ -13,7 +13,7 @@ const useFlameLinkApp = () => {
 
   const getContent = async (schemaKey) => {
     if (!app.current) return
-    const content = await app.current.content.get({schemaKey})
+    const content = await app.current.content.get({ schemaKey })
     return content
   }
 
@@ -25,25 +25,46 @@ const useFlameLinkApp = () => {
 
   const getContentBy = async (schemaKey, field, value) => {
     if (!app.current) return
-    const content = await app.current.content.getByField({schemaKey, field, value})
+    const content = await app.current.content.getByField({
+      schemaKey,
+      field,
+      value,
+    })
     if (!content) return []
     return Object.values(content)
   }
-  
+
   const getMesaById = async (mesaId) => {
-    const mesa = await app.current.content.getByField({schemaKey: 'mesa', field: 'id', value: mesaId})
+    const mesa = await app.current.content.getByField({
+      schemaKey: 'mesa',
+      field: 'id',
+      value: mesaId,
+    })
     return mesa[mesaId]
+  }
+
+  const getCommandById = async (commandId) => {
+    const command = await app.current.content.getByField({
+      schemaKey: 'command',
+      field: 'id',
+      value: commandId,
+    })
+    return command[commandId]
   }
 
   const createRecord = async (schemaKey, data) => {
     if (!app.current) return
-    const record = await app.current.content.add({schemaKey, data})
+    const record = await app.current.content.add({ schemaKey, data })
     return record
   }
 
   const updateRecord = async (schemaKey, entryId, data) => {
     if (!app.current) return
-    const record = await app.current.content.update({schemaKey, entryId, data})
+    const record = await app.current.content.update({
+      schemaKey,
+      entryId,
+      data,
+    })
     return record
   }
 
@@ -60,7 +81,18 @@ const useFlameLinkApp = () => {
         schemaKey: 'mesa',
         field: 'open',
         value: true,
-        fields: ['id', 'name', 'open', 'theme', 'cause', 'comuna', 'coordinator', 'mesaType', 'calendarId', 'nextEvent'],
+        fields: [
+          'id',
+          'name',
+          'open',
+          'theme',
+          'cause',
+          'comuna',
+          'coordinator',
+          'mesaType',
+          'calendarId',
+          'nextEvent',
+        ],
         populate: [
           {
             field: 'coordinator',
@@ -69,15 +101,14 @@ const useFlameLinkApp = () => {
           {
             field: 'mesaType',
             fields: ['id', 'name'],
-          }
+          },
         ],
       })
-      return (openMesas) ? Object.values(openMesas) : []
+      return openMesas ? Object.values(openMesas) : []
     } catch (error) {
-      console.error({error})
+      console.error({ error })
       return error.message || error
     }
-    
   }
 
   const getTypes = async () => {
@@ -89,9 +120,9 @@ const useFlameLinkApp = () => {
 
   const getFolderFiles = async (folderName) => {
     if (!app.current) return
-    const files = await app.current.storage.getFiles({folderName})
+    const files = await app.current.storage.getFiles({ folderName })
     return files
-  } 
+  }
 
   const getFolders = async () => {
     if (!app.current) return
@@ -101,19 +132,43 @@ const useFlameLinkApp = () => {
 
   const getFileUrl = async (fileId) => {
     if (!app.current) return
-    const url = await app.current.storage.getURL({fileId})
+    const url = await app.current.storage.getURL({ fileId })
     return url
   }
 
   const deleteMesa = async (mesaId) => {
     if (!app.current) return
-    const mesa = await app.current.content.remove({schemaKey: 'mesa', entryId: mesaId})
+    const mesa = await app.current.content.remove({
+      schemaKey: 'mesa',
+      entryId: mesaId,
+    })
+    return mesa
+  }
+
+  const deleteCommand = async (commandId) => {
+    if (!app.current) return
+    const mesa = await app.current.content.remove({
+      schemaKey: 'command',
+      entryId: commandId,
+    })
     return mesa
   }
 
   const deleteParticipant = async (participanteId) => {
     if (!app.current) return
-    const participante = await app.current.content.remove({schemaKey: 'participante', entryId: participanteId})
+    const participante = await app.current.content.remove({
+      schemaKey: 'participante',
+      entryId: participanteId,
+    })
+    return participante
+  }
+
+  const deleteCommandParticipant = async (participanteId) => {
+    if (!app.current) return
+    const participante = await app.current.content.remove({
+      schemaKey: 'commandParticipant',
+      entryId: participanteId,
+    })
     return participante
   }
 
@@ -125,8 +180,19 @@ const useFlameLinkApp = () => {
 
   const getCoordinator = async (userId) => {
     if (!app.current) return
-    const coordinator = await app.current.content.getByField({schemaKey: 'coordinador', field: 'userId', value: userId})
+    const coordinator = await app.current.content.getByField({
+      schemaKey: 'coordinador',
+      field: 'userId',
+      value: userId,
+    })
     return coordinator
+  }
+
+  const getCommandTypes = async () => {
+    if (!app.current) return
+    let commandTypes = await getContent('commandType')
+    commandTypes = Object.values(commandTypes)
+    return commandTypes
   }
 
   useEffect(() => {
@@ -136,7 +202,6 @@ const useFlameLinkApp = () => {
       dbType: 'cf',
     })
     setFlamelinkLoaded(true)
-
   }, [app.current, flamelink])
 
   return {
@@ -145,6 +210,7 @@ const useFlameLinkApp = () => {
     getContent,
     getContentBy,
     getMesaById,
+    getCommandById,
     createRecord,
     updateRecord,
     getSchema,
@@ -155,9 +221,12 @@ const useFlameLinkApp = () => {
     getFolders,
     getFileUrl,
     deleteMesa,
+    deleteCommand,
     deleteParticipant,
+    deleteCommandParticipant,
     getCoordinator,
     getCoordinators,
+    getCommandTypes,
   }
 }
 

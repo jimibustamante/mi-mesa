@@ -6,7 +6,7 @@ import { useMesaContext } from '../contexts/MesaContext'
 import Participate from './participants/Participate'
 import { VscLoading as LoadingSpinner } from 'react-icons/vsc'
 
-const FinderFileters = ({filters, mesaTypes, setFilters}) => {
+const FinderFileters = ({ filters, mesaTypes, setFilters }) => {
   const { type, query } = filters
 
   const onChange = (e) => {
@@ -18,13 +18,19 @@ const FinderFileters = ({filters, mesaTypes, setFilters}) => {
     <div className='filters'>
       <label>
         <SearchIcon />
-        <input type="text" placeholder='Buscar por palabra clave' value={query} name='query' onChange={onChange} />
+        <input
+          type='text'
+          placeholder='Buscar por palabra clave'
+          value={query}
+          name='query'
+          onChange={onChange}
+        />
       </label>
       <label>
         Tipo de de mesa:
         <select value={filters.type} name='type' onChange={onChange}>
-          <option value="">Todo</option>
-          {mesaTypes?.map(mesaType => (
+          <option value=''>Todo</option>
+          {mesaTypes?.map((mesaType) => (
             <option key={mesaType.id} value={mesaType.name}>
               {mesaType.name}
             </option>
@@ -36,7 +42,8 @@ const FinderFileters = ({filters, mesaTypes, setFilters}) => {
 }
 
 export default function MesaFinder() {
-  const { flamelinkLoaded, getOpenedMesas, getTypes, getCoordinators } = useFlameLinkApp()
+  const { flamelinkLoaded, getOpenedMesas, getTypes, getCoordinators } =
+    useFlameLinkApp()
   const [loading, setLoading] = useState(true)
   const [mesas, setMesas] = useState([])
   const [filteredMesas, setFilteredMesas] = useState([])
@@ -60,9 +67,10 @@ export default function MesaFinder() {
 
   const filterMesas = () => {
     const { type, query } = filters
-    const filteredMesas = mesas.filter(mesa => {
+    const filteredMesas = mesas.filter((mesa) => {
       if (type && mesaTypeName(mesa?.mesaType.id) !== type) return false
-      if (query && mesa.name.toLowerCase().indexOf(query.toLowerCase()) === -1) return false
+      if (query && mesa.name.toLowerCase().indexOf(query.toLowerCase()) === -1)
+        return false
       return true
     })
     return filteredMesas
@@ -75,11 +83,10 @@ export default function MesaFinder() {
   }, [filters])
 
   useEffect(() => {
-    getOpenedMesas().then(_mesas => {
+    getOpenedMesas().then((_mesas) => {
       setMesas(_mesas)
       setLoading(false)
     })
-
   }, [flamelinkLoaded])
 
   useEffect(() => {
@@ -92,12 +99,12 @@ export default function MesaFinder() {
 
   function mesaTypeName(typeId) {
     if (!mesaTypes) return ''
-    return mesaTypes.find(mt => mt.id === typeId)?.name
+    return mesaTypes.find((mt) => mt.id === typeId)?.name
   }
 
   function getCoordinatorContact(coordinatorId) {
     if (coordinators.length <= 0) return ''
-    const email = coordinators.find(c => c.userId === coordinatorId)?.email
+    const email = coordinators.find((c) => c.userId === coordinatorId)?.email
     return email || 'mesas@boricpresidente.cl'
   }
 
@@ -118,7 +125,10 @@ export default function MesaFinder() {
         if (sortings[sortBy] === 'desc') {
           sortedMesas = sortedMesas.reverse()
         }
-        setSortings({ ...sortings, [sortBy]: sortings[sortBy] === 'desc' ? 'asc' : 'desc' })
+        setSortings({
+          ...sortings,
+          [sortBy]: sortings[sortBy] === 'desc' ? 'asc' : 'desc',
+        })
         setMesas(sortedMesas)
         break
       default:
@@ -135,9 +145,17 @@ export default function MesaFinder() {
   return (
     <div id='find-your-mesa'>
       {toParticipateMesa && (
-        <Participate mesa={toParticipateMesa} show={showParticipate} onClose={() => setShowParticipate(false)} />
+        <Participate
+          mesa={toParticipateMesa}
+          show={showParticipate}
+          onClose={() => setShowParticipate(false)}
+        />
       )}
-      <FinderFileters filters={filters} mesaTypes={mesaTypes} setFilters={setFilters} />
+      <FinderFileters
+        filters={filters}
+        mesaTypes={mesaTypes}
+        setFilters={setFilters}
+      />
       <div className='table-wrapper'>
         {loading && (
           <div className='loading'>
@@ -147,38 +165,44 @@ export default function MesaFinder() {
         <Table>
           <thead className='sticky-top'>
             <tr>
-              <th style={{textAlign: 'left'}}>Nombre mesa</th>
+              <th style={{ textAlign: 'left' }}>Nombre mesa</th>
               <th>
-                <a name='mesaType' href='#' onClick={sortListBy}>Tipo de mesa</a>
+                <a name='mesaType' href='#' onClick={sortListBy}>
+                  Tipo de mesa
+                </a>
               </th>
               <th>Fecha</th>
-              <th>
-                Estado
-              </th>
+              <th>Estado</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {list.map(mesa => {
-              const nextEventDate = mesa.nextEvent && new Date(mesa.nextEvent).getTime() > 0 ? new Date(mesa.nextEvent) : null
+            {list.map((mesa) => {
+              const nextEventDate =
+                mesa.nextEvent && new Date(mesa.nextEvent).getTime() > 0
+                  ? new Date(mesa.nextEvent)
+                  : null
               const isInactive = !nextEventDate
-              // if (mesa.name === 'Agua en el Territorio Rural') {debugger}
-              const dateFormated = nextEventDate ? `${nextEventDate.getDate()}-${nextEventDate.getMonth()}-${nextEventDate.getFullYear()}` : '-'
+              const dateFormated = nextEventDate
+                ? `${nextEventDate.getDate()}-${nextEventDate.getMonth()}-${nextEventDate.getFullYear()}`
+                : '-'
               const isFinished = nextEventDate && nextEventDate < new Date()
               return (
                 <tr key={mesa.id}>
-                  <td style={{textAlign: 'left'}}>{mesa.name}</td>
+                  <td style={{ textAlign: 'left' }}>{mesa.name}</td>
                   <td>{mesa.mesaType.name || ''}</td>
-                  <td style={{textAlign: 'center'}} >{dateFormated}</td>
-                  <td>{isInactive ? '-' : (isFinished ? 'Concluida' : 'Abierta')}</td>
+                  <td style={{ textAlign: 'center' }}>{dateFormated}</td>
+                  <td>
+                    {isInactive ? '-' : isFinished ? 'Concluida' : 'Abierta'}
+                  </td>
                   <td>
                     <Button onClick={() => participate(mesa)} className='btn'>
                       Participar
                     </Button>
                   </td>
                 </tr>
-              )}
-            )}
+              )
+            })}
           </tbody>
         </Table>
       </div>

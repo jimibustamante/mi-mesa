@@ -10,13 +10,16 @@ import { ReactComponent as VideoIcon } from '../../images/video-icon.svg'
 
 const DocItem = ({ mesaFile }) => {
   const getIcon = (contentType) => {
-    if (contentType.includes('pdf')) return <PdfIcon />
-    if (contentType.includes('text')) return <TxtIcon />
-    if (contentType.includes('video')) return <VideoIcon />
+    if (contentType.includes('pdf'))
+      return <PdfIcon />
+    if (contentType.includes('text'))
+      return <TxtIcon />
+    if (contentType.includes('video'))
+      return <VideoIcon />
     return <TxtIcon />
   }
 
-  return (
+  return(
     <div className='doc-item'>
       <a href={mesaFile.url} target='_blank' className='body'>
         {getIcon(mesaFile.contentType)}
@@ -24,22 +27,23 @@ const DocItem = ({ mesaFile }) => {
       </a>
     </div>
   )
+
 }
 
-export default function DocsList({ mesa, mesaTypes }) {
+export default function DocsList({mesa, mesaTypes}) {
   const [mesaFiles, setMesaFiles] = useState([])
   const { getFolderFiles, getFileUrl } = useFlameLinkApp()
 
   function mesaTypeName(typeId) {
     if (!mesaTypes) return ''
-    return mesaTypes.find((mt) => mt.id === typeId)?.name
+    return mesaTypes.find(mt => mt.id === typeId)?.name
   }
 
-  const getMesaFiles = async (mesa) => {
+  const getMesaFiles =  async (mesa) => {
     const mesaType = mesaTypeName(mesa?.mesaType?.id)
     const files = await getFolderFiles(mesaType)
 
-    const promises = Object.values(files).map((file) => {
+    const promises = Object.values(files).map(file => {
       return new Promise(async (resolve, reject) => {
         try {
           const mesaFile = new MesaFile(file)
@@ -50,7 +54,7 @@ export default function DocsList({ mesa, mesaTypes }) {
         }
       })
     })
-    await Promise.all(promises).then((files) => {
+    await Promise.all(promises).then(files => {
       setMesaFiles(files)
     })
   }
@@ -60,7 +64,7 @@ export default function DocsList({ mesa, mesaTypes }) {
       getMesaFiles(mesa)
     }
   }, [mesa, mesaTypes])
-
+  
   return (
     <section id='docs-list'>
       <Row md={12} className='docs-header'>
@@ -70,10 +74,9 @@ export default function DocsList({ mesa, mesaTypes }) {
         </Col>
       </Row>
       <div className='list'>
-        {mesaFiles.length > 0 &&
-          mesaFiles.map((mesaFile, index) => (
-            <DocItem key={index} mesaFile={mesaFile} />
-          ))}
+        {mesaFiles.length > 0 && mesaFiles.map((mesaFile, index) => (
+          <DocItem key={index} mesaFile={mesaFile} />
+        ))}
       </div>
     </section>
   )

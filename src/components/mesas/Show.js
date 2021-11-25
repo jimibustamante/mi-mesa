@@ -25,23 +25,23 @@ export default function Show() {
       setMesa(mesa)
       if (!mesa.calendarId) {
         setShowAlert(true)
-      // functions().useEmulator("localhost", 5001)
-      const createCalendar = functions().httpsCallable('createCalendar')
+        // functions().useEmulator("localhost", 5001)
+        const createCalendar = functions().httpsCallable('createCalendar')
         const data = {
           mesaId: mesa.id,
           mesaName: mesa.name,
           userId: mesa.userId,
         }
         await createCalendar(data)
-      } 
-      else {
-        functions().useEmulator("localhost", 5001)
-        const fillMesasTypeName = functions().httpsCallable('fillMesasTypeName')
-        await fillMesasTypeName()
-        // const updateMesaEvent = functions().httpsCallable('updateMesaEvent')
-        // const resp = await updateMesaEvent({mesaId, start: new Date(2021, 10, 23, 18, 0)})
-        // console.log({resp})
       }
+      // else {
+      // functions().useEmulator("localhost", 5001)
+      // const fillMesasTypeName = functions().httpsCallable('fillMesasTypeName')
+      // await fillMesasTypeName()
+      // const updateMesaEvent = functions().httpsCallable('updateMesaEvent')
+      // const resp = await updateMesaEvent({mesaId, start: new Date(2021, 10, 23, 18, 0)})
+      // console.log({resp})
+      // }
     } catch (error) {
       console.error(error)
     }
@@ -57,40 +57,46 @@ export default function Show() {
 
   useEffect(() => {
     if (!mesaId) return
-    if (mesaTypes.length > 0)
-      getMesa()
+    if (mesaTypes.length > 0) getMesa()
   }, [mesaId, mesaTypes])
 
-
-  return (
-    mesa ? (
-      <Container id='show-mesa'>
-        <Alert show={showAlert} onHide={() => setShowAlert(false)} message='Para que los eventos aparezcan en tu calendario, debes aceptar la invitación que llegó a tu correo.' />
-        <Row style={{marginBottom: '25px'}} md={12} className='show-mesa-header'>
-          <Col md={2}>
-            <TableIcon className='show-mesa-header-icon' />
-          </Col>
-          <Col md={6}>
-            <h2 className='name'>{mesa.name}</h2>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <p>Hola! Aquí está todo lo que necesitas para armar tu Mesa Ciudadana. 
-              Por favor lee con cuidado los documentos metodológicos, revisa los videos tutoriales, 
-              y revisa también las herramientas de tabulación de los resultados de tu Mesa Ciudadana. 
-              Queremos que conozcas bien toda la información antes de iniciar el trabajo de tu mesa. 
-              Si necesitas apoyo no dudes en escribirnos en mesas@boricpresidente.cl
-            </p>
-          </Col>
-        </Row>
-        <Participants mesa={mesa} />
-        <DocsList mesa={mesa} mesaTypes={mesaTypes} />
-        {mesa.calendarId && <Events mesa={mesa} />}
-      </Container>
-    ) : (
-      // TODO: Here should be a loading component
-      ''
-    )
+  return mesa ? (
+    <Container id='show-mesa'>
+      <Alert
+        show={showAlert}
+        onHide={() => setShowAlert(false)}
+        message='Para que los eventos aparezcan en tu calendario, debes aceptar la invitación que llegó a tu correo.'
+      />
+      <Row
+        style={{ marginBottom: '25px' }}
+        md={12}
+        className='show-mesa-header'
+      >
+        <Col md={2}>
+          <TableIcon className='show-mesa-header-icon' />
+        </Col>
+        <Col md={6}>
+          <h2 className='name'>{mesa.name}</h2>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <p>
+            Hola! Aquí está todo lo que necesitas para armar tu Mesa Ciudadana.
+            Por favor lee con cuidado los documentos metodológicos, revisa los
+            videos tutoriales, y revisa también las herramientas de tabulación
+            de los resultados de tu Mesa Ciudadana. Queremos que conozcas bien
+            toda la información antes de iniciar el trabajo de tu mesa. Si
+            necesitas apoyo no dudes en escribirnos en mesas@boricpresidente.cl
+          </p>
+        </Col>
+      </Row>
+      <Participants mesa={mesa} />
+      <DocsList mesa={mesa} mesaTypes={mesaTypes} />
+      {mesa.calendarId && <Events mesa={mesa} />}
+    </Container>
+  ) : (
+    // TODO: Here should be a loading component
+    ''
   )
 }

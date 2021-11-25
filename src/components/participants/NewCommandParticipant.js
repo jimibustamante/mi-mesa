@@ -1,28 +1,24 @@
-import { memo, useState, useEffect } from 'react'
+import { memo, useState } from 'react'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
+import { db } from '../../lib/firebaseApp'
 import { ReactComponent as CloseModalIcon } from '../../images/close-modal.svg'
 import { ReactComponent as SaveIcon } from '../../images/save-icon.svg'
 import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
 
-const EditParticipant = ({
-  onUpdate,
-  show,
-  onClose,
-  participant,
-  participants,
-}) => {
-  const [name, setName] = useState(participant.name)
-  const [email, setEmail] = useState(participant.email)
+const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [errors, setErrors] = useState({})
-  const { updateRecord } = useFlameLinkApp()
+  const { createRecord } = useFlameLinkApp()
 
   const valideteEmail = (email) => {
-    const repeatedEmail = participants.find(
-      (_participant) =>
-        _participant.email === email && _participant.id !== participant.id
+    const participantsEmail = participants.map(
+      (participant) => participant.email
     )
-    if (repeatedEmail) {
-      throw new Error('Ya existe un participante con este email en esta mesa')
+    if (participantsEmail.includes(email)) {
+      throw new Error(
+        'Ya existe un participante con este email en este comando'
+      )
     }
     // Validate email with regex
     const re =
@@ -37,18 +33,15 @@ const EditParticipant = ({
     e.preventDefault()
     try {
       valideteEmail(email)
-      const updatedParticipant = await updateRecord(
-        'participante',
-        participant.id,
-        {
-          name,
-          email,
-        }
-      )
+      const newParticipant = await createRecord('commandParticipant', {
+        name,
+        commandId: command.id,
+        email,
+        command: db().doc(`/fl_content/${command.id}`),
+      })
       setName('')
       setEmail('')
-      setErrors({})
-      onUpdate(updatedParticipant)
+      onCreate(newParticipant)
       onClose()
     } catch (error) {
       console.error(error)
@@ -56,20 +49,12 @@ const EditParticipant = ({
     }
   }
 
-  useEffect(() => {
-    setErrors({})
-    if (show) {
-      participant && setName(participant.name)
-      participant && setEmail(participant.email)
-    }
-  }, [show])
-
   const disabled = !name || !email
 
   return (
     <Modal className='new-participant' show={show} onHide={onClose}>
       <CloseModalIcon className='close-modal' onClick={onClose} />
-      <h2 style={{ marginBottom: '20px' }}>Editar Participante</h2>
+      <h2 style={{ marginBottom: '20px' }}>Nuevo Participante</h2>
       <Modal.Body>
         <Form autoComplete='off' onSubmit={handleSubmit}>
           <Form.Group
@@ -124,7 +109,7 @@ const EditParticipant = ({
             >
               <Button type='submit' disabled={disabled}>
                 <SaveIcon className='save-icon' />
-                Actualizar
+                Crear
               </Button>
             </Col>
           </Row>
@@ -134,4 +119,4 @@ const EditParticipant = ({
   )
 }
 
-export default memo(EditParticipant)
+export default memo(NewParticipant)

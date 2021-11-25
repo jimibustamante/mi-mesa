@@ -1,16 +1,16 @@
-import { ReactComponent as PrevIcon } from '../../../images/prev.svg'
+import { ReactComponent as NextIcon } from '../../../images/next.svg'
 import React from 'react'
 
-export default function Back({ onBack }) {
+export default function Next({onNext}) {
   const styles = {
     position: 'absolute',
     bottom: '0',
-    left: '0',
+    right: '0',
     cursor: 'pointer',
   }
   return (
     <div style={styles}>
-      <PrevIcon onClick={onBack} />
+      <NextIcon onClick={onNext}/>
     </div>
   )
 }
