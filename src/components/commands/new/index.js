@@ -5,19 +5,22 @@ import { ReactComponent as CloseModalIcon } from '../../../images/close-modal.sv
 
 import { useUserContext } from '../../../contexts/UserContext'
 import { useCommandContext } from '../../../contexts/CommandContext'
-import { Button, Modal, Container, Row, Col, Form } from 'react-bootstrap'
+import { Button, Modal, Container, Row, Col } from 'react-bootstrap'
 import Carousel from 'react-bootstrap/Carousel'
 
 import Step1 from './Step1'
 import Step2 from './Step2'
 import Back from './Back'
-// import ComunaPicker from './ComunaPicker'
+import ComunaPicker from './ComunaPicker'
 import LocationPicker from './LocationPicker'
 import ThemePicker from './ThemePicker'
 
-const NewMesa = ({ onCreate, show, onClose }) => {
+const NewCommand = ({ onCreate, show, onClose }) => {
   const [type, setType] = useState('')
   const [theme, setTheme] = useState('')
+  const [pais, setPais] = useState('Chile')
+  const [region, setRegion] = useState('')
+  const [comuna, setComuna] = useState('')
   const [location, setLocation] = useState('')
   const [carouselCurrentIndex, setCarouselCurrentIndex] = useState(0)
   const [userState] = useUserContext()
@@ -64,11 +67,15 @@ const NewMesa = ({ onCreate, show, onClose }) => {
       userId: currentUser.uid,
       theme,
       description: commandName(),
+      commune: comuna,
+      region,
+      country: pais,
+      location,
       nextEvent: new Date(0).toISOString(),
       commandType: db().doc(`/fl_content/${selectedType.id}`),
       coordinator: db().doc(`/fl_content/${coordinator.id}`),
     })
-    console.log({ newCommand })
+
     setTheme('')
     setType('')
     setCarouselCurrentIndex(0)
@@ -99,13 +106,17 @@ const NewMesa = ({ onCreate, show, onClose }) => {
     if (!type) return true
     switch (type) {
       case 'territorial':
-        return !location
+        console.log({ pais, location, comuna, region })
+        if (pais && pais === 'Chile') {
+          return !location || !comuna || !region
+        }
+        return !pais || !location
       case 'temático':
         return !theme
       default:
         return true
     }
-  }, [location, theme, type])
+  }, [location, pais, comuna, region, type])
   // console.log({carouselCurrentIndex, onCreate , show, onClose})
 
   const disabled = createButtonDisabled()
@@ -137,7 +148,14 @@ const NewMesa = ({ onCreate, show, onClose }) => {
               <Container>
                 <Back onBack={back} />
                 {type && type === 'territorial' && (
-                  <LocationPicker onSelect={(loc) => setLocation(loc)} />
+                  <>
+                    <ComunaPicker
+                      onSelect={(comuna) => setComuna(comuna)}
+                      onRegionSelect={(region) => setRegion(region)}
+                      onPaisSelect={(pais) => setPais(pais)}
+                    />
+                    <LocationPicker onSelect={(loc) => setLocation(loc)} />
+                  </>
                 )}
                 {type && type === 'temático' && (
                   <ThemePicker
@@ -165,4 +183,4 @@ const NewMesa = ({ onCreate, show, onClose }) => {
   )
 }
 
-export default memo(NewMesa)
+export default memo(NewCommand)

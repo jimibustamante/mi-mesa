@@ -1,4 +1,4 @@
-#events {
+#command-events {
   margin-bottom: 3rem;
   form {
     margin-bottom: 3rem;
@@ -19,13 +19,13 @@
       padding: 0.375rem 0.75rem;
     }
   }
-  .mesa-buttons {
+  .command-buttons {
     justify-content: flex-start;
     button {
       text-transform: none;
       color: white;
-      border-color: var(--bs-green);
-      background-color: var(--bs-green);
+      border-color: var(--bs-blue);
+      background-color: var(--bs-blue);
       font-style: normal;
       font-weight: 600;
       padding: 0 25px;

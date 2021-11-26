@@ -10,7 +10,7 @@ import DateAdapter from '@mui/lab/AdapterDateFns'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
-import '../../styles/Events.scss'
+import '../../styles/CommandEvents.scss'
 
 export default function Events({ command }) {
   const [startTime, setStartTime] = useState(null)
@@ -28,7 +28,6 @@ export default function Events({ command }) {
       const _createCommandEvent =
         functions().httpsCallable('createCommandEvent')
       const { calendarId } = command
-
       const event = {
         summary: eventName,
         start: {
@@ -59,7 +58,7 @@ export default function Events({ command }) {
   const disabled = !eventName || !startTime
   console.log({ command })
   return (
-    <section id='events'>
+    <section id='command-events'>
       <Row md={12} className='events-header'>
         <Col>
           <EventsIcon />
@@ -108,7 +107,7 @@ export default function Events({ command }) {
         </Form.Group>
         <Row>
           <Col md='12'>
-            <div className='mesa-buttons'>
+            <div className='command-buttons'>
               <Button disabled={disabled} onClick={createCommandEvent}>
                 Crea tu evento
                 {loading && <LoadingIcon className='loading-icon' />}

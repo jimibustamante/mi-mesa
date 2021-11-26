@@ -1,7 +1,7 @@
-import { ReactComponent as PrevIcon } from '../../../images/prev.svg'
+import { ReactComponent as PrevIcon } from '../../../images/prev_blue.svg'
 import React from 'react'
 
-export default function Back({onBack}) {
+export default function Back({ onBack }) {
   const styles = {
     position: 'absolute',
     bottom: '0',
@@ -10,7 +10,7 @@ export default function Back({onBack}) {
   }
   return (
     <div style={styles}>
-      <PrevIcon onClick={onBack}/>
+      <PrevIcon onClick={onBack} />
     </div>
   )
 }

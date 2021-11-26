@@ -64,7 +64,7 @@ export default function Show() {
   }, [commandId, commandTypes])
 
   return command ? (
-    <Container id='show-mesa'>
+    <Container id='show-command'>
       <Alert
         show={showAlert}
         onHide={() => setShowAlert(false)}
@@ -93,7 +93,7 @@ export default function Show() {
         </Col>
       </Row>
       <Participants command={command} />
-      <DocsList mesa={command} commandTypes={commandTypes} />
+      <DocsList command={command} commandTypes={commandTypes} />
       {command.calendarId && <Events command={command} />}
     </Container>
   ) : (

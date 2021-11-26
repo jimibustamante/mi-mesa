@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { ReactComponent as CommandoIcon } from '../../images/megafono_blue.svg'
-import { ReactComponent as DeleteIcon } from '../../images/delete.svg'
-import { ReactComponent as EditIcon } from '../../images/edit.svg'
+import { ReactComponent as DeleteIcon } from '../../images/delete_blue.svg'
+import { ReactComponent as EditIcon } from '../../images/edit_blue.svg'
 import { useCommandContext } from '../../contexts/CommandContext'
 
 const ActionButton = ({ onClick, icon, title }) => {

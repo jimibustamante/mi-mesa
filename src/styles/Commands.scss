@@ -1,131 +1,17 @@
-.options-list {
+.button-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 45px;
-  gap: 28px;
-}
-span.option-button {
-  display: flex;
-  cursor: pointer;
-  box-shadow: 2px 3px 9px rgba(0, 0, 0, 0.25);
-  font-weight: 400;
-  border-radius: 10px;
-  padding: 10px 20px;
-  box-sizing: border-box;
-  // &.selected {
-  //   background-color: lightblue;
-  // }
-}
-
-.dropdown-container {
-  position: relative;
-  overflow-y: visible;
-  .theme-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: white;
-    border-left: solid 1px #d6d2d2;
-    border-right: solid 1px #d6d2d2;
-    .theme-item {
-      padding: 10px 20px;
-      font-weight: 300;
-      font-size: 15px;
-      line-height: 27px;
-      color: black;
-      border-bottom: solid 1px #d6d2d2;
-    }
-  }
-}
-.mesa-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 55px;
-  margin-top: 37px;
-  button {
-    min-width: 120px;
-    border-radius: 20px;
-    color: var(--mesas-blue);
-    border-color: var(--mesas-blue);
-    background-color: white;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 16.42px;
-    &.selected {
-      background-color: var(--mesas-blue);
-      color: white;
-    }
-  }
-}
-.modal .modal-dialog .modal-content {
-  padding: 20px;
-  border-radius: 45px;
-  position: relative;
-  .modal-body {
-    width: 100%;
-    padding: 0;
-    .carousel {
-      // transition: height 0.5s;
-      .carousel-inner {
-        padding: 76px 60px;
-        min-height: 350px;
-        position: initial;
-        // transition: height 0.5s ease-in-out;
-        display: flex;
-        height: 100%;
-        align-items: center;
-        .carousel-item {
-          position: initial;
-        }
-        h3 {
-          font-style: normal;
-          font-weight: 600;
-          font-size: 20px;
-          line-height: 23px;
-          text-align: center;
-          color: var(--mesas-blue);
-        }
-      }
-      .carousel-control-next {
-        right: -50px;
-      }
-      .carousel-control-prev {
-        left: -50px;
-      }
-    }
-  }
-  h2 {
+  span {
+    margin-top: 10px;
     font-family: var(--bs-font-sans-serif);
     font-style: normal;
-    font-weight: 700;
-    font-weight: bold;
-    font-size: 32px;
-    line-height: 103.8%;
-    // margin-bottom: 20px;
-    color: var(--mesas-blue);
-  }
-  span.small-text {
-    font-family: var(--bs-font-sans-serif);
-    font-style: normal;
-    font-weight: 300;
+    font-weight: normal;
     font-size: 12px;
     line-height: 14px;
-  }
-  .close-modal {
-    z-index: 100;
-    position: absolute;
-    cursor: pointer;
-    top: 23px;
-    right: 30px;
-    width: 25px;
-    height: 25px;
+    text-align: center;
   }
 }
-
 #commands {
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -206,6 +92,9 @@ span.option-button {
             .add-mesa-icon {
               width: 36px;
               height: 36px;
+              path {
+                fill: var(--mesas-blue);
+              }
             }
           }
           span {
@@ -319,7 +208,7 @@ span.option-button {
   }
 }
 
-#show-mesa {
+#show-command {
   margin-top: var(--header-height);
   padding-top: var(--header-height);
   h2.name {
@@ -332,7 +221,7 @@ span.option-button {
   }
 }
 
-#participants-list {
+#command-participants-list {
   margin-top: 40px;
   margin-bottom: 40px;
   .participants-header {
@@ -341,10 +230,13 @@ span.option-button {
       display: flex;
       align-items: center;
     }
+    svg path {
+      stroke: var(--bs-blue);
+    }
   }
   .participants-title {
     margin-left: 15px;
-    color: var(--bs-green);
+    color: var(--bs-blue);
     font-family: var(--bs-font-sans-serif);
     font-style: normal;
     font-weight: 600;
@@ -404,8 +296,8 @@ span.option-button {
     min-width: 120px;
     border-radius: 20px;
     color: white;
-    border-color: var(--bs-green);
-    background-color: var(--bs-green);
+    border-color: var(--bs-blue);
+    background-color: var(--bs-blue);
     text-transform: none;
     font-weight: 600;
     font-size: 14px;
@@ -420,14 +312,19 @@ span.option-button {
     display: flex;
     align-items: center;
   }
-  svg g {
-    clip-path: url(#clip1) !important;
+  svg {
+    path {
+      fill: var(--bs-blue);
+    }
+    g {
+      clip-path: url(#clip1) !important;
+    }
   }
 }
 .docs-title,
 .events-title {
   margin-left: 15px;
-  color: var(--bs-green);
+  color: var(--bs-blue);
   font-family: var(--bs-font-sans-serif);
   font-style: normal;
   font-weight: 600;
@@ -479,11 +376,11 @@ span.option-button {
   }
 }
 
-.modal.new-participant {
+.modal.new-command-participant {
   .modal-content {
     padding: 40px 40px;
     h2 {
-      color: var(--bs-green);
+      color: var(--bs-blue);
       font-weight: bold;
       font-size: 30px;
       line-height: 31px;
@@ -496,12 +393,12 @@ span.option-button {
         justify-content: center;
         border-radius: 20px;
         color: white;
-        border-color: var(--bs-green);
+        border-color: var(--bs-blue);
         text-transform: uppercase;
         font-weight: 600;
         font-size: 14px;
         line-height: 16.42px;
-        background-color: var(--bs-green);
+        background-color: var(--bs-blue);
         svg {
           height: 14px;
         }

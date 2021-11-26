@@ -52,7 +52,7 @@ const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
   const disabled = !name || !email
 
   return (
-    <Modal className='new-participant' show={show} onHide={onClose}>
+    <Modal className='new-command-participant' show={show} onHide={onClose}>
       <CloseModalIcon className='close-modal' onClick={onClose} />
       <h2 style={{ marginBottom: '20px' }}>Nuevo Participante</h2>
       <Modal.Body>

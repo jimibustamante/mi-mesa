@@ -1,7 +1,7 @@
-import { ReactComponent as NextIcon } from '../../../images/next.svg'
+import { ReactComponent as NextIcon } from '../../../images/next_blue.svg'
 import React from 'react'
 
-export default function Next({onNext}) {
+export default function Next({ onNext }) {
   const styles = {
     position: 'absolute',
     bottom: '0',
@@ -10,7 +10,7 @@ export default function Next({onNext}) {
   }
   return (
     <div style={styles}>
-      <NextIcon onClick={onNext}/>
+      <NextIcon onClick={onNext} />
     </div>
   )
 }

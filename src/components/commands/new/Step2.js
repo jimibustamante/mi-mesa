@@ -18,19 +18,25 @@ const Step2 = ({ onSelect, type, back, next }) => {
         </Col>
       </Row>
       <Row className='justify-content-md-center'>
-        <Col className='mesa-buttons' md={6}>
-          <Button
-            className={`button ${type === 'territorial' ? 'selected' : ''}`}
-            onClick={() => onSelect('territorial')}
-          >
-            Territorial
-          </Button>
-          <Button
-            className={`button ${type === 'temático' ? 'selected' : ''}`}
-            onClick={() => onSelect('temático')}
-          >
-            Temático
-          </Button>
+        <Col className='mesa-buttons' md={8}>
+          <div className='button-wrapper'>
+            <Button
+              className={`button ${type === 'territorial' ? 'selected' : ''}`}
+              onClick={() => onSelect('territorial')}
+            >
+              Territorial
+            </Button>
+            <span>Nos organizamos alrededor de un territorio</span>
+          </div>
+          <div className='button-wrapper'>
+            <Button
+              className={`button ${type === 'temático' ? 'selected' : ''}`}
+              onClick={() => onSelect('temático')}
+            >
+              Temático
+            </Button>
+            <span>Nos organizamos alrededor tema en común</span>
+          </div>
         </Col>
       </Row>
     </Container>

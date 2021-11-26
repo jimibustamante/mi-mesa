@@ -14,8 +14,7 @@ const LocationPicker = ({ onSelect, cause }) => {
             style={{ fontSize: '20px', marginBottom: '20px' }}
             className='text-center'
           >
-            En una frase, ¿cuál es la ‘causa social’ que convoca a las y los
-            participantes de esta mesa?
+            Escribe el nombre de tu barrio, calle o comuna
           </h2>
         </Col>
       </Row>

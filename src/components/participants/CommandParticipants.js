@@ -6,8 +6,8 @@ import DeletePrompt from '../../components/DeletePrompt'
 import NewParticipant from './NewCommandParticipant'
 import EditParticipant from './EditParticipant'
 import { ReactComponent as ParticipantIcon } from '../../images/participant.svg'
-import { ReactComponent as EmailIcon } from '../../images/action-mail.svg'
-import { ReactComponent as DeleteIcon } from '../../images/action-delete.svg'
+import { ReactComponent as EmailIcon } from '../../images/mail_blue.svg'
+import { ReactComponent as DeleteIcon } from '../../images/delete_blue.svg'
 
 export default function CommandParticipants({ command }) {
   const [participants, setParticipants] = useState([])
@@ -73,7 +73,7 @@ export default function CommandParticipants({ command }) {
   }
 
   return (
-    <Container id='participants-list'>
+    <Container id='command-participants-list'>
       <DeletePrompt
         text='Ojo, estás eliminando un participante de este comando'
         show={showDelete}

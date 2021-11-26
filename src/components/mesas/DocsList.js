@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
-import MesaFile from '../../classes/mesa_file'
+import File from '../../classes/file'
 
 import { ReactComponent as DocsIcon } from '../../images/docs-icon-green.svg'
 import { ReactComponent as PdfIcon } from '../../images/pdf-icon.svg'
@@ -42,7 +42,7 @@ export default function DocsList({ mesa, mesaTypes }) {
     const promises = Object.values(files).map((file) => {
       return new Promise(async (resolve, reject) => {
         try {
-          const mesaFile = new MesaFile(file)
+          const mesaFile = new File(file)
           await mesaFile.fetchUrl(getFileUrl(mesaFile.id))
           resolve(mesaFile)
         } catch (error) {

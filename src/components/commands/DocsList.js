@@ -1,70 +1,66 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
-import MesaFile from '../../classes/mesa_file'
+import File from '../../classes/file'
 
 import { ReactComponent as DocsIcon } from '../../images/docs-icon-green.svg'
 import { ReactComponent as PdfIcon } from '../../images/pdf-icon.svg'
 import { ReactComponent as TxtIcon } from '../../images/txt-icon.svg'
 import { ReactComponent as VideoIcon } from '../../images/video-icon.svg'
 
-const DocItem = ({ mesaFile }) => {
+const DocItem = ({ file }) => {
   const getIcon = (contentType) => {
-    if (contentType.includes('pdf'))
-      return <PdfIcon />
-    if (contentType.includes('text'))
-      return <TxtIcon />
-    if (contentType.includes('video'))
-      return <VideoIcon />
+    if (contentType.includes('pdf')) return <PdfIcon />
+    if (contentType.includes('text')) return <TxtIcon />
+    if (contentType.includes('video')) return <VideoIcon />
     return <TxtIcon />
   }
 
-  return(
+  return (
     <div className='doc-item'>
-      <a href={mesaFile.url} target='_blank' className='body'>
-        {getIcon(mesaFile.contentType)}
-        <span title={mesaFile.name}>{mesaFile.name}</span>
+      <a href={file.url} target='_blank' className='body'>
+        {getIcon(file.contentType)}
+        <span title={file.name}>{file.name}</span>
       </a>
     </div>
   )
-
 }
 
-export default function DocsList({mesa, mesaTypes}) {
-  const [mesaFiles, setMesaFiles] = useState([])
+export default function DocsList({ command, commandTypes }) {
+  const [files, setFiles] = useState([])
   const { getFolderFiles, getFileUrl } = useFlameLinkApp()
 
-  function mesaTypeName(typeId) {
-    if (!mesaTypes) return ''
-    return mesaTypes.find(mt => mt.id === typeId)?.name
+  function commandTypeName(typeId) {
+    if (!commandTypes) return ''
+    return commandTypes.find((mt) => mt.id === typeId)?.name
   }
 
-  const getMesaFiles =  async (mesa) => {
-    const mesaType = mesaTypeName(mesa?.mesaType?.id)
-    const files = await getFolderFiles(mesaType)
+  const getFiles = async (command) => {
+    const commandType = commandTypeName(command?.commandType?.id)
+    const files = await getFolderFiles(commandType)
 
-    const promises = Object.values(files).map(file => {
+    const promises = Object.values(files).map((file) => {
       return new Promise(async (resolve, reject) => {
         try {
-          const mesaFile = new MesaFile(file)
-          await mesaFile.fetchUrl(getFileUrl(mesaFile.id))
-          resolve(mesaFile)
+          const commandFile = new File(file)
+          await commandFile.fetchUrl(getFileUrl(commandFile.id))
+          resolve(commandFile)
         } catch (error) {
           reject(error)
         }
       })
     })
-    await Promise.all(promises).then(files => {
-      setMesaFiles(files)
+    await Promise.all(promises).then((files) => {
+      setFiles(files)
     })
   }
 
   useEffect(() => {
-    if (mesaTypes && mesa) {
-      getMesaFiles(mesa)
+    if (commandTypes && command) {
+      getFiles(command)
     }
-  }, [mesa, mesaTypes])
-  
+  }, [command, commandTypes])
+
   return (
     <section id='docs-list'>
       <Row md={12} className='docs-header'>
@@ -74,9 +70,8 @@ export default function DocsList({mesa, mesaTypes}) {
         </Col>
       </Row>
       <div className='list'>
-        {mesaFiles.length > 0 && mesaFiles.map((mesaFile, index) => (
-          <DocItem key={index} mesaFile={mesaFile} />
-        ))}
+        {files.length > 0 &&
+          files.map((file, index) => <DocItem key={index} file={file} />)}
       </div>
     </section>
   )

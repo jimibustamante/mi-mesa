@@ -101,7 +101,7 @@ export default function Commands() {
       <Alert
         show={calendarAlert}
         onHide={() => setCalendarAlert(false)}
-        message='En breve llegará a tu correo una invitación al calendario de tu mesa. Debes aceptarla antes de crear eventos.'
+        message='En breve llegará a tu correo una invitación al calendario de tu comando. Debes aceptarla antes de crear eventos.'
       />
       {loading && <Loading />}
       <NewCommand
