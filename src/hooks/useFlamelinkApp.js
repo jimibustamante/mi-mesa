@@ -111,6 +111,48 @@ const useFlameLinkApp = () => {
     }
   }
 
+  const getCommands = async ({ query }) => {
+    if (!app.current) return
+    let commands = []
+    let options = {
+      schemaKey: 'command',
+      fields: [
+        'id',
+        'name',
+        'theme',
+        'pais',
+        'comuna',
+        'location',
+        'commandType',
+        'calendarId',
+        'nextEvent',
+      ],
+      populate: [
+        {
+          field: 'coordinator',
+          fields: ['id', 'email'],
+        },
+        {
+          field: 'commandType',
+          fields: ['id', 'name'],
+        },
+      ],
+    }
+
+    if (query) {
+      options = {
+        ...options,
+        field: 'name',
+        value: query,
+      }
+      commands = await app.current.content.getByField(options)
+    } else {
+      commands = await app.current.content.get(options)
+    }
+
+    return commands ? Object.values(commands) : []
+  }
+
   const getTypes = async () => {
     if (!app.current) return
     let types = await getContent('tipoMesa')
@@ -217,6 +259,7 @@ const useFlameLinkApp = () => {
     getTypes,
     getMesas,
     getOpenedMesas,
+    getCommands,
     getFolderFiles,
     getFolders,
     getFileUrl,

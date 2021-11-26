@@ -184,7 +184,9 @@ export default function MesaFinder() {
                   : null
               const isInactive = !nextEventDate
               const dateFormated = nextEventDate
-                ? `${nextEventDate.getDate()}-${nextEventDate.getMonth()}-${nextEventDate.getFullYear()}`
+                ? `${nextEventDate.getDate()}-${
+                    nextEventDate.getMonth() + 1
+                  }-${nextEventDate.getFullYear()}`
                 : '-'
               const isFinished = nextEventDate && nextEventDate < new Date()
               return (

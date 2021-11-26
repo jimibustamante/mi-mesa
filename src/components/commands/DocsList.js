@@ -42,6 +42,7 @@ export default function DocsList({ command, commandTypes }) {
     const promises = Object.values(files).map((file) => {
       return new Promise(async (resolve, reject) => {
         try {
+          // debugger
           const commandFile = new File(file)
           await commandFile.fetchUrl(getFileUrl(commandFile.id))
           resolve(commandFile)
@@ -62,7 +63,7 @@ export default function DocsList({ command, commandTypes }) {
   }, [command, commandTypes])
 
   return (
-    <section id='docs-list'>
+    <section id='command-docs-list'>
       <Row md={12} className='docs-header'>
         <Col>
           <DocsIcon />

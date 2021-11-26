@@ -371,7 +371,8 @@ span.span-link {
 
 #landing,
 #participar,
-#mesa-finder-wrapper {
+#mesa-finder-wrapper,
+#command-finder-wrapper {
   margin-bottom: 10rem;
   margin-top: var(--header-height);
   @media screen and (max-width: 768px) {
@@ -383,6 +384,9 @@ span.span-link {
   }
   .more-info {
     @include moreInfoButton;
+  }
+  &#command-finder-wrapper {
+    background-color: var(--bs-light-blue);
   }
   section.landing-text {
     position: relative;
@@ -663,8 +667,14 @@ span.span-link {
         }
       }
     }
-    .mesa-finder-img-wrapper {
-      background: white;
+    .mesa-finder-img-wrapper,
+    .command-finder-img-wrapper {
+      &.command-finder-img-wrapper {
+        background-color: var(--bs-blue);
+      }
+      &.mesa-finder-img-wrapper {
+        background-color: white;
+      }
       width: 230px;
       height: 230px;
       border-radius: 50%;
@@ -681,7 +691,8 @@ span.span-link {
   }
 }
 
-#find-your-mesa {
+#find-your-mesa,
+#find-your-command {
   margin-top: 2rem;
   padding: 2rem;
   min-height: 500px;

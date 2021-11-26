@@ -21,7 +21,8 @@ const ThemePicker = ({ onSelect }) => {
         style={{ fontSize: '20px', marginBottom: '20px' }}
         className='text-center'
       >
-        Escribe el tema que te convoca a participar en este comando
+        Escribe el tema que convocará a las personas para participar en este
+        comando
       </h2>
 
       <Row className='justify-content-md-center'>

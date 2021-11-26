@@ -272,15 +272,76 @@ const updateMesaEvent = async ({ mesaId, start }) => {
   return minDate.toISOString()
 }
 
+const updateCommandEvent = async ({ commandId, start }) => {
+  console.info(`********* START NEW COMMAND EVENT: ${commandId} *********`)
+
+  const command = await flamelinkApp.content.get({
+    schemaKey: 'command',
+    entryId: commandId,
+    fields: ['id', 'events', 'name'],
+    populate: {
+      field: 'events',
+      populate: ['id', 'start'],
+    },
+  })
+
+  const startDate = new Date(start)
+  const { events } = command
+  console.info('********* EVENTS LENGTH => ', events?.length || events)
+  if (!events || events.length === 0) {
+    console.info('********* NO EVENTS *********')
+    await flamelinkApp.content.update({
+      schemaKey: 'command',
+      entryId: commandId,
+      data: {
+        nextEvent: new Date(0).toISOString(),
+      },
+    })
+    return
+  }
+  const promises = events.map((event) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const eventData = await event.get()
+        let { start } = eventData.data()
+        resolve(new Date(start))
+      } catch (error) {
+        reject(error)
+      }
+    })
+  })
+
+  let dates = await Promise.all(promises)
+  dates.push(startDate)
+  dates = dates.filter((date) => date > new Date()).sort()
+  const minDate = dates.length > 0 ? new Date(dates[0]) : startDate
+  console.log({ nextEvent: minDate.toISOString() })
+  await flamelinkApp.content.update({
+    schemaKey: 'command',
+    entryId: commandId,
+    data: {
+      nextEvent: minDate.toISOString(),
+    },
+  })
+  return minDate.toISOString()
+}
+
 exports.onNewEvent = functions.firestore
   .document('fl_content/{contentId}')
   .onCreate(async (snapshot, context) => {
     console.info(`********* NEW EVENT CALLBACK *********`)
     try {
-      const { id, start, mesa, _fl_meta_ } = snapshot.data()
+      const { id, start, mesa, command, _fl_meta_ } = snapshot.data()
+      console.log({ id, start, mesa, command, _fl_meta_ })
       if (_fl_meta_.schema === 'evento') {
-        const mesaData = await mesa.get()
-        await updateMesaEvent({ mesaId: mesaData.id, start })
+        if (mesa) {
+          const mesaData = await mesa.get()
+          await updateMesaEvent({ mesaId: mesaData.id, start })
+        }
+        if (command) {
+          const commandData = await command.get()
+          await updateCommandEvent({ commandId: commandData.id, start })
+        }
       }
     } catch (error) {
       console.error(error)
@@ -516,6 +577,71 @@ exports.createMesaParticipation = functions.https.onCall(
           status: 400,
           message:
             '¡Gracias! Esta mesa aún no tiene fecha de reunión. Te contactarán muy pronto.',
+        }
+      }
+
+      const oauth2Client = await getOAuth2Client()
+      const result = []
+      await calendarEvents.forEach(async (event) => {
+        if (event.attendees) {
+          let attendeesEmail = event.attendees.map((attendee) => attendee.email)
+          if (attendeesEmail.includes(email)) {
+            console.info('***** ALREADY PARTICIPATING *****')
+            return
+          }
+        }
+        let attendees = event.attendees || []
+        attendees.push({
+          email,
+          responseStatus: 'needsAction',
+        })
+        event.attendees = attendees
+        const response = await calendar.events.patch({
+          auth: oauth2Client,
+          calendarId,
+          eventId: event.id,
+          sendUpdates: 'all',
+          resource: event,
+        })
+        result.push(response.data)
+      })
+
+      return {
+        status: 200,
+        message: 'Successfully invited',
+      }
+    } catch (error) {
+      console.error({ error })
+      return ERROR_RESPONSE
+    }
+  }
+)
+
+exports.createCommandParticipation = functions.https.onCall(
+  async (data, context) => {
+    console.info('***** CREATING COMMAND PARTICIPATION *****')
+    const { commandId, calendarId, email, phone, name } = data
+    try {
+      // Create Participation in Firestore
+      const commandParticipant = {
+        email,
+        phone,
+        name,
+        commandId,
+        command: db.doc(`/fl_content/${commandId}`),
+      }
+      console.info('***** CREATE FLAMELINK PARTICIPANT *****')
+      const record = await flamelinkApp.content.add({
+        schemaKey: 'commandParticipant',
+        data: commandParticipant,
+      })
+
+      const calendarEvents = await getCalendarEvents(calendarId)
+      if (calendarEvents.length <= 0) {
+        return {
+          status: 400,
+          message:
+            'Gracias, hemos hecho llegar tu información a la coordinación de este comando. Te contactarán muy pronto.',
         }
       }
 

@@ -36,7 +36,8 @@ import CmsContent from './components/CmsContent'
 import Landing from './components/Landing'
 import Mesas from './components/mesas'
 import ShowMesa from './components/mesas/Show'
-import FinderWrapper from './components/FinderWrapper'
+import CommandFinderWrapper from './components/CommandFinderWrapper'
+import MesaFinderWrapper from './components/MesaFinderWrapper'
 import Commands from './components/commands'
 import ShowCommand from './components/commands/Show'
 // functions.useEmulator("localhost", 5001)
@@ -106,7 +107,11 @@ ReactDOM.render(
                 />
                 <Route path='/' component={Landing} exact />
                 <Route path='/welcome' component={Landing} exact />
-                <Route path='/busca-tu-mesa' component={FinderWrapper} exact />
+                <Route
+                  path='/busca-tu-mesa'
+                  component={MesaFinderWrapper}
+                  exact
+                />
                 <Route path='/como-participar' component={Participar} exact />
                 <Route path='/sign-in' component={Login} exact />
                 <Route
@@ -123,6 +128,11 @@ ReactDOM.render(
                     exact
                   />
                   <Route path='/comandos' component={Commands} exact />
+                  <Route
+                    path='/busca-tu-comando'
+                    component={CommandFinderWrapper}
+                    exact
+                  />
                 </CommandContextProvider>
                 <Route
                   path='/:page'

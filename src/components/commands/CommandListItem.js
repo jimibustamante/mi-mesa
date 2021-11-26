@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { ReactComponent as CommandoIcon } from '../../images/megafono_blue.svg'
+import { ReactComponent as CommandIcon } from '../../images/megafono_blue.svg'
 import { ReactComponent as DeleteIcon } from '../../images/delete_blue.svg'
 import { ReactComponent as EditIcon } from '../../images/edit_blue.svg'
 import { useCommandContext } from '../../contexts/CommandContext'
@@ -32,7 +32,7 @@ export default function CommandItem({ command, deleteCommand }) {
   return (
     <div className='mesa-item'>
       <div className='body'>
-        <CommandoIcon />
+        <CommandIcon />
         <Link
           className='title'
           title={command.name}

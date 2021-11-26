@@ -106,7 +106,7 @@ const NewCommand = ({ onCreate, show, onClose }) => {
     if (!type) return true
     switch (type) {
       case 'territorial':
-        console.log({ pais, location, comuna, region })
+        console.log({ pais, location, comuna, region, theme })
         if (pais && pais === 'Chile') {
           return !location || !comuna || !region
         }
@@ -116,7 +116,7 @@ const NewCommand = ({ onCreate, show, onClose }) => {
       default:
         return true
     }
-  }, [location, pais, comuna, region, type])
+  }, [location, pais, comuna, region, type, theme])
   // console.log({carouselCurrentIndex, onCreate , show, onClose})
 
   const disabled = createButtonDisabled()
