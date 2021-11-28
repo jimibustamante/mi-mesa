@@ -6,7 +6,7 @@ import DeletePrompt from '../../components/DeletePrompt'
 import NewParticipant from './NewCommandParticipant'
 import EditParticipant from './EditParticipant'
 import { ReactComponent as ParticipantIcon } from '../../images/participant.svg'
-import { ReactComponent as EmailIcon } from '../../images/mail_blue.svg'
+// import { ReactComponent as EmailIcon } from '../../images/mail_blue.svg'
 import { ReactComponent as DeleteIcon } from '../../images/delete_blue.svg'
 
 export default function CommandParticipants({ command }) {
@@ -114,9 +114,9 @@ export default function CommandParticipants({ command }) {
                   <li key={participant.id}>
                     <div className='name'>{participant.name}</div>
                     <div className='actions'>
-                      <div className='action'>
+                      {/* <div className='action'>
                         <EmailIcon />
-                      </div>
+                      </div> */}
                       <div
                         className='action'
                         onClick={() => deleteAttempt(participant.id)}

@@ -14,7 +14,8 @@ const LocationPicker = ({ onSelect, cause }) => {
             style={{ fontSize: '20px', marginBottom: '20px' }}
             className='text-center'
           >
-            Escribe el nombre de tu barrio, calle o comuna
+            Escribe el nombre de tu barrio, calle, organización local, o ciudad
+            si es extranjera
           </h2>
         </Col>
       </Row>

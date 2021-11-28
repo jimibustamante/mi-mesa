@@ -56,7 +56,6 @@ export default function Events({ command }) {
   }
 
   const disabled = !eventName || !startTime
-  console.log({ command })
   return (
     <section id='command-events'>
       <Row md={12} className='events-header'>

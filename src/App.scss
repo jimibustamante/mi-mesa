@@ -113,7 +113,7 @@
   --header-bg: #094c68;
   --bs-font-sans-serif: 'Work Sans', sans-serif !important;
   --bs-purple: #3b007d !important;
-  --bs-red: #fb4c7e !important;
+  --bs-red: #e30909 !important;
   --bs-green: #59c885 !important;
   --bs-blue: #094c68 !important;
   --bs-oil-green: #177596 !important;
@@ -373,7 +373,7 @@ span.span-link {
 #participar,
 #mesa-finder-wrapper,
 #command-finder-wrapper {
-  margin-bottom: 10rem;
+  padding-bottom: 10rem;
   margin-top: var(--header-height);
   @media screen and (max-width: 768px) {
     margin-top: var(--header-height-mobile);
@@ -632,8 +632,9 @@ span.span-link {
   section#mesa-finder {
     padding-top: var(--header-height);
     margin-bottom: 3rem;
-    min-height: 500px;
-    overflow-y: hidden;
+    min-height: 100vh;
+    height: fit-content;
+    // overflow-y: hidden;
     h2 {
       @include title;
       font-family: Lexia;
@@ -671,6 +672,10 @@ span.span-link {
     .command-finder-img-wrapper {
       &.command-finder-img-wrapper {
         background-color: var(--bs-blue);
+        img {
+          transform: translate(-32%, -38%);
+          width: 145%;
+        }
       }
       &.mesa-finder-img-wrapper {
         background-color: white;
@@ -775,10 +780,10 @@ span.span-link {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-    }
-    svg {
-      animation: spin 2s linear infinite;
-      color: var(--bs-green);
+      svg {
+        animation: spin 2s linear infinite;
+        color: var(--bs-green);
+      }
     }
     th,
     tr {
@@ -815,7 +820,7 @@ span.span-link {
       tbody {
         td {
           text-transform: capitalize;
-          align-self: center;
+          vertical-align: middle;
           button.btn {
             padding: 0px 25px;
             border: 1px solid #ffffff;
@@ -831,6 +836,11 @@ span.span-link {
         @media screen and (max-width: 768px) {
           font-size: 12px;
         }
+      }
+      .actions-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
       }
     }
   }
@@ -1126,6 +1136,10 @@ footer {
       }
     }
   }
+}
+
+span.required {
+  color: var(--bs-red);
 }
 
 .alert-container {

@@ -28,7 +28,7 @@ const CommandList = ({ commands, createCommand }) => {
   }
 
   return (
-    <section className='mesas-container'>
+    <section className='commands-container'>
       <DeletePrompt
         text='Ojo, estás eliminando un Comando y todo su contenido'
         show={showDelete}
@@ -36,20 +36,20 @@ const CommandList = ({ commands, createCommand }) => {
         onConfirm={onConfirmDelete}
       />
       <EditCommand
-        mesaId={editId}
+        commandId={editId}
         onCancel={() => setEditId(null)}
         onUpdate={() => setEditId(null)}
       />
       <Container fluid>
-        <div className='mesa-list'>
-          <div className='mesa-item add-mesa'>
+        <div className='command-list'>
+          <div className='command-item add-command'>
             <div className='body'>
               <a
-                className='create-mesa'
+                className='create-command'
                 href='#'
                 onClick={() => createCommand()}
               >
-                <AddIcon className='add-mesa-icon' />
+                <AddIcon className='add-command-icon' />
               </a>
               <span className='title'>Crea un nuevo comando</span>
               <span className='subtitle'>

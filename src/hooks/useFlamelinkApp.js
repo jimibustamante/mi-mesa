@@ -17,6 +17,16 @@ const useFlameLinkApp = () => {
     return content
   }
 
+  const getUserCommands = async (userId) => {
+    if (!app.current) return
+    const content = await app.current.content.getByField({
+      schemaKey: 'command',
+      field: 'userId',
+      value: userId,
+    })
+    return content
+  }
+
   const getSchema = async (schemaKey) => {
     if (!app.current) return
     const schema = await app.current.schemas.get(schemaKey)
@@ -116,16 +126,17 @@ const useFlameLinkApp = () => {
     let commands = []
     let options = {
       schemaKey: 'command',
+      field: 'hasLink',
+      value: true,
       fields: [
         'id',
         'name',
-        'theme',
-        'pais',
-        'comuna',
-        'location',
         'commandType',
         'calendarId',
-        'nextEvent',
+        'whatsappLink',
+        'telegramLink',
+        'instagramLink',
+        'otherLink',
       ],
       populate: [
         {
@@ -138,17 +149,7 @@ const useFlameLinkApp = () => {
         },
       ],
     }
-
-    if (query) {
-      options = {
-        ...options,
-        field: 'name',
-        value: query,
-      }
-      commands = await app.current.content.getByField(options)
-    } else {
-      commands = await app.current.content.get(options)
-    }
+    commands = await app.current.content.getByField(options)
 
     return commands ? Object.values(commands) : []
   }
@@ -260,6 +261,7 @@ const useFlameLinkApp = () => {
     getMesas,
     getOpenedMesas,
     getCommands,
+    getUserCommands,
     getFolderFiles,
     getFolders,
     getFileUrl,

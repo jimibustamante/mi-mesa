@@ -18,25 +18,19 @@ export default function Commands() {
   const [loading, setLoading] = useState(false)
   const [showNewCommand, setShowNewCommand] = useState(false)
   const [calendarAlert, setCalendarAlert] = useState(false)
-  const { flamelinkApp, flamelinkLoaded, getContent, updateRecord } =
-    useFlameLinkApp()
+  const { flamelinkLoaded, getUserCommands, updateRecord } = useFlameLinkApp()
   const [userState] = useUserContext()
   const [commandState, dispatch] = useCommandContext()
   const { currentUser } = userState
   const { myCommands } = commandState
   const history = useHistory()
-  console.log({ myCommands })
+
   const fetchMyCommands = async () => {
     try {
-      let content = await getContent('command')
+      let content = await getUserCommands(currentUser.id || currentUser.uid)
       setFetched(true)
       if (!content) return
-      content = Object.values(content)
-      const commands = content.filter(
-        (command) =>
-          command.userId === currentUser.id ||
-          command.userId === currentUser.uid
-      )
+      const commands = Object.values(content)
       dispatch({ type: 'SET_MY_COMMANDS', payload: commands })
     } catch (error) {
       history.push('/sign-in')
@@ -44,34 +38,15 @@ export default function Commands() {
     }
   }
 
-  const subscribeToMesas = async () => {
-    flamelinkApp.content.subscribe({
-      schemaKey: 'command',
-      callback: (err, content) => {
-        // TODO: handle error
-        setFetched(true)
-        if (err) console.error({ err })
-        if (!content || !currentUser) return
-        content = Object.values(content)
-        const command = content.filter(
-          (mesa) =>
-            mesa?.userId === currentUser.id || mesa?.userId === currentUser.uid
-        )
-        dispatch({ type: 'SET_MY_COMMANDS', payload: command })
-      },
-    })
-  }
-
   useEffect(() => {
     if (currentUser && flamelinkLoaded && !fetched) {
       try {
         fetchMyCommands()
-        subscribeToMesas()
       } catch (error) {
         history.push('/sign-in')
       }
     }
-  }, [flamelinkLoaded, myCommands, currentUser])
+  }, [flamelinkLoaded, currentUser, fetched])
 
   const onCommandCreated = async (newCommand) => {
     setShowNewCommand(false)
@@ -116,6 +91,20 @@ export default function Commands() {
             <h3>Comando Ciudadano</h3>
             <h2>Crea tu comando ciudadano con Gabriel</h2>
           </div>
+        </div>
+        <div className='text-container'>
+          <p>
+            Bienvenido a tu sesión de Comando Ciudadano. Aquí encontrarás
+            algunas herramientas para hacer campaña como materiales gráficos
+            para imprimir y redes sociales, además de manuales con información
+            importante de cómo hacer campaña.
+          </p>
+          <p>
+            Muy pronto te contactará un coordinador de nuestra campaña para
+            crear un chat de Whatsapp al que puedan unirse más personas para
+            participar de tu Comando Ciudadano. Si tienes cualquier duda
+            llámanos o escríbenos por Whatsapp al número +56 9 3376 2034
+          </p>
         </div>
         <CommandList
           createCommand={() => setShowNewCommand(true)}

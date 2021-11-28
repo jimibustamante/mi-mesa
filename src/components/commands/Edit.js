@@ -2,80 +2,95 @@ import React, { memo, useEffect, useState, useCallback } from 'react'
 import { db } from '../../lib/firebaseApp'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 
-import { useMesaContext } from '../../contexts/MesaContext'
+import { useCommandContext } from '../../contexts/CommandContext'
 import { Button, Modal, Form } from 'react-bootstrap'
 
-function EditMesa({mesaId, onUpdate, onCancel}) {
-  const [mesa, setMesa] = useState(null)
+function EditMesa({ commandId, onUpdate, onCancel }) {
+  const [command, setCommand] = useState(null)
   const [type, setType] = useState('')
   const [name, setName] = useState('')
 
-  const [mesaState, dispatch] = useMesaContext()
-  const { mesaTypes } = mesaState
-  const { getMesaById, updateRecord } = useFlameLinkApp()
+  const [commandState, dispatch] = useCommandContext()
+  const { commandTypes } = commandState
+  const { getCommandById, updateRecord } = useFlameLinkApp()
 
   const getMesa = useCallback(async () => {
     try {
-      const mesa = await getMesaById(mesaId)
-      setMesa(mesa)
+      const command = await getCommandById(commandId)
+      setCommand(command)
     } catch (error) {
       console.error(error)
     }
-  }, [getMesaById, mesaId])
+  }, [getCommandById, commandId])
 
   const onChange = (e) => {
     let { name, value } = e.target
-    if (name === 'mesaType') {
-      value = mesaTypes.find(type => type.name === value)
+    if (name === 'commandType') {
+      value = commandTypes.find((type) => type.name === value)
     }
-    setMesa({ ...mesa, [name]: value })
+    setCommand({ ...command, [name]: value })
   }
 
   const handleSubmit = async (e) => {
     // TODO: validate
     e.preventDefault()
     const data = {
-      name: mesa.name,
-      mesaType: db().doc(`/fl_content/${mesa.mesaType.id}`),
+      name: command.name,
+      commandType: db().doc(`/fl_content/${command.commandType.id}`),
     }
-    const updatedRecord = await updateRecord('mesa', mesaId, data)
+    const updatedRecord = await updateRecord('command', commandId, data)
 
     onUpdate()
   }
 
   useEffect(() => {
-    if(!mesaId) return
+    if (!commandId) return
     getMesa()
-  }, [mesaId])
-    
-  function mesaTypeName(typeId) {
-    return mesaTypes.find(mt => mt.id === typeId).name
+  }, [commandId])
+
+  function commandTypeName(typeId) {
+    return commandTypes.find((ct) => ct.id === typeId).name
   }
 
-  return (mesa ? (
-    <Modal show={mesaId ? true : false} onHide={onCancel}>
+  return command ? (
+    <Modal show={commandId ? true : false} onHide={onCancel}>
       <Modal.Header closeButton>
-        <Modal.Title>{mesa.name || ''}</Modal.Title>
+        <Modal.Title>{command.name || ''}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="name">
+          <Form.Group controlId='name'>
             <Form.Label>Nombre</Form.Label>
-            <Form.Control type="text" placeholder="Nombre Mesa" name='name' value={mesa.name} onChange={onChange} />
+            <Form.Control
+              type='text'
+              placeholder='Nombre Mesa'
+              name='name'
+              value={command.name}
+              onChange={onChange}
+            />
           </Form.Group>
-          <Form.Group controlId="type">
+          <Form.Group controlId='type'>
             <Form.Label>Tipo</Form.Label>
-            <Form.Control as="select" name='mesaType' value={mesaTypeName(mesa.mesaType.id)} onChange={onChange}>
-              {mesaTypes.map((_type) => (
-                <option key={_type.id} value={_type.name}>{_type.name}</option>
+            <Form.Control
+              as='select'
+              name='commandType'
+              value={commandTypeName(command.commandType.id)}
+              onChange={onChange}
+            >
+              {commandTypes.map((_type) => (
+                <option key={_type.id} value={_type.name}>
+                  {_type.name}
+                </option>
               ))}
             </Form.Control>
           </Form.Group>
-          <Button variant="primary" type="submit">Actualizar</Button>
+          <Button variant='primary' type='submit'>
+            Actualizar
+          </Button>
         </Form>
       </Modal.Body>
     </Modal>
-  ) : null)
+  ) : null
 }
 
 export default memo(EditMesa)

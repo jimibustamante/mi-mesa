@@ -37,7 +37,7 @@ const ComunaPicker = ({ onSelect, onRegionSelect, onPaisSelect }) => {
   }, [selectedRegion, REGIONES_DB])
 
   return (
-    <Container>
+    <Container style={{ marginBottom: '50px' }}>
       <h2
         style={{ fontSize: '20px', marginBottom: '25px' }}
         className='text-center'
@@ -90,7 +90,7 @@ const ComunaPicker = ({ onSelect, onRegionSelect, onPaisSelect }) => {
               </Col>
             </Row>
           )}
-          {comunas.length > 0 && (
+          {selectedPais && selectedPais === 'Chile' && comunas.length > 0 && (
             <Row className='justify-content-sm-center'>
               <Col sm={6}>
                 <Form.Control

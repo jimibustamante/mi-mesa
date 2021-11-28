@@ -60,20 +60,21 @@
       border-color: #fff;
     }
   }
-  .mesas-container {
+  .commands-container {
     margin: 0;
-    .mesa-list {
+    margin-top: 5rem;
+    .command-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, 260px);
       justify-content: space-between;
       grid-column-gap: 1.3rem;
       grid-row-gap: 3rem;
     }
-    .mesa-item {
+    .command-item {
       display: flex;
       flex-direction: column;
       margin-bottom: 1rem;
-      &.add-mesa {
+      &.add-command {
         position: relative;
         .body {
           padding: 0 30px;
@@ -81,7 +82,7 @@
           align-items: center;
           background-color: var(--mesas-blue);
           z-index: 10;
-          a.create-mesa {
+          a.create-command {
             display: flex;
             width: 100px;
             height: 100px;
@@ -89,7 +90,7 @@
             background-color: white;
             align-items: center;
             justify-content: center;
-            .add-mesa-icon {
+            .add-command-icon {
               width: 36px;
               height: 36px;
               path {
@@ -160,7 +161,7 @@
           -webkit-line-clamp: 2; /* number of lines to show */
           -webkit-box-orient: vertical;
         }
-        .mesa-info {
+        .command-info {
           display: flex;
           width: 100%;
           flex-direction: column;
@@ -176,7 +177,7 @@
             color: black;
             text-overflow: ellipsis;
             width: 100%;
-            &.mesa-type {
+            &.command-type {
               text-transform: capitalize;
             }
           }
@@ -218,6 +219,35 @@
     font-size: 45px;
     line-height: 53px;
     color: var(--mesas-blue);
+  }
+  .resend-invitation-wrapper {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+    span {
+      text-align: center;
+      b {
+        cursor: pointer;
+      }
+    }
+    button {
+      margin-top: 1rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      width: fit-content;
+      min-width: 120px;
+      border-radius: 20px;
+      color: white;
+      border-color: var(--bs-green);
+      background-color: var(--bs-green);
+      text-transform: none;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 16.42px;
+    }
   }
 }
 
@@ -408,6 +438,9 @@
         svg {
           height: 14px;
         }
+      }
+      input.form-control {
+        width: 100%;
       }
     }
   }

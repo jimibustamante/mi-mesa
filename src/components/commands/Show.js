@@ -3,6 +3,7 @@ import { functions } from '../../lib/firebaseApp'
 import { useParams } from 'react-router-dom'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useCommandContext } from '../../contexts/CommandContext'
+import { useUserContext } from '../../contexts/UserContext'
 import { Container, Row, Col } from 'react-bootstrap'
 import Participants from '../participants/CommandParticipants'
 import DocsList from './DocsList'
@@ -14,9 +15,12 @@ import { ReactComponent as CommandIcon } from '../../images/megafono_blue.svg'
 export default function Show() {
   const { commandId } = useParams()
   const [showAlert, setShowAlert] = useState(false)
+  const [showInvitationAlert, setShowInvitationAlert] = useState(false)
   const [commandState, dispatch] = useCommandContext()
+  const [userState] = useUserContext()
+  const { currentUser } = userState
+  console.log({ currentUser })
   const { commandTypes } = commandState
-  console.log({ commandTypes })
   const [command, commandMesa] = useState(null)
   const { getCommandById, getCommandTypes } = useFlameLinkApp()
 
@@ -37,18 +41,26 @@ export default function Show() {
         }
         await createCommandCalendar(data)
       }
-      // else {
-      // functions().useEmulator('localhost', 5001)
-      // const fillMesasTypeName = functions().httpsCallable('fillMesasTypeName')
-      // await fillMesasTypeName()
-      // const updateMesaEvent = functions().httpsCallable('updateMesaEvent')
-      // const resp = await updateMesaEvent({commandId, start: new Date(2021, 10, 23, 18, 0)})
-      // console.log({resp})
-      // }
     } catch (error) {
       console.error(error)
     }
   }, [getCommandById, commandId])
+
+  const resendInvitation = async () => {
+    try {
+      functions().useEmulator('localhost', 5001)
+      const { email } = currentUser
+      const resendInvitation = functions().httpsCallable('resendInvitation')
+      const data = {
+        calendarId: command.calendarId,
+        email,
+      }
+      await resendInvitation(data)
+      setShowInvitationAlert(true)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   useEffect(() => {
     if (commandTypes.length === 0) {
@@ -69,6 +81,11 @@ export default function Show() {
         show={showAlert}
         onHide={() => setShowAlert(false)}
         message='Para que los eventos aparezcan en tu calendario, debes aceptar la invitación que llegó a tu correo.'
+      />
+      <Alert
+        show={showInvitationAlert}
+        onHide={() => setShowInvitationAlert(false)}
+        message='La invitación fue reenviada correctamente.'
       />
       <Row
         style={{ marginBottom: '25px' }}
@@ -94,7 +111,23 @@ export default function Show() {
       </Row>
       <Participants command={command} />
       <DocsList command={command} commandTypes={commandTypes} />
-      {command.calendarId && <Events command={command} />}
+      {command.calendarId && (
+        <>
+          <Events command={command} />
+          <div className='resend-invitation-wrapper'>
+            <span>
+              Si no haz recibido aún la invitación o no puedes verlo
+              correctamente, <b onClick={resendInvitation}>haz clic aquí</b>
+            </span>
+            <button
+              className='btn resend-invitation'
+              onClick={resendInvitation}
+            >
+              Enviar invitación
+            </button>
+          </div>
+        </>
+      )}
     </Container>
   ) : (
     // TODO: Here should be a loading component

@@ -26,11 +26,10 @@ export default function CommandItem({ command, deleteCommand }) {
     let command = commandTypes.find((command) => command.id === commandId)
     return command ? command.name : ''
   }
-  console.log({ command })
   const commandType = commandTypeName(command.commandType.id)
 
   return (
-    <div className='mesa-item'>
+    <div className='command-item'>
       <div className='body'>
         <CommandIcon />
         <Link
@@ -40,8 +39,8 @@ export default function CommandItem({ command, deleteCommand }) {
         >
           {command.name}
         </Link>
-        <div className='mesa-info'>
-          <span className='text mesa-type'>{commandType}</span>
+        <div className='command-info'>
+          <span className='text command-type'>{commandType}</span>
           {command.comuna && (
             <span title={command.comuna} className='text comuna'>
               Comuna: {command.comuna}

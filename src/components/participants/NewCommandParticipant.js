@@ -1,6 +1,7 @@
 import { memo, useState } from 'react'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { db } from '../../lib/firebaseApp'
+import PhoneInput from 'react-phone-input-2'
 import { ReactComponent as CloseModalIcon } from '../../images/close-modal.svg'
 import { ReactComponent as SaveIcon } from '../../images/save-icon.svg'
 import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
@@ -8,6 +9,7 @@ import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
 const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [errors, setErrors] = useState({})
   const { createRecord } = useFlameLinkApp()
 
@@ -37,6 +39,7 @@ const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
         name,
         commandId: command.id,
         email,
+        phone: phoneNumber,
         command: db().doc(`/fl_content/${command.id}`),
       })
       setName('')
@@ -55,6 +58,7 @@ const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
     <Modal className='new-command-participant' show={show} onHide={onClose}>
       <CloseModalIcon className='close-modal' onClick={onClose} />
       <h2 style={{ marginBottom: '20px' }}>Nuevo Participante</h2>
+      <span className='required'>* campos obligatorios</span>
       <Modal.Body>
         <Form autoComplete='off' onSubmit={handleSubmit}>
           <Form.Group
@@ -63,7 +67,7 @@ const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
             controlId='formParticipant'
           >
             <Form.Label column md='3'>
-              Nombre y apellido
+              Nombre y apellido <span className='required'>*</span>
             </Form.Label>
             <Col sm='9'>
               <Form.Control
@@ -81,7 +85,7 @@ const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
             controlId='formParticipant'
           >
             <Form.Label column md='3'>
-              Email
+              Email <span className='required'>*</span>
             </Form.Label>
             <Col sm='9'>
               <Form.Control
@@ -97,6 +101,19 @@ const NewParticipant = ({ command, onCreate, show, onClose, participants }) => {
                   {errors.email}
                 </Form.Control.Feedback>
               )}
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className='align-items-center' controlId='phone'>
+            <Form.Label column md='3'>
+              Teléfono:
+            </Form.Label>
+            <Col sm='9'>
+              <PhoneInput
+                country={'cl'}
+                value={phoneNumber}
+                placeholder='+56 912345678'
+                onChange={(phone) => setPhoneNumber(phone)}
+              />
             </Col>
           </Form.Group>
           <Row>

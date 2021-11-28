@@ -21,15 +21,15 @@ const ThemePicker = ({ onSelect }) => {
         style={{ fontSize: '20px', marginBottom: '20px' }}
         className='text-center'
       >
-        Escribe el tema que convocará a las personas para participar en este
-        comando
+        ¿Qué nombre le damos a este comando ciudadano? Describe el tema que lo
+        convoca
       </h2>
 
       <Row className='justify-content-md-center'>
         <Col md={10}>
           <span>
-            Por ejemplo: Cultura por Boric, Ciclistas por Boric, Emprendedores
-            por Boric, etc.
+            Usa un nombre descriptivo del tema que convoca a este comando como
+            por ejemplo “Cultura x Boric” o “Ciclistas x Boric”
           </span>
         </Col>
       </Row>

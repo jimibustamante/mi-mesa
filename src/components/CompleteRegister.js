@@ -20,7 +20,7 @@ import REGIONES_DB from '../data/regiones'
 export default function CompleteRegister() {
   const [loading, setLoading] = useState(true)
   const [coordinator, setCoordinator] = useState(null)
-  const [phoneNumber, setPhoneNumbre] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [comunas, setComunas] = useState([])
   const [selectedRegion, setSelectedRegion] = useState(null)
   const [selectedComuna, setSelectedComuna] = useState(null)
@@ -58,17 +58,18 @@ export default function CompleteRegister() {
       })
       if (coordinator) {
         setCoordinator(coordinator)
-        history.push('/mesas')
+        history.push('/comandos')
       } else {
         console.error('Error creating coordinator')
       }
     } catch (error) {
-      console.error({error})
+      console.error({ error })
     }
   }
 
-  // Redirects to "/mesas" if user has phone number registered.
-  const disabled = !validatePhoneNumber(phoneNumber) || !selectedRegion || !selectedComuna
+  // Redirects to "/comandos" if user has phone number registered.
+  const disabled =
+    !validatePhoneNumber(phoneNumber) || !selectedRegion || !selectedComuna
 
   useEffect(() => {
     if (selectedRegion) {
@@ -83,66 +84,87 @@ export default function CompleteRegister() {
         setCoordinator(_coordinator)
         setLoading(false)
         if (_coordinator) {
-          history.push('/mesas')
+          history.push('/comandos')
         }
       })
     }
   }, [coordinator, currentUser])
 
-  return (
-    loading ? <Loading /> :
-      <Container id='complete-register'>
-        <div className='form-wrapper'>
-          <Form onSubmit={handleSubmit}>
-            <h3>Por favor ingresa tu teléfono</h3>
-            <p>Nuestro equipo se pondrá en contacto contigo</p>
+  return loading ? (
+    <Loading />
+  ) : (
+    <Container id='complete-register'>
+      <div className='form-wrapper'>
+        <Form onSubmit={handleSubmit}>
+          <h3>Por favor ingresa tu teléfono</h3>
+          <p>Nuestro equipo se pondrá en contacto contigo</p>
+          <Row className='justify-content-sm-center'>
+            <Col sm={12} md={10}>
+              <Form.Group>
+                <PhoneInput
+                  country={'cl'}
+                  value={phoneNumber}
+                  placeholder='+56 912345678'
+                  onChange={(phone) => setPhoneNumber(phone)}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <h3>¿En qué comuna vives?</h3>
+          <Form.Group>
             <Row className='justify-content-sm-center'>
               <Col sm={12} md={10}>
-                <Form.Group >
-                  <PhoneInput
-                    country={'cl'}
-                    value={phoneNumber}
-                    placeholder='+56 912345678'
-                    onChange={(phone) => setPhoneNumbre(phone)}
-                  />
-                </Form.Group>
+                <Form.Control
+                  style={{ marginBottom: '30px' }}
+                  as='select'
+                  name='región'
+                  value={selectedRegion}
+                  placeholder='Región'
+                  onChange={handleRegionChange}
+                >
+                  <option key='none' value=''>
+                    Selecciona región
+                  </option>
+                  {regiones.map((reg) => (
+                    <option key={reg} value={reg}>
+                      {reg}
+                    </option>
+                  ))}
+                </Form.Control>
               </Col>
             </Row>
-
-            <h3>¿En qué comuna vives?</h3>
-            <Form.Group >
+            {comunas.length > 0 && (
               <Row className='justify-content-sm-center'>
                 <Col sm={12} md={10}>
-                  <Form.Control style={{marginBottom: '30px'}} as="select" name='región' value={selectedRegion} placeholder='Región' onChange={handleRegionChange}>
-                    <option key='none' value=''>Selecciona región</option>
-                    {regiones.map((reg) => (
-                      <option key={reg} value={reg}>{reg}</option>
+                  <Form.Control
+                    as='select'
+                    name='comuna'
+                    value={selectedComuna}
+                    onChange={handleComunaChange}
+                  >
+                    <option key='none' value=''>
+                      Selecciona comuna
+                    </option>
+                    {comunas.map((comuna) => (
+                      <option key={comuna} value={comuna}>
+                        {comuna}
+                      </option>
                     ))}
                   </Form.Control>
                 </Col>
               </Row>
-              {comunas.length > 0 && (
-                <Row className='justify-content-sm-center'>
-                  <Col sm={12} md={10}>
-                    <Form.Control as="select" name='comuna' value={selectedComuna} onChange={handleComunaChange}>
-                      <option key='none' value=''>Selecciona comuna</option>
-                      {comunas.map((comuna) => (
-                        <option key={comuna} value={comuna}>{comuna}</option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </Row>
-              )}
-            </Form.Group>
-            <Row className='justify-content-sm-center'>
-              <Col className='mesa-buttons'>
-                <Button type='submit' disabled={disabled}>
-                  Guardar
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-      </Container>
+            )}
+          </Form.Group>
+          <Row className='justify-content-sm-center'>
+            <Col className='mesa-buttons'>
+              <Button type='submit' disabled={disabled}>
+                Guardar
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    </Container>
   )
 }

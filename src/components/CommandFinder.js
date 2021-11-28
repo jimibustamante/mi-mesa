@@ -1,10 +1,55 @@
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as SearchIcon } from '../images/search-icon.svg'
 import useFlameLinkApp from '../hooks/useFlamelinkApp'
-import { Table, Button } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import { useCommandContext } from '../contexts/CommandContext'
 import ParticipateToCommand from './participants/ParticipateToCommand'
 import { VscLoading as LoadingSpinner } from 'react-icons/vsc'
+
+import { ReactComponent as WhatsappIcon } from '../images/whatsapp-icon.svg'
+import { ReactComponent as TelegramIcon } from '../images/telegram-icon.svg'
+import { ReactComponent as InstagramIcon } from '../images/instagram-icon.svg'
+import { ReactComponent as LinkIcon } from '../images/link-icon.svg'
+
+const CommandRow = ({ command }) => {
+  const { whatsappLink, telegramLink, instagramLink, otherLink } = command
+  return (
+    <tr key={command.id}>
+      <td style={{ textAlign: 'left' }}>{command.name}</td>
+      <td>{command.commandType.name || ''}</td>
+      <td>
+        <div className='actions-wrapper'>
+          {whatsappLink && (
+            <a className='action-link' href={whatsappLink} target='_blank'>
+              <WhatsappIcon className='action-icon' />
+            </a>
+          )}
+          {telegramLink && (
+            <a className='action-link' href={telegramLink} target='_blank'>
+              <TelegramIcon className='action-icon' />
+            </a>
+          )}
+          {instagramLink && (
+            <a className='action-link' href={instagramLink} target='_blank'>
+              <InstagramIcon className='action-icon' />
+            </a>
+          )}
+          {otherLink && (
+            <a className='action-link' href={otherLink} target='_blank'>
+              <LinkIcon className='action-icon' />
+            </a>
+          )}
+        </div>
+        {/* <Button
+        onClick={() => participate(command)}
+        className='btn'
+      >
+        Únete
+      </Button> */}
+      </td>
+    </tr>
+  )
+}
 
 const FinderFileters = ({ filters, commandTypes, setFilters }) => {
   const { type, query } = filters
@@ -41,11 +86,11 @@ const FinderFileters = ({ filters, commandTypes, setFilters }) => {
   )
 }
 
-export default function MesaFinder() {
+export default function CommandFinder() {
   const { flamelinkLoaded, getCommands, getCommandTypes } = useFlameLinkApp()
   const [loading, setLoading] = useState(true)
   const [commands, setCommands] = useState([])
-  const [filteredCommands, setFilteredMesas] = useState([])
+  const [filteredCommands, setFilteredCommands] = useState([])
   const [filters, setFilters] = useState({})
   const [sortings, setSortings] = useState({})
   const [showParticipate, setShowParticipate] = useState(false)
@@ -70,7 +115,7 @@ export default function MesaFinder() {
 
   useEffect(() => {
     if (filters) {
-      setFilteredMesas(filterCommands())
+      setFilteredCommands(filterCommands())
     }
   }, [filters])
 
@@ -161,41 +206,12 @@ export default function MesaFinder() {
                   Tipo de comando
                 </a>
               </th>
-              <th>Fecha</th>
-              <th></th>
+              <th>Únete</th>
             </tr>
           </thead>
           <tbody>
             {list.map((command) => {
-              const nextEventDate =
-                command.nextEvent && new Date(command.nextEvent).getTime() > 0
-                  ? new Date(command.nextEvent)
-                  : null
-              console.log({
-                'command.nextEvent': command.nextEvent,
-                nextEventDate,
-              })
-              const dateFormated = nextEventDate
-                ? `${nextEventDate.getDate()}-${
-                    nextEventDate.getMonth() + 1
-                  }-${nextEventDate.getFullYear()}`
-                : '-'
-              const isFinished = nextEventDate && nextEventDate < new Date()
-              return (
-                <tr key={command.id}>
-                  <td style={{ textAlign: 'left' }}>{command.name}</td>
-                  <td>{command.commandType.name || ''}</td>
-                  <td style={{ textAlign: 'center' }}>{dateFormated}</td>
-                  <td>
-                    <Button
-                      onClick={() => participate(command)}
-                      className='btn'
-                    >
-                      Únete
-                    </Button>
-                  </td>
-                </tr>
-              )
+              return <CommandRow key={command.id} command={command} />
             })}
           </tbody>
         </Table>
