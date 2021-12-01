@@ -212,6 +212,22 @@
 #show-command {
   margin-top: var(--header-height);
   padding-top: var(--header-height);
+  .back-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    text-decoration: none;
+    .back-link-text {
+      font-family: Work Sans;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 23px;
+      color: var(--bs-green);
+    }
+  }
   h2.name {
     font-family: var(--bs-font-sans-serif);
     font-style: normal;

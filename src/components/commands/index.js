@@ -10,7 +10,7 @@ import NewCommand from './new/index'
 import CommandList from './List'
 import Alert from '../Alert'
 import Loading from '../Loading'
-
+import WelcomeMessage from './WelcomeMessage'
 import '../../styles/Commands.scss'
 
 export default function Commands() {
@@ -69,10 +69,12 @@ export default function Commands() {
     }
     setLoading(false)
     setCalendarAlert(true)
+    fetchMyCommands()
   }
 
   return (
     <>
+      <WelcomeMessage />
       <Alert
         show={calendarAlert}
         onHide={() => setCalendarAlert(false)}
@@ -103,13 +105,22 @@ export default function Commands() {
             Muy pronto te contactará un coordinador de nuestra campaña para
             crear un chat de Whatsapp al que puedan unirse más personas para
             participar de tu Comando Ciudadano. Si tienes cualquier duda
-            llámanos o escríbenos por Whatsapp al número +56 9 3376 2034
+            llámanos o escríbenos por Whatsapp al número{' '}
+            <a
+              href='https://api.whatsapp.com/send?phone=56933762034&text=Hola!'
+              target='_blank'
+              title='Contacto Whatsapp'
+            >
+              +56 9 3376 2034
+            </a>
+            .
           </p>
         </div>
         <CommandList
           createCommand={() => setShowNewCommand(true)}
           commands={myCommands}
           emptyMessage='No tienes comandos creadas aun'
+          onDelete={() => fetchMyCommands()}
         />
       </Container>
     </>

@@ -1,3 +1,13 @@
+#firebase-login
+  > div
+  > div.firebaseui-card-content
+  > form
+  > ul
+  > li:nth-child(1)
+  > button {
+  background-color: var(--bs-blue) !important;
+  border-color: var(--bs-blue);
+}
 .login-wrapper {
   position: relative;
   width: 100vw;

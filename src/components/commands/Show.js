@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { functions } from '../../lib/firebaseApp'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import useFlameLinkApp from '../../hooks/useFlamelinkApp'
 import { useCommandContext } from '../../contexts/CommandContext'
 import { useUserContext } from '../../contexts/UserContext'
@@ -11,6 +11,7 @@ import Events from './Events'
 import Alert from '../Alert'
 
 import { ReactComponent as CommandIcon } from '../../images/megafono_blue.svg'
+import { ReactComponent as Arrow } from '../../images/arrow-left.svg'
 
 export default function Show() {
   const { commandId } = useParams()
@@ -19,7 +20,6 @@ export default function Show() {
   const [commandState, dispatch] = useCommandContext()
   const [userState] = useUserContext()
   const { currentUser } = userState
-  console.log({ currentUser })
   const { commandTypes } = commandState
   const [command, commandMesa] = useState(null)
   const { getCommandById, getCommandTypes } = useFlameLinkApp()
@@ -77,6 +77,10 @@ export default function Show() {
 
   return command ? (
     <Container id='show-command'>
+      <Link to='/comandos' className='back-link'>
+        <Arrow />
+        <span className='back-link-text'> Volver a mis comandos</span>
+      </Link>
       <Alert
         show={showAlert}
         onHide={() => setShowAlert(false)}
@@ -104,8 +108,16 @@ export default function Show() {
           <p>
             Aquí está todo lo que necesitas para armar tu Comando Ciudadano. Por
             favor revisa el material que dispondes para hacer campaña. Si
-            necesitas apoyo no dudes en escribirnos a
-            comandosciudadanos@boricpresidente.cl
+            necesitas apoyo, no dudes en llámanos o escríbenos por Whatsapp al
+            número{' '}
+            <a
+              href='https://api.whatsapp.com/send?phone=56933762034&text=Hola!'
+              target='_blank'
+              title='Contacto Whatsapp'
+            >
+              +56 9 3376 2034
+            </a>
+            .
           </p>
         </Col>
       </Row>

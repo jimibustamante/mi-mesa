@@ -326,6 +326,31 @@ const updateCommandEvent = async ({ commandId, start }) => {
   return minDate.toISOString()
 }
 
+exports.onNewUser = functions.auth.user().onCreate(async (user) => {
+  const { email } = user
+  const userId = user.uid
+  const userData = {
+    email,
+    userId,
+    name: user.displayName || '',
+  }
+  console.log('********* ON NEW USER *********')
+  console.log({ userData })
+  let coordinator = await flamelinkApp.content.getByField({
+    schemaKey: 'coordinador',
+    field: 'userId',
+    value: userId,
+  })
+  console.log({ coordinator })
+  if (!coordinator) {
+    console.log('********* NO COORDINATOR *********')
+    await flamelinkApp.content.add({
+      schemaKey: 'coordinador',
+      data: userData,
+    })
+  }
+})
+
 exports.onCommandChange = functions.firestore
   .document('fl_content/{commandId}')
   .onWrite(async (change, context) => {

@@ -1093,6 +1093,16 @@ footer {
 }
 
 .modal.more-info-modal {
+  .modal-content .welcome-message-body.modal-body {
+    padding: 30px !important;
+    display: flex;
+    flex-direction: column;
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  }
+
   .modal-content {
     @media screen and (max-width: 768px) {
       border-radius: 20px;

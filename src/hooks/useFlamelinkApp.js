@@ -19,12 +19,41 @@ const useFlameLinkApp = () => {
 
   const getUserCommands = async (userId) => {
     if (!app.current) return
-    const content = await app.current.content.getByField({
+    let commands = []
+    let coordinator = await app.current.content.getByField({
+      schemaKey: 'coordinador',
+      field: 'userId',
+      value: userId,
+      fields: ['id', 'commands', 'email'],
+      populate: [
+        {
+          field: 'commands',
+          fields: [
+            'id',
+            'name',
+            'description',
+            'commandType',
+            'commune',
+            'theme',
+          ],
+        },
+      ],
+    })
+    console.log({ coordinator: Object.values(coordinator)[0] })
+    coordinator = Object.values(coordinator)[0] || null
+    let content = await app.current.content.getByField({
       schemaKey: 'command',
       field: 'userId',
       value: userId,
     })
-    return content
+    commands = [...commands, ...(coordinator.commands || [])]
+    console.log({ content })
+    if (content) {
+      const contentCommand = Object.values(content)[0]
+      commands = [...commands, contentCommand]
+    }
+
+    return commands || []
   }
 
   const getSchema = async (schemaKey) => {

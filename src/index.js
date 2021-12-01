@@ -47,6 +47,7 @@ const AuthListener = () => {
   const [userState, dispatchUser] = useUserContext()
   const [navigationState, dispatchNavigation] = useNavigationContext()
   const history = useHistory()
+  const location = useLocation()
 
   const initFlamelink = async () => {
     const flamelinkApp = flamelink({
@@ -67,10 +68,16 @@ const AuthListener = () => {
         dispatchUser({ type: 'AUTH_SIGNED_IN', payload: user })
       } else {
         // Signed out
+        if (
+          location.pathname.includes('/mesas') ||
+          location.pathname.includes('/comandos')
+        ) {
+          history.push('/sign-in')
+        }
         dispatchUser({ type: 'AUTH_SIGNED_OUT' })
       }
     })
-  }, [history, firebaseApp])
+  }, [location, history, firebaseApp])
   return ''
 }
 

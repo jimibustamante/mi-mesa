@@ -42,7 +42,6 @@ export default function DocsList({ command, commandTypes }) {
     const promises = Object.values(files).map((file) => {
       return new Promise(async (resolve, reject) => {
         try {
-          // debugger
           const commandFile = new File(file)
           await commandFile.fetchUrl(getFileUrl(commandFile.id))
           resolve(commandFile)

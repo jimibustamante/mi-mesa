@@ -40,12 +40,6 @@ const CommandRow = ({ command }) => {
             </a>
           )}
         </div>
-        {/* <Button
-        onClick={() => participate(command)}
-        className='btn'
-      >
-        Únete
-      </Button> */}
       </td>
     </tr>
   )
@@ -165,6 +159,21 @@ export default function CommandFinder() {
         })
         setCommands(sortedCommands)
         break
+      case 'name':
+        let sortedCommandsByName = Object.assign([], commands).sort((a, b) => {
+          if (a.name < b.name) return -1
+          if (a.name > b.name) return 1
+          return 0
+        })
+        if (sortings[sortBy] === 'desc') {
+          sortedCommandsByName = sortedCommandsByName.reverse()
+        }
+        setSortings({
+          ...sortings,
+          [sortBy]: sortings[sortBy] === 'desc' ? 'asc' : 'desc',
+        })
+        setCommands(sortedCommandsByName)
+        break
       default:
         break
     }
@@ -200,7 +209,11 @@ export default function CommandFinder() {
         <Table>
           <thead className='sticky-top'>
             <tr>
-              <th style={{ textAlign: 'left' }}>Nombre comando</th>
+              <th style={{ textAlign: 'left' }}>
+                <a name='name' href='#' onClick={sortListBy}>
+                  Nombre comando
+                </a>
+              </th>
               <th>
                 <a name='commandType' href='#' onClick={sortListBy}>
                   Tipo de comando

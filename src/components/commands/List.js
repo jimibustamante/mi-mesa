@@ -7,7 +7,7 @@ import CommandItem from './CommandListItem'
 import { ReactComponent as AddIcon } from '../../images/add.svg'
 import DeletePrompt from '../DeletePrompt'
 
-const CommandList = ({ commands, createCommand }) => {
+const CommandList = ({ commands, createCommand, onDelete }) => {
   const [editId, setEditId] = useState(null)
   const [showDelete, setShowDelete] = useState(false)
   const [deleteId, setDeleteId] = useState(null)
@@ -25,6 +25,7 @@ const CommandList = ({ commands, createCommand }) => {
   const onConfirmDelete = () => {
     deleteCommand(deleteId)
     setShowDelete(false)
+    onDelete()
   }
 
   return (
