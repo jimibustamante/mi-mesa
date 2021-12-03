@@ -49,7 +49,7 @@ export default function Show() {
   const resendInvitation = async () => {
     try {
       // functions().useEmulator('localhost', 5001)
-      // const { email } = currentUser
+      const { email } = currentUser
       // const relateCommandCoordinator = functions().httpsCallable(
       //   'relateCommandCoordinator'
       // )
