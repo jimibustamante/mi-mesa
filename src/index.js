@@ -126,6 +126,11 @@ ReactDOM.render(
                   component={CompleteRegister}
                   exact
                 />
+                <Route
+                  path='/completar-registro'
+                  component={CompleteRegister}
+                  exact
+                />
                 <Route path='/mesas/:mesaId' component={ShowMesa} exact />
                 <Route path='/mesas' component={Mesas} exact />
                 <CommandContextProvider>

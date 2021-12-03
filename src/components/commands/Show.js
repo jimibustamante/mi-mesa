@@ -48,8 +48,13 @@ export default function Show() {
 
   const resendInvitation = async () => {
     try {
-      functions().useEmulator('localhost', 5001)
-      const { email } = currentUser
+      // functions().useEmulator('localhost', 5001)
+      // const { email } = currentUser
+      // const relateCommandCoordinator = functions().httpsCallable(
+      //   'relateCommandCoordinator'
+      // )
+      // await relateCommandCoordinator()
+
       const resendInvitation = functions().httpsCallable('resendInvitation')
       const data = {
         calendarId: command.calendarId,

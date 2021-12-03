@@ -18,12 +18,28 @@ export default function Commands() {
   const [loading, setLoading] = useState(false)
   const [showNewCommand, setShowNewCommand] = useState(false)
   const [calendarAlert, setCalendarAlert] = useState(false)
-  const { flamelinkLoaded, getUserCommands, updateRecord } = useFlameLinkApp()
+  const { flamelinkLoaded, getUserCommands, getContentBy, updateRecord } =
+    useFlameLinkApp()
   const [userState] = useUserContext()
   const [commandState, dispatch] = useCommandContext()
   const { currentUser } = userState
   const { myCommands } = commandState
   const history = useHistory()
+
+  const fetchCoordinator = async () => {
+    let coordinator = await getContentBy(
+      'coordinador',
+      'userId',
+      currentUser.uid || currentUser.id
+    )
+    if (coordinator) {
+      coordinator = coordinator[0]
+      console.log({ coordinator })
+      if (!coordinator.phone || !coordinator.comuna) {
+        return history.push('/completar-registro')
+      }
+    }
+  }
 
   const fetchMyCommands = async () => {
     try {
@@ -41,6 +57,7 @@ export default function Commands() {
   useEffect(() => {
     if (currentUser && flamelinkLoaded && !fetched) {
       try {
+        fetchCoordinator()
         fetchMyCommands()
       } catch (error) {
         history.push('/sign-in')

@@ -28,7 +28,8 @@ export default function CompleteRegister() {
   const [userState] = useUserContext()
   const { currentUser } = userState
 
-  const { getCoordinator, createRecord } = useFlameLinkApp()
+  const { getCoordinator, createRecord, getContentBy, updateRecord } =
+    useFlameLinkApp()
 
   const handleRegionChange = (e) => {
     setSelectedRegion(e.target.value)
@@ -49,13 +50,29 @@ export default function CompleteRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const coordinator = await createRecord('coordinador', {
-        name: currentUser.displayName,
-        email: currentUser.email,
-        userId: currentUser.uid || currentUser.id,
-        phone: phoneNumber,
-        comuna: selectedComuna,
-      })
+      // Check if coordinator exists.
+      let coordinator = await getContentBy(
+        'coordinador',
+        'userId',
+        currentUser.uid || currentUser.id
+      )
+      if (coordinator.length === 0) {
+        coordinator = await createRecord('coordinador', {
+          name: currentUser.displayName,
+          email: currentUser.email,
+          userId: currentUser.uid || currentUser.id,
+          phone: phoneNumber,
+          comuna: selectedComuna,
+        })
+      } else {
+        coordinator = coordinator[0]
+        coordinator = await updateRecord('coordinador', coordinator.id, {
+          ...coordinator,
+          name: currentUser.displayName,
+          phone: phoneNumber,
+          comuna: selectedComuna,
+        })
+      }
       if (coordinator) {
         setCoordinator(coordinator)
         history.push('/comandos')
@@ -83,7 +100,7 @@ export default function CompleteRegister() {
       getCoordinator(currentUser.id || currentUser.uid).then((_coordinator) => {
         setCoordinator(_coordinator)
         setLoading(false)
-        if (_coordinator) {
+        if (_coordinator && _coordinator.phone && _coordinator.comuna) {
           history.push('/comandos')
         }
       })

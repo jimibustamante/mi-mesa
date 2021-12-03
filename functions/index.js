@@ -1,10 +1,17 @@
 const functions = require('firebase-functions')
 const { google } = require('googleapis')
 const OAuth2 = google.auth.OAuth2
+const nodemailer = require('nodemailer')
+require('dotenv').config()
 const admin = require('firebase-admin')
 
+// const {
+//   onCommandChange,
+//   onNewUser,
+//   sendEmail,
+// } = require('./firestore-callbacks')
+
 const firebaseApp = admin.initializeApp()
-// const firebaseApp = admin.initializeApp(functions.config().firebase)
 
 calendar = google.calendar('v3')
 const db = admin.firestore()
@@ -38,6 +45,201 @@ const getOAuth2Client = async () => {
   await oauth2Client.getAccessToken()
   return oauth2Client
 }
+
+// exports.onCommandChange = onCommandChange({
+//   flamelinkApp,
+// })
+
+// exports.onNewUser = onNewUser({
+//   flamelinkApp,
+//   getOAuth2Client,
+// })
+
+// exports.sendEmail = sendEmail({
+//   getOAuth2Client,
+// })
+
+// const admin = require('firebase-admin')
+
+const sendEmail = async ({
+  email,
+  subject,
+  text,
+  html,
+  from,
+  to,
+  cc,
+  bcc,
+  replyTo,
+  attachments,
+  oauth2Client,
+}) => {
+  console.log({ oauth2Client })
+  console.log({
+    clientId: oauth2Client._clientId,
+    clientSecret: oauth2Client._clientSecret,
+    refresh_token: oauth2Client.credentials.refresh_token,
+    access_token: oauth2Client.credentials.access_token,
+  })
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        type: 'OAuth2',
+        user: process.env.MAIL_USER,
+        accessToken: oauth2Client.credentials.access_token,
+        clientId: oauth2Client._clientId,
+        clientSecret: oauth2Client._clientSecret,
+        refreshToken: oauth2Client.credentials.refresh_token,
+      },
+    })
+
+    const mailOptions = {
+      from: 'Probando Probando <desarrollo@boricpresidente.cl>', // Something like: Jane Doe <janedoe@gmail.com>
+      to: 'jbustamante@graiph.ai',
+      subject: 'Probando Probando!!!', // email subject
+      html: `<p style="font-size: 16px;">Pickle Riiiiiiiiiiiiiiiick!!</p>
+          <br />
+          <img src="https://images.prod.meredith.com/product/fc8754735c8a9b4aebb786278e7265a5/1538025388228/l/rick-and-morty-pickle-rick-sticker" />
+      `,
+    }
+
+    console.log({ mailOptions })
+
+    return transporter.sendMail(mailOptions)
+  } catch (error) {
+    console.error({ error })
+    return ERROR_RESPONSE
+  }
+}
+
+exports.sendEmail = () =>
+  functions.https.onCall(async (data, context) => {
+    const {
+      email,
+      subject,
+      text,
+      html,
+      from,
+      to,
+      cc,
+      bcc,
+      replyTo,
+      attachments,
+    } = data
+
+    const oauth2Client = await getOAuth2Client(context)
+    console.log({ oauth2Client })
+    return sendEmail({
+      email,
+      subject,
+      text,
+      html,
+      from,
+      to,
+      cc,
+      bcc,
+      replyTo,
+      attachments,
+      oauth2Client,
+    })
+  })
+
+// exports.relateCommandCoordinator = functions.https.onCall(
+//   async (data, context) => {
+//     let commands = await flamelinkApp.content.get({
+//       schemaKey: 'command',
+//       fields: ['id', 'coordinator', 'userId', 'name'],
+//       populate: ['coordinator'],
+//     })
+//     commands = Object.values(commands)
+//     commands.forEach(async (command) => {
+//       const { id, coordinator, userId, name } = command
+//       if (userId) {
+//         console.log('********* RELATE *********')
+//         console.log({ name, id, coordinator, userId })
+//         let newCoordinator = await flamelinkApp.content.getByField({
+//           schemaKey: 'coordinador',
+//           field: 'userId',
+//           value: userId,
+//         })
+//         newCoordinator = Object.values(newCoordinator)[0]
+//         console.log({ newCoordinator })
+
+//         await flamelinkApp.content.update({
+//           schemaKey: 'command',
+//           entryId: id,
+//           data: {
+//             coordinator: db.doc(`/fl_content/${newCoordinator.id}`),
+//           },
+//         })
+//         console.log('********* UPDATED!! *********')
+//       }
+//     })
+//   }
+// )
+
+exports.onCommandChange = () =>
+  functions.firestore
+    .document('fl_content/{commandId}')
+    .onWrite(async (change, context) => {
+      const {
+        id,
+        _fl_meta_,
+        whatsappLink,
+        telegramLink,
+        instagramLink,
+        otherLink,
+      } = change.after.data()
+
+      if (_fl_meta_.schema == 'command') {
+        const hasLink =
+          whatsappLink !== '' ||
+          telegramLink !== '' ||
+          instagramLink !== '' ||
+          otherLink !== ''
+
+        if (hasLink !== change.after.data().hasLink) {
+          console.info('********* HAS LINK *********', hasLink)
+          await flamelinkApp.content.update({
+            schemaKey: 'command',
+            entryId: id,
+            data: {
+              hasLink,
+            },
+          })
+        }
+      }
+    })
+
+exports.onNewUser = () =>
+  functions.auth.user().onCreate(async (user) => {
+    const { email } = user
+    const userId = user.uid
+    const userData = {
+      email,
+      userId,
+      name: user.displayName || '',
+    }
+    console.log('********* ON NEW USER *********')
+    console.log({ userData })
+    let coordinator = await flamelinkApp.content.getByField({
+      schemaKey: 'coordinador',
+      field: 'userId',
+      value: userId,
+    })
+    console.log({ coordinator })
+    if (!coordinator) {
+      console.log('********* NO COORDINATOR *********')
+      await flamelinkApp.content.add({
+        schemaKey: 'coordinador',
+        data: userData,
+      })
+    }
+  })
 
 const getUserEmail = async (uid) => {
   const user = await admin.auth().getUser(uid)
@@ -82,18 +284,6 @@ const createParticipantAcl = async (participant) => {
         value: participant.email,
       })
     )
-  }
-}
-
-const deleteCalendar = async ({ calendarId }) => {
-  try {
-    const oauth2Client = await getOAuth2Client()
-    return calendar.calendars.delete({
-      auth: oauth2Client,
-      calendarId,
-    })
-  } catch (error) {
-    return ERROR_RESPONSE
   }
 }
 
@@ -326,63 +516,6 @@ const updateCommandEvent = async ({ commandId, start }) => {
   return minDate.toISOString()
 }
 
-exports.onNewUser = functions.auth.user().onCreate(async (user) => {
-  const { email } = user
-  const userId = user.uid
-  const userData = {
-    email,
-    userId,
-    name: user.displayName || '',
-  }
-  console.log('********* ON NEW USER *********')
-  console.log({ userData })
-  let coordinator = await flamelinkApp.content.getByField({
-    schemaKey: 'coordinador',
-    field: 'userId',
-    value: userId,
-  })
-  console.log({ coordinator })
-  if (!coordinator) {
-    console.log('********* NO COORDINATOR *********')
-    await flamelinkApp.content.add({
-      schemaKey: 'coordinador',
-      data: userData,
-    })
-  }
-})
-
-exports.onCommandChange = functions.firestore
-  .document('fl_content/{commandId}')
-  .onWrite(async (change, context) => {
-    const {
-      id,
-      _fl_meta_,
-      whatsappLink,
-      telegramLink,
-      instagramLink,
-      otherLink,
-    } = change.after.data()
-
-    if (_fl_meta_.schema == 'command') {
-      const hasLink =
-        whatsappLink !== '' ||
-        telegramLink !== '' ||
-        instagramLink !== '' ||
-        otherLink !== ''
-
-      if (hasLink !== change.after.data().hasLink) {
-        console.info('********* HAS LINK *********', hasLink)
-        await flamelinkApp.content.update({
-          schemaKey: 'command',
-          entryId: id,
-          data: {
-            hasLink,
-          },
-        })
-      }
-    }
-  })
-
 // exports.onNewEvent = functions.firestore
 //   .document('fl_content/{contentId}')
 //   .onCreate(async (snapshot, context) => {
@@ -404,23 +537,6 @@ exports.onCommandChange = functions.firestore
 //       console.error(error)
 //     }
 //   })
-
-exports.onDeleteMesa = functions.firestore
-  .document('fl_content/{contentId}')
-  .onDelete(async (snapshot, context) => {
-    try {
-      const { id, calendarId, _fl_meta_ } = snapshot.data()
-      if (
-        (_fl_meta_.schema === 'mesa' || _fl_meta_.schema === 'command') &&
-        calendarId
-      ) {
-        console.info('********* DELETING CALENDAR *********')
-        deleteCalendar({ calendarId })
-      }
-    } catch (error) {
-      console.info('********* ERROR: DELETING CALENDAR *********', { error })
-    }
-  })
 
 // exports.createCalendarAll = functions.https.onCall(async (data, context) => {
 //   const oauth2Client = await getOAuth2Client()
@@ -868,56 +984,56 @@ exports.getOpenMesas = functions.https.onCall(async (data, context) => {
 // })
 
 // Lets fill "mesaTypeName" attribute in each Participant in the database
-exports.fillMesasTypeName = functions.https.onCall(async (data, context) => {
-  console.info('***** FILLING MESAS TYPE NAME *****')
-  try {
-    let participants = await flamelinkApp.content.get({
-      schemaKey: 'participante',
-      // limit: 50,
-      fields: ['id', 'mesa'],
-      populate: [
-        {
-          field: 'mesa',
-          fields: ['id', 'name', 'mesaType'],
-          populate: [
-            {
-              field: 'mesaType',
-              fields: ['id', 'name'],
-            },
-          ],
-        },
-      ],
-    })
-    participants = Object.values(participants)
-    console.log({ participants: participants.length })
-    participants.forEach(async (participant) => {
-      if (!participant.mesa || !participant.mesa.mesaType) {
-        console.info('********* NO MESA OR MESA TYPE *********')
-        return
-      }
-      console.log({
-        mesa: participant.mesa,
-        mesaType: participant.mesa?.mesaType?.name,
-      })
-      await flamelinkApp.content.update({
-        schemaKey: 'participante',
-        entryId: participant.id,
-        data: {
-          mesaTypeName: participant.mesa.mesaType.name,
-        },
-      })
-      console.info(
-        `Mesa ${
-          participant?.mesa?.name || 'sin nombre'
-        } actualizada exitosamente!`
-      )
-    })
-    return participants.length
-  } catch (error) {
-    console.error({ error })
-    return error.message || error
-  }
-})
+// exports.fillMesasTypeName = functions.https.onCall(async (data, context) => {
+//   console.info('***** FILLING MESAS TYPE NAME *****')
+//   try {
+//     let participants = await flamelinkApp.content.get({
+//       schemaKey: 'participante',
+//       // limit: 50,
+//       fields: ['id', 'mesa'],
+//       populate: [
+//         {
+//           field: 'mesa',
+//           fields: ['id', 'name', 'mesaType'],
+//           populate: [
+//             {
+//               field: 'mesaType',
+//               fields: ['id', 'name'],
+//             },
+//           ],
+//         },
+//       ],
+//     })
+//     participants = Object.values(participants)
+//     console.log({ participants: participants.length })
+//     participants.forEach(async (participant) => {
+//       if (!participant.mesa || !participant.mesa.mesaType) {
+//         console.info('********* NO MESA OR MESA TYPE *********')
+//         return
+//       }
+//       console.log({
+//         mesa: participant.mesa,
+//         mesaType: participant.mesa?.mesaType?.name,
+//       })
+//       await flamelinkApp.content.update({
+//         schemaKey: 'participante',
+//         entryId: participant.id,
+//         data: {
+//           mesaTypeName: participant.mesa.mesaType.name,
+//         },
+//       })
+//       console.info(
+//         `Mesa ${
+//           participant?.mesa?.name || 'sin nombre'
+//         } actualizada exitosamente!`
+//       )
+//     })
+//     return participants.length
+//   } catch (error) {
+//     console.error({ error })
+//     return error.message || error
+//   }
+// })
 
 exports.resendInvitation = functions.https.onCall(async (data, context) => {
   console.info('***** RESENDING INVITATION *****')
@@ -970,3 +1086,33 @@ exports.resendInvitation = functions.https.onCall(async (data, context) => {
 //     return(ERROR_RESPONSE, error)
 //   }
 // })
+
+const deleteCalendar = async ({ calendarId }) => {
+  try {
+    const oauth2Client = await getOAuth2Client()
+    return calendar.calendars.delete({
+      auth: oauth2Client,
+      calendarId,
+    })
+  } catch (error) {
+    return ERROR_RESPONSE
+  }
+}
+
+exports.onDelete = () =>
+  functions.firestore
+    .document('fl_content/{contentId}')
+    .onDelete(async (snapshot, context) => {
+      try {
+        const { id, calendarId, _fl_meta_ } = snapshot.data()
+        if (
+          (_fl_meta_.schema === 'mesa' || _fl_meta_.schema === 'command') &&
+          calendarId
+        ) {
+          console.info('********* DELETING CALENDAR *********')
+          deleteCalendar({ calendarId })
+        }
+      } catch (error) {
+        console.info('********* ERROR: DELETING CALENDAR *********', { error })
+      }
+    })

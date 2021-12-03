@@ -55,16 +55,6 @@ export default function MesaFinder() {
   const [mesaState, dispatch] = useMesaContext()
   const { mesaTypes } = mesaState
 
-  // useEffect(() => {
-  //   if (mesas.length) {
-  //     const mesa = mesas[0]
-  //     functions().useEmulator("localhost", 5001)
-  //     functions().httpsCallable('getCalendarEvents')(mesa.calendarId).then(res => {
-  //       console.log({res})
-  //     })
-  //   }
-  // }, [mesas])
-
   const filterMesas = () => {
     const { type, query } = filters
     const filteredMesas = mesas.filter((mesa) => {
